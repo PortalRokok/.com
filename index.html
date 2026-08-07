@@ -247,11 +247,11 @@
           </div>
         </div>
 
-        <!-- STOK PERSLOP -->
+        <!-- STOK PERSLOP & ECERAN -->
         <div id="page-stok" class="hidden fade-in">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="premium-card p-6 md:col-span-1">
-              <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-plus-circle text-blue-400"></i> Catat Pengambilan</h3>
+              <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-plus-circle text-blue-400"></i> Catat Pengambilan Stok</h3>
               <label class="block label-dark mb-2 ml-1">TANGGAL PENGAMBILAN</label>
               <input type="date" id="stok-tanggal" class="w-full p-3 mb-3 input-dark transition-all">
               <label class="block label-dark mb-2 ml-1">JENIS ROKOK</label>
@@ -261,28 +261,58 @@
               <label class="block label-dark mb-2 ml-1">MODAL HARGA BELI PER SLOP (៛)</label>
               <input type="text" inputmode="numeric" id="stok-modal" oninput="formatNumber(this)" class="w-full p-3 mb-4 input-dark transition-all" placeholder="Modal Harga Beli Per Slop (៛)">
               <button onclick="saveAmbilStok()" id="btn-save-stok" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-xl font-bold active:scale-95 transition-all border border-slate-700">CATAT PENGAMBILAN</button>
-              <p class="text-xs text-slate-400 mt-4"><i class="fas fa-info-circle"></i> Sisa stok bulan lalu otomatis terhitung dari stok yang belum terjual bulan sebelumnya.</p>
             </div>
-            <div class="premium-card rounded-2xl overflow-hidden md:col-span-2 scroll-x">
+
+            <!-- FORM BUKA SLOP KE ECERAN -->
+            <div class="premium-card p-6 md:col-span-1">
+              <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-box-open text-purple-400"></i> Buka Slop ke Eceran</h3>
+              <label class="block label-dark mb-2 ml-1">JENIS ROKOK</label>
+              <select id="buka-rokok" class="w-full p-3 mb-3 input-dark transition-all"></select>
+              <label class="block label-dark mb-2 ml-1">JUMLAH SLOP DIBUKA</label>
+              <input type="number" id="buka-jumlah" class="w-full p-3 mb-3 input-dark transition-all" placeholder="Contoh: 1 (akan jadi 10 bungkus)">
+              <div class="bg-purple-500/10 p-3 rounded-xl mb-4 text-center text-sm text-purple-300">
+                Stok Perslop akan berkurang, Stok Eceran akan bertambah otomatis.
+              </div>
+              <button onclick="saveBukaSlop()" id="btn-buka-slop" class="w-full bg-purple-600 hover:bg-purple-500 text-white py-3 rounded-xl font-bold active:scale-95 transition-all">BUKA SLOP KE ECERAN</button>
+            </div>
+
+            <div class="premium-card rounded-2xl overflow-hidden md:col-span-1 scroll-x">
               <table class="text-center w-full">
                 <thead>
                   <tr>
-                    <th class="p-4 text-left">Jenis Rokok</th>
-                    <th class="p-4">Sisa Bulan Lalu</th>
-                    <th class="p-4">Masuk Bulan Ini</th>
-                    <th class="p-4">Terjual Bulan Ini</th>
-                    <th class="p-4">Sisa Saat Ini</th>
+                    <th class="p-3 text-left" style="font-size: 11px;">Rokok</th>
+                    <th class="p-3" style="font-size: 11px;">Sisa Slop</th>
+                    <th class="p-3" style="font-size: 11px;">Sisa Eceran</th>
                   </tr>
                 </thead>
-                <tbody id="table-stok" class="divide-y divide-slate-800"></tbody>
+                <tbody id="table-stok-mini" class="divide-y divide-slate-800"></tbody>
               </table>
             </div>
           </div>
-          <div class="premium-card rounded-2xl overflow-hidden scroll-x">
-            <h4 class="font-bold bg-blue-500/10 text-blue-400 p-4 border-b border-slate-800 text-sm">Riwayat Pengambilan Stok Bulan Ini</h4>
+
+          <div class="premium-card rounded-2xl overflow-hidden scroll-x mb-6">
+            <h4 class="font-bold bg-blue-500/10 text-blue-400 p-4 border-b border-slate-800 text-sm">Detail Stok Bulan Ini</h4>
             <table class="text-center w-full">
               <thead>
-                <tr><th class="p-3 text-left">Tanggal Pengambilan</th><th class="p-3">Rokok</th><th class="p-3">Jumlah Diambil</th><th class="p-3">Modal Per Slop</th></tr>
+                <tr>
+                  <th class="p-3 text-left">Jenis Rokok</th>
+                  <th class="p-3">Sisa Slop Bulan Lalu</th>
+                  <th class="p-3">Masuk Slop</th>
+                  <th class="p-3">Dibuka Slop</th>
+                  <th class="p-3">Terjual Slop</th>
+                  <th class="p-3">Sisa Slop Saat Ini</th>
+                  <th class="p-3">Sisa Eceran Saat Ini</th>
+                </tr>
+              </thead>
+              <tbody id="table-stok" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+
+          <div class="premium-card rounded-2xl overflow-hidden scroll-x">
+            <h4 class="font-bold bg-blue-500/10 text-blue-400 p-4 border-b border-slate-800 text-sm">Riwayat Pengambilan & Mutasi Stok Bulan Ini</h4>
+            <table class="text-center w-full">
+              <thead>
+                <tr><th class="p-3 text-left">Tanggal</th><th class="p-3">Rokok</th><th class="p-3">Tipe</th><th class="p-3">Jumlah</th><th class="p-3">Modal Per Slop</th></tr>
               </thead>
               <tbody id="table-pengambilan-recap" class="divide-y divide-slate-800"></tbody>
             </table>
@@ -460,7 +490,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyNzQprnD0YjZWVQRQPWb0O8pY1Nbq9wllko63d46wgH5XiJ-vWRbKCB4Ve03jo1HWx/exec'; 
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz4sgdQVlh_ri6tL7ZytLKNRuawbOgGqWeq53VA3VYf9gYVA2dZraKE0QDeyLLlzTqi/exec'; 
     
     let masterData = {};
     let dashboardState = null; 
@@ -638,11 +668,14 @@
     function populateDropdowns() {
       const selJual = document.getElementById('jual-rokok');
       const selStok = document.getElementById('stok-rokok');
+      const selBuka = document.getElementById('buka-rokok');
       selJual.innerHTML = '<option value="">Pilih Rokok</option>';
       selStok.innerHTML = '';
+      selBuka.innerHTML = '';
       Object.keys(masterData).forEach(r => {
         selJual.appendChild(new Option(r, r));
         selStok.appendChild(new Option(r, r));
+        selBuka.appendChild(new Option(r, r));
       });
     }
 
@@ -699,6 +732,7 @@
 
       toggleLoadingButton('btn-save-master', true, btnText);
       const res = await apiCall(action, { payload: data });
+      toggleLoadingButton('btn-save-master', false, btnText);
       
       if(res.error) showToast("Gagal simpan ke Sheet, cek internet.", "error");
       else {
@@ -712,7 +746,6 @@
         }
         cancelEdit();
       }
-      toggleLoadingButton('btn-save-master', false, btnText);
     }
 
     function editMaster(namaRokok) {
@@ -748,7 +781,7 @@
     async function deleteMaster(namaRokok) {
       if(!confirm(`Yakin hapus rokok ${namaRokok}?`)) return;
       
-      // OPTIMISTIC UI: LANGSUNG HAPUS DI LAYAR
+      // OPTIMISTIC UI
       const originalMaster = {...masterData};
       delete masterData[namaRokok];
       populateDropdowns();
@@ -911,59 +944,92 @@
       document.getElementById('um-total-sudah-cair').innerText = "៛ " + fmt(totalUMSudahCair);
       document.getElementById('um-total-belum-cair').innerText = "៛ " + fmt(totalUMBelumCair);
 
+      // STOK TABLE & MATH
       const tbStok = document.getElementById('table-stok'); tbStok.innerHTML = "";
+      const tbStokMini = document.getElementById('table-stok-mini'); tbStokMini.innerHTML = "";
       let stokArr = [];
+      
       for(let namaRokok in res.masterMap) {
-        let prevAmbil = 0, prevJual = 0;
+        let prevMasuk = 0, prevBuka = 0, prevJualPerslop = 0;
+        let masukBulanIni = 0, bukaBulanIni = 0, terjualPerslopBulanIni = 0;
+        let prevJualEceran = 0, terjualEceranBulanIni = 0;
+
         res.allPengambilan.forEach(p => {
-          if(p.rokok === namaRokok && getMonthFromDate(p.tanggal) < selectedMonth) prevAmbil += p.jumlah;
+          if(p.rokok === namaRokok && getMonthFromDate(p.tanggal) < selectedMonth) {
+            if(p.tipe === 'Masuk') prevMasuk += p.jumlah;
+            if(p.tipe === 'Buka Slop') prevBuka += p.jumlah;
+          }
         });
         res.allSales.forEach(u => {
-          if(u.rokok === namaRokok && getMonthFromDate(u.tanggal) < selectedMonth) prevJual += u.jumlah;
+          if(u.rokok === namaRokok && getMonthFromDate(u.tanggal) < selectedMonth) {
+            if(u.tipe === 'Perslop') prevJualPerslop += u.jumlah;
+            if(u.tipe === 'Eceran') prevJualEceran += u.jumlah;
+          }
         });
-        let sisaBulanLalu = prevAmbil - prevJual;
+
+        filteredAmbil.forEach(p => {
+          if(p.rokok === namaRokok) {
+            if(p.tipe === 'Masuk') masukBulanIni += p.jumlah;
+            if(p.tipe === 'Buka Slop') bukaBulanIni += p.jumlah;
+          }
+        });
+        filteredSales.forEach(u => {
+          if(u.rokok === namaRokok) {
+            if(u.tipe === 'Perslop') terjualPerslopBulanIni += u.jumlah;
+            if(u.tipe === 'Eceran') terjualEceranBulanIni += u.jumlah;
+          }
+        });
+
+        let sisaSlopBulanLalu = prevMasuk - prevBuka - prevJualPerslop;
+        let sisaSlopSaatIni = sisaSlopBulanLalu + masukBulanIni - bukaBulanIni - terjualPerslopBulanIni;
         
-        let masukBulanIni = 0, terjualBulanIni = 0;
-        filteredAmbil.forEach(p => { if(p.rokok === namaRokok) masukBulanIni += p.jumlah; });
-        filteredSales.forEach(u => { if(u.rokok === namaRokok) terjualBulanIni += u.jumlah; });
+        let sisaEceranBulanLalu = (prevBuka * 10) - prevJualEceran;
+        let sisaEceranSaatIni = sisaEceranBulanLalu + (bukaBulanIni * 10) - terjualEceranBulanIni;
         
-        let sisaSaatIni = sisaBulanLalu + masukBulanIni - terjualBulanIni;
-        
-        stokArr.push({ rokok: namaRokok, sisaBulanLalu, masukBulanIni, terjualBulanIni, sisaSaatIni });
+        stokArr.push({ rokok: namaRokok, sisaSlopBulanLalu, masukBulanIni, bukaBulanIni, terjualPerslopBulanIni, sisaSlopSaatIni, sisaEceranSaatIni });
         
         tbStok.innerHTML += `<tr class="hover:bg-slate-800/50">
-          <td class="p-4 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-4 text-slate-100">${sisaBulanLalu}</td>
-          <td class="p-4 text-slate-100">${masukBulanIni}</td>
-          <td class="p-4 text-slate-100">${terjualBulanIni}</td>
-          <td class="p-4 font-bold text-blue-400">${sisaSaatIni}</td>
+          <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
+          <td class="p-3 text-slate-100">${sisaSlopBulanLalu}</td>
+          <td class="p-3 text-green-400">${masukBulanIni}</td>
+          <td class="p-3 text-purple-400">${bukaBulanIni}</td>
+          <td class="p-3 text-red-400">${terjualPerslopBulanIni}</td>
+          <td class="p-3 font-bold text-blue-400">${sisaSlopSaatIni}</td>
+          <td class="p-3 font-bold text-cyan-400">${sisaEceranSaatIni}</td>
+        </tr>`;
+
+        tbStokMini.innerHTML += `<tr class="hover:bg-slate-800/50">
+          <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
+          <td class="p-3 font-bold text-blue-400">${sisaSlopSaatIni}</td>
+          <td class="p-3 font-bold text-cyan-400">${sisaEceranSaatIni}</td>
         </tr>`;
       }
 
       const tbAmbil = document.getElementById('table-pengambilan-recap'); tbAmbil.innerHTML = "";
       if(filteredAmbil.length > 0) {
         filteredAmbil.reverse().forEach(p => {
+          const badgeClass = p.tipe === 'Buka Slop' ? 'badge-purple' : 'badge-success';
           tbAmbil.innerHTML += `<tr class="hover:bg-slate-800/50">
             <td class="p-3 text-slate-100 text-left">${formatFullDate(p.tanggal, false)}</td>
             <td class="p-3 text-white">${p.rokok}</td>
+            <td class="p-3"><span class="badge ${badgeClass}">${p.tipe}</span></td>
             <td class="p-3 text-white">${p.jumlah} Slop</td>
             <td class="p-3 text-white">៛ ${fmt(p.modal)}</td>
           </tr>`;
         });
-      } else tbAmbil.innerHTML = `<tr><td colspan="4" class="p-4 text-slate-400 text-center">Belum ada pengambilan stok bulan ini</td></tr>`;
+      } else tbAmbil.innerHTML = `<tr><td colspan="5" class="p-4 text-slate-400 text-center">Belum ada mutasi stok bulan ini</td></tr>`;
 
       const tbStokCC = document.getElementById('table-stok-cc'); tbStokCC.innerHTML = "";
-      let ccStokData = stokArr; 
-      if(ccStokData && ccStokData.length > 0) ccStokData.forEach(s => {
+      if(stokArr.length > 0) stokArr.forEach(s => {
         let val1, val2, val3;
         if(currentCCTipe === 'Perslop') {
           val1 = `<span class="text-slate-100">${s.masukBulanIni}</span>`; 
-          val2 = `<span class="text-slate-100">${s.terjualBulanIni}</span>`; 
-          val3 = `<span class="text-blue-400 font-bold">${s.sisaSaatIni}</span>`;
+          val2 = `<span class="text-red-400">${s.terjualPerslopBulanIni}</span>`; 
+          val3 = `<span class="text-blue-400 font-bold">${s.sisaSlopSaatIni}</span>`;
         } else {
-          val1 = `<span class="text-purple-400 font-bold">0</span>`; 
-          val2 = `<span class="text-slate-100">${s.terjualBulanIni * 10}</span>`; 
-          val3 = `<span class="text-green-400 font-bold">${s.sisaSaatIni * 10}</span>`;
+          val1 = `<span class="text-purple-400 font-bold">${s.bukaBulanIni * 10}</span>`; 
+          val2 = `<span class="text-red-400">${s.terjualPerslopBulanIni * 10}</span>`; // Asumsi eceran terjual dari buka slop
+          val3 = `<span class="text-cyan-400 font-bold">${s.sisaEceranSaatIni}</span>`;
         }
         tbStokCC.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-4 text-left font-semibold text-white">${s.rokok}</td>
@@ -1137,8 +1203,8 @@
       });
     }
 
+    // OPTIMISTIC UI FUNCTIONS (NO DELAY)
     async function updateJualStatus(data, newStatus) {
-      // OPTIMISTIC UI UPDATE
       dashboardState.allSales.forEach(u => {
         if (u.tanggal === data.tanggal && u.nama === data.nama && u.rokok === data.rokok && Number(u.jumlah) === Number(data.jumlah) && Number(u.harga) === Number(data.harga)) {
           u.statusBayar = newStatus;
@@ -1160,18 +1226,17 @@
     async function deleteJualData(data) {
       if(!confirm('Yakin hapus transaksi ini?')) return;
       
-      // OPTIMISTIC UI UPDATE (LANGSUNG HILANG DARI LAYAR)
-      const originalSales = [...dashboardState.allSales];
       dashboardState.allSales = dashboardState.allSales.filter(u => {
         return !(u.tanggal === data.tanggal && u.nama === data.nama && u.rokok === data.rokok && Number(u.jumlah) === Number(data.jumlah) && Number(u.harga) === Number(data.harga));
       });
       renderDashboard(dashboardState);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       showToast("Menghapus transaksi...", "success");
 
       const res = await apiCall('deletePenjualan', { payload: data });
       if(res.error) { 
         showToast("Gagal hapus, mengembalikan data...", "error"); 
-        dashboardState.allSales = originalSales;
+        dashboardState.allSales.push(data); // Restore
         renderDashboard(dashboardState);
         return; 
       }
@@ -1224,17 +1289,33 @@
         statusBayar: statusVal
       };
       
-      toggleLoadingButton('btn-save-jual', true, 'SIMPAN TRANSAKSI');
-      const res = await apiCall('savePenjualan', { payload: data });
-      toggleLoadingButton('btn-save-jual', false, 'SIMPAN TRANSAKSI');
-      
-      if(res.error) { showToast("Gagal simpan transaksi.", "error"); return; }
-      
+      // OPTIMISTIC UI: LANGSUNG PUSH KE ARRAY & RENDER
+      const newSale = {
+          tanggal: new Date().toISOString(),
+          tipe: data.tipe,
+          nama: data.nama,
+          situs: data.situs,
+          rokok: data.rokok,
+          jumlah: data.jumlah,
+          jumlahTxt: data.jumlah + (data.tipe === 'Eceran' ? ' Bungkus' : ' Slop'),
+          tipeBayar: data.tipeBayar,
+          harga: data.harga,
+          statusBayar: data.tipeBayar === "Uang Makan" ? "BELUM BAYAR" : data.statusBayar
+      };
+      dashboardState.allSales.push(newSale);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      renderDashboard(dashboardState);
+
+      // CLEAR FORM
       document.getElementById('jual-nama').value = ""; 
       document.getElementById('jual-situs').value = ""; 
       document.getElementById('jual-jumlah').value = "";
       document.getElementById('jual-harga').innerText = "៛ 0";
-      showToast("Transaksi tersimpan permanen!", "success");
+      showToast("Transaksi tersimpan!", "success");
+
+      // BACKGROUND SAVE
+      const res = await apiCall('savePenjualan', { payload: data });
+      if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
       if(res.dashboard) { 
         dashboardState = res.dashboard; 
         if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
@@ -1249,17 +1330,49 @@
         tanggal: tglVal ? new Date(tglVal).toISOString() : new Date().toISOString(),
         rokok: document.getElementById('stok-rokok').value, 
         jumlah: parseFloat(document.getElementById('stok-jumlah').value), 
-        modal: parseFloat(document.getElementById('stok-modal').value.replace(/\./g, '')) || 0 
+        modal: parseFloat(document.getElementById('stok-modal').value.replace(/\./g, '')) || 0,
+        tipe: "Masuk"
       };
       if(!data.rokok || !data.jumlah) { showToast("Lengkapi data rokok & jumlah!", "error"); return; }
       
-      toggleLoadingButton('btn-save-stok', true, 'CATAT PENGAMBILAN');
-      const res = await apiCall('savePengambilan', { payload: data });
-      toggleLoadingButton('btn-save-stok', false, 'CATAT PENGAMBILAN');
-      
-      if(res.error) { showToast(res.error, "error"); return; }
-      showToast("Pengambilan stok dicatat permanen!", "success");
+      // OPTIMISTIC UI
+      dashboardState.allPengambilan.push(data);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      renderDashboard(dashboardState);
+
       document.getElementById('stok-jumlah').value = ""; document.getElementById('stok-modal').value = "";
+      showToast("Pengambilan stok dicatat!", "success");
+
+      const res = await apiCall('savePengambilan', { payload: data });
+      if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
+      if(res.dashboard) { 
+        dashboardState = res.dashboard; 
+        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
+        renderDashboard(dashboardState); 
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      }
+    }
+
+    async function saveBukaSlop() {
+      const data = { 
+        tanggal: new Date().toISOString(),
+        rokok: document.getElementById('buka-rokok').value, 
+        jumlah: parseFloat(document.getElementById('buka-jumlah').value), 
+        modal: 0,
+        tipe: "Buka Slop"
+      };
+      if(!data.rokok || !data.jumlah) { showToast("Lengkapi data buka slop!", "error"); return; }
+      
+      // OPTIMISTIC UI
+      dashboardState.allPengambilan.push(data);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      renderDashboard(dashboardState);
+
+      document.getElementById('buka-jumlah').value = "";
+      showToast("Slop dibuka ke eceran!", "success");
+
+      const res = await apiCall('savePengambilan', { payload: data });
+      if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
       if(res.dashboard) { 
         dashboardState = res.dashboard; 
         if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
@@ -1276,16 +1389,22 @@
       const ketSelisih = document.getElementById('cc-ket-selisih').value;
       if(!jam) { showToast("Jam wajib diisi!", "error"); return; }
       
-      toggleLoadingButton('btn-save-cc', true, 'SIMPAN CROSSCHECK');
-      const res = await apiCall('saveCrosscheck', { payload: { jam: jam, status: status, catatan: catatan, tipe: currentCCTipe, jmlSelisih: jmlSelisih, ketSelisih: ketSelisih } });
-      toggleLoadingButton('btn-save-cc', false, 'SIMPAN CROSSCHECK');
-      
-      if(res.error) { showToast(res.error, "error"); return; }
-      showToast("Crosscheck disimpan permanen!", "success");
+      const data = { jam: jam, status: status, catatan: catatan, tipe: currentCCTipe, jmlSelisih: jmlSelisih, ketSelisih: ketSelisih };
+
+      // OPTIMISTIC UI
+      const newCC = { tanggal: new Date().toISOString(), ...data };
+      dashboardState.allCrosscheck.push(newCC);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      renderDashboard(dashboardState);
+
       document.getElementById('cc-jam').value = "";
       document.getElementById('cc-catatan').value = "";
       document.getElementById('cc-jml-selisih').value = "";
       document.getElementById('cc-ket-selisih').value = "-";
+      showToast("Crosscheck disimpan!", "success");
+
+      const res = await apiCall('saveCrosscheck', { payload: data });
+      if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
       if(res.dashboard) { 
         dashboardState = res.dashboard; 
         if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
@@ -1298,7 +1417,6 @@
     function saveBarcode() { const link = document.getElementById('input-barcode').value; localStorage.setItem('rokok_barcode_link', link); document.getElementById('barcode-img').src = link; showToast("Link barcode disimpan!", "success"); }
     function copyBarcodeLink() { const link = document.getElementById('input-barcode').value; if(!link) { showToast("Link kosong!", "error"); return; } navigator.clipboard.writeText(link).then(() => showToast("Link barcode berhasil di-copy!", "success")); }
 
-    // BACKGROUND SETTINGS
     function loadBg() {
       const link = localStorage.getItem('rokok_bg_link');
       const inputBg = document.getElementById('input-bg');
