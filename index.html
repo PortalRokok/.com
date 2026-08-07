@@ -17,7 +17,6 @@
       background-position: center;
       background-attachment: fixed;
       min-height: 100vh;
-      transition: background 0.5s ease;
     }
     .hidden { display: none !important; }
     input, select, button { outline: none; }
@@ -81,9 +80,7 @@
     <div class="absolute bottom-0 -right-10 w-80 h-80 bg-indigo-600 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
     <div class="relative z-10 premium-card p-8 rounded-3xl w-full max-w-sm fade-in">
       <div class="flex flex-col items-center mb-8">
-        <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg mb-4 shadow-blue-500/30">
-          <i class="fas fa-smoking text-3xl text-white"></i>
-        </div>
+        <img id="logo-login" src="" class="w-20 h-20 rounded-2xl object-cover shadow-lg mb-4 shadow-blue-500/30" alt="Logo">
         <h1 class="text-2xl font-extrabold tracking-tight text-white">Dashboard Rokok Pro</h1>
         <p class="text-sm text-slate-300 mt-1 font-medium">Masuk untuk mengelola data</p>
       </div>
@@ -117,17 +114,13 @@
   <!-- APP DASHBOARD -->
   <div id="app-view" class="hidden min-h-screen">
     <aside id="sidebar" class="fixed top-0 left-0 z-40 h-screen w-72 bg-slate-950/80 backdrop-blur-md text-white flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 border-r border-slate-800">
-      <div class="p-6 flex items-center gap-3 border-b border-slate-800">
-        <div class="w-10 h-10 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30"><i class="fas fa-smoking text-xl"></i></div>
-        <div>
-          <h1 class="font-bold text-lg leading-none text-white">Dashboard Rokok</h1>
-          <p class="text-xs text-slate-400 mt-1">Sistem Pencatatan</p>
-        </div>
-        <button onclick="toggleSidebar()" class="lg:hidden ml-auto text-slate-300"><i class="fas fa-times text-xl"></i></button>
+      <div class="p-6 flex items-center justify-center border-b border-slate-800">
+        <img id="logo-sidebar" src="" class="w-12 h-12 rounded-xl object-cover shadow-lg shadow-blue-500/30" alt="Logo">
+        <button onclick="toggleSidebar()" class="lg:hidden ml-auto text-slate-300 absolute right-4 top-6"><i class="fas fa-times text-xl"></i></button>
       </div>
       <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
         <p class="text-slate-500 text-xs font-bold uppercase tracking-wider px-4 mb-2 mt-2">Menu Utama</p>
-        <button onclick="switchPage('dashboard')" id="nav-dashboard" class="nav-active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all">
+        <button onclick="switchPage('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white font-semibold text-sm transition-all">
           <i class="fas fa-chart-line w-5 text-center"></i> Dashboard Analytics
         </button>
         
@@ -474,35 +467,18 @@
             </div>
           </div>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="premium-card p-6">
-              <h3 class="font-bold text-white mb-4">Barcode Pembayaran (ABA / Wings)</h3>
-              <div class="flex flex-col md:flex-row items-center gap-6">
-                <div class="w-48 h-48 bg-white p-3 rounded-xl flex items-center justify-center overflow-hidden"><img id="barcode-img" src="https://via.placeholder.com/150x150?text=No+Image" class="w-full h-full object-contain" alt="Barcode"></div>
-                <div class="flex-1 w-full">
-                  <label class="block label-dark mb-2 ml-1">MASUKKAN LINK GAMBAR BARCODE</label>
-                  <div class="flex gap-2 flex-col md:flex-row">
-                    <input type="text" id="input-barcode" class="flex-1 p-3 input-dark rounded-xl transition-all" placeholder="https://contoh.com/gambar.jpg">
-                    <div class="flex gap-2">
-                      <button onclick="saveBarcode()" class="bg-blue-600 hover:bg-blue-500 px-4 rounded-xl font-bold text-white transition-all py-3 flex-1 md:flex-none">SIMPAN</button>
-                      <button onclick="copyBarcodeLink()" class="bg-slate-700 hover:bg-slate-600 px-4 rounded-xl font-bold text-white transition-all py-3 flex-1 md:flex-none"><i class="fas fa-copy"></i></button>
-                    </div>
-                  </div>
-                </div>
+          <div class="premium-card p-6">
+            <h3 class="font-bold text-white mb-4">Barcode Pembayaran (ABA / Wings)</h3>
+            <div class="flex flex-col md:flex-row items-center gap-6">
+              <div class="w-48 h-48 bg-white p-3 rounded-xl flex items-center justify-center overflow-hidden">
+                <a id="barcode-link" href="#" target="_blank">
+                  <img id="barcode-img" src="https://via.placeholder.com/150x150?text=No+Image" class="w-full h-full object-contain" alt="Barcode">
+                </a>
               </div>
-            </div>
-
-            <div class="premium-card p-6">
-              <h3 class="font-bold text-white mb-4">Pengaturan Tampilan (Background)</h3>
-              <label class="block label-dark mb-2 ml-1">MASUKKAN LINK GAMBAR BACKGROUND</label>
-              <div class="flex gap-2 flex-col md:flex-row">
-                <input type="text" id="input-bg" class="flex-1 p-3 input-dark rounded-xl transition-all" placeholder="Kosongkan untuk warna default">
-                <div class="flex gap-2">
-                  <button onclick="saveBg()" class="bg-indigo-600 hover:bg-indigo-500 px-4 rounded-xl font-bold text-white transition-all py-3 flex-1 md:flex-none">SIMPAN BG</button>
-                  <button onclick="resetBg()" class="bg-red-600 hover:bg-red-500 px-4 rounded-xl font-bold text-white transition-all py-3 flex-1 md:flex-none">RESET</button>
-                </div>
+              <div class="flex-1 w-full flex flex-col gap-4">
+                <button onclick="copyBarcodeLink()" class="bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-xl font-bold text-white transition-all w-full md:w-auto"><i class="fas fa-copy mr-2"></i> COPY LINK GAMBAR</button>
+                <p class="text-xs text-slate-400"><i class="fas fa-info-circle"></i> Untuk mengganti gambar barcode, silakan ganti link di dalam script HTML (<code>const BARCODE_LINK</code>).</p>
               </div>
-              <p class="text-xs text-slate-400 mt-4"><i class="fas fa-info-circle"></i> Masukkan link gambar (jpg/png) untuk mengubah background luar dashboard.</p>
             </div>
           </div>
         </div>
@@ -512,8 +488,15 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbw19la-wUUZ-g2ytF9ltrn8PjTKjYPD3B4gMqppI40ucSJPCghMIilkyYQg4Kg1q97I/exec'; 
-    
+    // =======================================================
+    // TEMPELKAN LINK KAMU DI BAWAH INI
+    // =======================================================
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzQ1ualbx0PIHfp-CrGIuCH4oBsbqrAcvHfyJTxk78vfd42LrpshWRw8oeK_hVq4L0/exec'; 
+    const LOGO_LINK = 'https://via.placeholder.com/100x100?text=LOGO'; // Ganti dengan link gambar logo kamu
+    const BG_LINK = ''; // Kosongkan jika tidak mau pakai background gambar. Contoh: 'https://imagehost.com/bg.jpg'
+    const BARCODE_LINK = 'https://ibb.co/mCfr0GzB'; // Ganti dengan link gambar Barcode ABA kamu
+    // =======================================================
+
     let masterData = {};
     let dashboardState = null; 
     let currentJualTipe = "Perslop";
@@ -522,6 +505,13 @@
     let editMode = null;
     let selectedMonth = new Date().toISOString().slice(0, 7); 
     let salesChart = null;
+
+    // Apply Links on Load
+    document.getElementById('logo-login').src = LOGO_LINK;
+    document.getElementById('logo-sidebar').src = LOGO_LINK;
+    document.getElementById('barcode-img').src = BARCODE_LINK;
+    document.getElementById('barcode-link').href = BARCODE_LINK;
+    if(BG_LINK) document.body.style.backgroundImage = `url('${BG_LINK}')`;
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', checkSession);
@@ -634,8 +624,6 @@
     }
 
     async function initApp() {
-      loadBarcode();
-      loadBg();
       document.getElementById('stok-tanggal').value = new Date().toISOString().slice(0, 10);
 
       const cachedMaster = localStorage.getItem('rokok_master_cache');
@@ -835,8 +823,30 @@
       const titles = { 'dashboard': 'Dashboard Analytics', 'stok': 'Stok & Pengambilan', 'crosscheck': 'Crosscheck Stok', 'rokok': 'List Harga Rokok', 'rekap': 'Rekapan Pembayaran UM', 'kas': 'Kas & Setoran Bulanan' };
       if(titles[page]) document.getElementById('page-title').innerText = titles[page];
       
+      // Reset semua nav
+      ['nav-dashboard', 'nav-jual-cash', 'nav-jual-um', 'nav-jual-eceran', 'nav-stok', 'nav-crosscheck-perslop', 'nav-crosscheck-eceran', 'nav-rokok', 'nav-rekap', 'nav-kas'].forEach(id => {
+        const nav = document.getElementById(id);
+        if(nav) {
+          nav.classList.remove('nav-active');
+          nav.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+        }
+      });
+
+      // Set active nav
+      let activeId = 'nav-' + page;
+      if(page === 'jual' && customArg === 'Perslop Cash') activeId = 'nav-jual-cash';
+      else if(page === 'jual' && customArg === 'Perslop UM') activeId = 'nav-jual-um';
+      else if(page === 'jual' && customArg === 'Eceran') activeId = 'nav-jual-eceran';
+      else if(page === 'crosscheck' && customArg === 'Perslop') activeId = 'nav-crosscheck-perslop';
+      else if(page === 'crosscheck' && customArg === 'Eceran') activeId = 'nav-crosscheck-eceran';
+      
+      const activeBtn = document.getElementById(activeId);
+      if(activeBtn) {
+        activeBtn.classList.add('nav-active');
+        activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+      }
+
       if(page === 'jual' && customArg) {
-        const jualTipe = customArg;
         const lblJumlah = document.getElementById('label-jumlah');
         const inputJumlah = document.getElementById('jual-jumlah');
         const wrapperBayar = document.getElementById('wrapper-tipe-bayar');
@@ -845,21 +855,21 @@
         const selBayar = document.getElementById('jual-tipebayar');
         const titleRekap = document.getElementById('title-rekap-jual');
         
-        if(jualTipe === 'Perslop Cash') { 
+        if(customArg === 'Perslop Cash') { 
           currentJualTipe = 'Perslop'; currentJualFilter = 'Cash';
           lblJumlah.innerText = "JUMLAH SLOP"; inputJumlah.placeholder = "1 Slop, 2 Slop..."; 
           wrapperBayar.classList.remove('hidden'); wrapperSitus.classList.remove('hidden'); wrapperStatus.classList.remove('hidden');
           selBayar.value = 'Cash Riel'; titleRekap.innerText = "Riwayat Penjualan Cash / ABA";
           document.getElementById('page-title').innerText = 'Penjualan Perslop Cash'; 
         } 
-        else if(jualTipe === 'Perslop UM') { 
+        else if(customArg === 'Perslop UM') { 
           currentJualTipe = 'Perslop'; currentJualFilter = 'UM';
           lblJumlah.innerText = "JUMLAH SLOP"; inputJumlah.placeholder = "1 Slop, 2 Slop..."; 
           wrapperBayar.classList.add('hidden'); wrapperSitus.classList.remove('hidden'); wrapperStatus.classList.add('hidden'); 
           selBayar.value = 'Uang Makan'; titleRekap.innerText = "Riwayat Penjualan UM";
           document.getElementById('page-title').innerText = 'Penjualan Perslop Uang Makan'; 
         } 
-        else if(jualTipe === 'Eceran') { 
+        else if(customArg === 'Eceran') { 
           currentJualTipe = 'Eceran'; currentJualFilter = 'Eceran';
           lblJumlah.innerText = "JUMLAH BUNGKUS"; inputJumlah.placeholder = "1 Bungkus, 2 Bungkus..."; 
           wrapperBayar.classList.remove('hidden'); wrapperSitus.classList.add('hidden'); wrapperStatus.classList.remove('hidden');
@@ -1494,33 +1504,9 @@
       }
     }
 
-    function loadBarcode() { const link = localStorage.getItem('rokok_barcode_link'); if(link) { document.getElementById('barcode-img').src = link; document.getElementById('input-barcode').value = link; } }
-    function saveBarcode() { const link = document.getElementById('input-barcode').value; localStorage.setItem('rokok_barcode_link', link); document.getElementById('barcode-img').src = link; showToast("Link barcode disimpan!", "success"); }
-    function copyBarcodeLink() { const link = document.getElementById('input-barcode').value; if(!link) { showToast("Link kosong!", "error"); return; } navigator.clipboard.writeText(link).then(() => showToast("Link barcode berhasil di-copy!", "success")); }
-
-    function loadBg() {
-      const link = localStorage.getItem('rokok_bg_link');
-      const inputBg = document.getElementById('input-bg');
-      if(link) {
-        document.body.style.backgroundImage = `url('${link}')`;
-        if(inputBg) inputBg.value = link;
-      }
-    }
-    function saveBg() {
-      const link = document.getElementById('input-bg').value;
-      localStorage.setItem('rokok_bg_link', link);
-      if(link) {
-        document.body.style.backgroundImage = `url('${link}')`;
-      } else {
-        document.body.style.backgroundImage = 'none';
-      }
-      showToast("Background disimpan!", "success");
-    }
-    function resetBg() {
-      localStorage.removeItem('rokok_bg_link');
-      document.body.style.backgroundImage = 'none';
-      document.getElementById('input-bg').value = '';
-      showToast("Background direset ke default!", "success");
+    function copyBarcodeLink() {
+      if(!BARCODE_LINK || BARCODE_LINK.includes('placeholder')) { showToast("Link barcode kosong!", "error"); return; }
+      navigator.clipboard.writeText(BARCODE_LINK).then(() => showToast("Link barcode berhasil di-copy!", "success"));
     }
   </script>
 </body>
