@@ -587,6 +587,7 @@
       else { input.value = ''; }
     }
 
+    // PERBAIKAN: Cek bulan berdasarkan waktu lokal agar sesuai input kalender
     function getMonthFromDate(dateStr) {
       if(!dateStr) return "";
       let d = new Date(dateStr);
@@ -1318,7 +1319,6 @@
       }
       
       if(!namaVal) { showToast("Nama pembeli wajib diisi!", "error"); return; }
-      // PERBAIKAN: Mengganti "and" dengan "&&" agar tidak crash scriptnya
       if(currentJualTipe === "Perslop" && !situsVal) { showToast("Nama situs wajib diisi!", "error"); return; }
       
       const data = { 
@@ -1332,8 +1332,10 @@
         statusBayar: statusVal
       };
       
+      const newTanggal = new Date().toISOString();
       const newSale = {
-          tanggal: new Date().toISOString(),
+          row: Date.now(), // temporary row ID
+          tanggal: newTanggal,
           tipe: data.tipe,
           nama: data.nama,
           situs: data.situs,
@@ -1344,6 +1346,11 @@
           harga: data.harga,
           statusBayar: data.tipeBayar === "Uang Makan" ? "BELUM BAYAR" : data.statusBayar
       };
+      
+      // Auto-snap filter bulan ke bulan data baru
+      selectedMonth = getMonthFromDate(newTanggal);
+      document.getElementById('month-filter').value = selectedMonth;
+
       dashboardState.allSales.push(newSale);
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       renderDashboard(dashboardState);
@@ -1366,8 +1373,18 @@
 
     async function saveAmbilStok() {
       const tglVal = document.getElementById('stok-tanggal').value;
+      // PERBAIKAN: Pisahkan tanggal agar tidak terjadi pergeseran timezone (mundur ke bulan sebelumnya)
+      let tglIso;
+      if (tglVal) {
+          let parts = tglVal.split('-');
+          // Buat sebagai tanggal lokal tengah malam, lalu konversi ke ISO
+          tglIso = new Date(parts[0], parts[1] - 1, parts[2]).toISOString();
+      } else {
+          tglIso = new Date().toISOString();
+      }
+
       const data = { 
-        tanggal: tglVal ? new Date(tglVal).toISOString() : new Date().toISOString(),
+        tanggal: tglIso,
         rokok: document.getElementById('stok-rokok').value, 
         jumlah: parseFloat(document.getElementById('stok-jumlah').value), 
         modal: parseFloat(document.getElementById('stok-modal').value.replace(/\./g, '')) || 0,
@@ -1375,7 +1392,20 @@
       };
       if(!data.rokok || !data.jumlah) { showToast("Lengkapi data rokok & jumlah!", "error"); return; }
       
-      dashboardState.allPengambilan.push(data);
+      // Auto-snap filter bulan ke bulan data baru
+      selectedMonth = getMonthFromDate(data.tanggal);
+      document.getElementById('month-filter').value = selectedMonth;
+
+      const newPengambilan = {
+          row: Date.now(), // temporary row ID
+          tanggal: data.tanggal,
+          rokok: data.rokok,
+          jumlah: data.jumlah,
+          modal: data.modal,
+          tipe: data.tipe
+      };
+
+      dashboardState.allPengambilan.push(newPengambilan);
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       renderDashboard(dashboardState);
 
@@ -1393,8 +1423,9 @@
     }
 
     async function saveBukaSlop() {
+      const newTanggal = new Date().toISOString();
       const data = { 
-        tanggal: new Date().toISOString(),
+        tanggal: newTanggal,
         rokok: document.getElementById('buka-rokok').value, 
         jumlah: parseFloat(document.getElementById('buka-jumlah').value), 
         modal: 0,
@@ -1402,7 +1433,20 @@
       };
       if(!data.rokok || !data.jumlah) { showToast("Lengkapi data buka slop!", "error"); return; }
       
-      dashboardState.allPengambilan.push(data);
+      // Auto-snap filter bulan
+      selectedMonth = getMonthFromDate(newTanggal);
+      document.getElementById('month-filter').value = selectedMonth;
+
+      const newPengambilan = {
+          row: Date.now(), // temporary row ID
+          tanggal: newTanggal,
+          rokok: data.rokok,
+          jumlah: data.jumlah,
+          modal: 0,
+          tipe: "Buka Slop"
+      };
+
+      dashboardState.allPengambilan.push(newPengambilan);
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       renderDashboard(dashboardState);
 
@@ -1441,7 +1485,11 @@
 
     function editPengambilanData(row) {
       let data = dashboardState.allPengambilan.find(p => p.row === row);
-      if(!data) return;
+      if(!data) {
+          showToast("Data tidak ditemukan, memuat ulang halaman...", "error");
+          loadDashboardSilent();
+          return;
+      }
       
       const newJumlah = prompt(`Edit Jumlah Slop untuk ${data.rokok}:`, data.jumlah);
       if (newJumlah === null) return;
@@ -1482,61 +1530,18 @@
       const ketSelisih = document.getElementById('cc-ket-selisih').value;
       if(!jam) { showToast("Jam wajib diisi!", "error"); return; }
       
+      const newTanggal = new Date().toISOString();
       const data = { jam: jam, status: status, catatan: catatan, tipe: currentCCTipe, jmlSelisih: jmlSelisih, ketSelisih: ketSelisih };
 
-      const newCC = { tanggal: new Date().toISOString(), ...data };
+      // Auto-snap filter bulan
+      selectedMonth = getMonthFromDate(newTanggal);
+      document.getElementById('month-filter').value = selectedMonth;
+
+      const newCC = { tanggal: newTanggal, ...data };
       dashboardState.allCrosscheck.push(newCC);
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       renderDashboard(dashboardState);
 
       document.getElementById('cc-jam').value = "";
       document.getElementById('cc-catatan').value = "";
-      document.getElementById('cc-jml-selisih').value = "";
-      document.getElementById('cc-ket-selisih').value = "-";
-      showToast("Crosscheck disimpan!", "success");
-
-      const res = await apiCall('saveCrosscheck', { payload: data });
-      if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
-      if(res.dashboard) { 
-        dashboardState = res.dashboard; 
-        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        renderDashboard(dashboardState); 
-        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      }
-    }
-
-    async function copyBarcodeImage() {
-      if(!BARCODE_LINK || BARCODE_LINK === 'PASTE_LINK_GAMBAR_BARCODE_DISINI') { 
-        showToast("Link barcode belum diisi di script!", "error"); 
-        return; 
-      }
-      try {
-        const img = document.getElementById('barcode-img');
-        if(!img.complete || img.naturalWidth === 0) {
-          showToast("Gambar belum selesai dimuat.", "error");
-          return;
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        canvas.toBlob(async (blob) => {
-          try {
-            await navigator.clipboard.write([
-              new ClipboardItem({ 'image/png': blob })
-            ]);
-            showToast("Gambar barcode berhasil di-copy!", "success");
-          } catch (err) {
-            console.error('Clipboard write error:', err);
-            showToast("Browser memblokir copy gambar. Coba klik kanan gambar -> Copy Image.", "error");
-          }
-        });
-      } catch (err) {
-        console.error('Canvas draw error:', err);
-        showToast("Gagal copy gambar. Link mungkin bermasalah.", "error");
-      }
-    }
-  </script>
-</body>
-</html>
+      document.getElementById('cc-jml-selis
