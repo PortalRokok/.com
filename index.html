@@ -400,7 +400,8 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyNzQprnD0YjZWVQRQPWb0O8pY1Nbq9wllko63d46wgH5XiJ-vWRbKCB4Ve03jo1HWx/exec'; 
+    // PASTIKAN INI LINK WEB APP KAMU YANG BENAR
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwvJpmtFeZWgL1nzknC4y19SoTDDNnNvIp1vfKibWX8yzUx6ZrnFL5q0fG6F-Z_cG_3/exec'; 
     
     let masterData = {};
     let dashboardState = null; 
@@ -525,6 +526,21 @@
       loadBarcode();
       document.getElementById('stok-tanggal').value = new Date().toISOString().slice(0, 10);
 
+      // 1. LOAD FROM CACHE FIRST (INSTAN TANPA DELAY)
+      const cachedMaster = localStorage.getItem('rokok_master_cache');
+      const cachedDashboard = localStorage.getItem('rokok_dashboard_cache');
+      
+      if(cachedMaster) {
+        masterData = JSON.parse(cachedMaster);
+        populateDropdowns();
+        renderListRokok();
+      }
+      if(cachedDashboard) {
+        dashboardState = JSON.parse(cachedDashboard);
+        renderDashboard(dashboardState);
+      }
+
+      // 2. FETCH FRESH DATA IN BACKGROUND
       await loadMaster();
       const res = await apiCall('getDashboard');
       if(!res.error) {
@@ -533,8 +549,10 @@
           masterData = dashboardState.masterMap;
           populateDropdowns();
           renderListRokok();
+          localStorage.setItem('rokok_master_cache', JSON.stringify(masterData));
         }
         renderDashboard(dashboardState);
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       }
     }
 
@@ -630,8 +648,9 @@
         await loadMaster(); 
         if(res.dashboard) { 
           dashboardState = res.dashboard; 
-          if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+          if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
           renderDashboard(dashboardState); 
+          localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
         }
         cancelEdit();
       }
@@ -677,8 +696,9 @@
         await loadMaster(); 
         if(res.dashboard) { 
           dashboardState = res.dashboard; 
-          if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+          if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
           renderDashboard(dashboardState); 
+          localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
         }
       }
     }
@@ -778,7 +798,7 @@
         if(u.tipe === "Perslop") {
           modalVal = (res.masterMap[u.rokok] ? res.masterMap[u.rokok].modal : 0) * u.jumlah;
           untungPerslop += (u.harga - modalVal);
-          totalSlopTerjual += u.jumlah;
+          totalSlopTerjual += u.jumlah; 
         } else if(u.tipe === "Eceran") {
           modalVal = (res.masterMap[u.rokok] ? res.masterMap[u.rokok].modal / 10 : 0) * u.jumlah;
           untungEceran += (u.harga - modalVal); 
@@ -984,13 +1004,11 @@
         data.push(total);
       }
 
-      // Gradient Warna Mewah (Ungu ke Biru ke Transparan)
       const chartGradient = ctx.createLinearGradient(0, 0, 0, 350);
-      chartGradient.addColorStop(0, 'rgba(139, 92, 246, 0.9)'); // Ungu di atas
-      chartGradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.7)'); // Biru di tengah
-      chartGradient.addColorStop(1, 'rgba(15, 23, 42, 0.1)'); // Transparan di bawah
+      chartGradient.addColorStop(0, 'rgba(139, 92, 246, 0.9)'); 
+      chartGradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.7)'); 
+      chartGradient.addColorStop(1, 'rgba(15, 23, 42, 0.1)'); 
 
-      // Gradient saat Hover (Emas/Hijau Cerah)
       const hoverGradient = ctx.createLinearGradient(0, 0, 0, 350);
       hoverGradient.addColorStop(0, 'rgba(16, 185, 129, 1)');
       hoverGradient.addColorStop(1, 'rgba(5, 150, 105, 0.5)');
@@ -1007,7 +1025,7 @@
             hoverBackgroundColor: hoverGradient,
             borderColor: 'rgba(255, 255, 255, 0.1)',
             borderWidth: 1,
-            borderRadius: 10, // Sudut membulat elegan
+            borderRadius: 10, 
             borderSkipped: false,
           }]
         },
@@ -1057,8 +1075,9 @@
       if(res.error) { showToast("Gagal update status.", "error"); return; }
       showToast("Status pembayaran diperbarui!", "success");
       dashboardState = res.dashboard;
-      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
       renderDashboard(dashboardState);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
     }
 
     async function deleteJualData(data) {
@@ -1067,8 +1086,9 @@
       if(res.error) { showToast("Gagal hapus data.", "error"); return; }
       showToast("Transaksi dihapus.", "success");
       dashboardState = res.dashboard;
-      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
       renderDashboard(dashboardState);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
     }
 
     function hitungHargaOtomatis() {
@@ -1126,8 +1146,9 @@
       showToast("Transaksi tersimpan permanen!", "success");
       if(res.dashboard) { 
         dashboardState = res.dashboard; 
-        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
         renderDashboard(dashboardState); 
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       }
     }
 
@@ -1150,8 +1171,9 @@
       document.getElementById('stok-jumlah').value = ""; document.getElementById('stok-modal').value = "";
       if(res.dashboard) { 
         dashboardState = res.dashboard; 
-        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
         renderDashboard(dashboardState); 
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       }
     }
 
@@ -1175,8 +1197,9 @@
       document.getElementById('cc-ket-selisih').value = "-";
       if(res.dashboard) { 
         dashboardState = res.dashboard; 
-        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
         renderDashboard(dashboardState); 
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       }
     }
 
