@@ -13,7 +13,11 @@
       font-family: 'Inter', sans-serif; 
       -webkit-tap-highlight-color: transparent; 
       background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 60%, #020617 100%);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       min-height: 100vh;
+      transition: background 0.5s ease;
     }
     .hidden { display: none !important; }
     input, select, button { outline: none; }
@@ -25,12 +29,10 @@
     .fade-in { animation: fadeIn 0.3s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* Sidebar & Navbar */
     .nav-active { background: linear-gradient(90deg, #3b82f6, #2563eb); color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
     
-    /* Kartu Premium Kaca (Glassmorphism) */
     .premium-card { 
-      background: rgba(30, 41, 59, 0.7); 
+      background: rgba(30, 41, 59, 0.8); 
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255,255,255,0.1); 
@@ -38,7 +40,6 @@
       border-radius: 16px;
     }
     
-    /* Input Form Mewah & Hidup */
     .input-dark { 
       background: rgba(15, 23, 42, 0.8); 
       border: 1px solid #334155; 
@@ -56,13 +57,11 @@
     .toast { animation: toastIn 0.3s ease-out; }
     @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
     
-    /* Tabel Rapi & Hidup */
     th { color: #94a3b8; font-weight: 600; vertical-align: middle; background: rgba(15, 23, 42, 0.5); border-bottom: 1px solid rgba(255,255,255,0.1); }
     td { color: #f1f5f9; font-weight: 500; vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); }
     td.text-left { text-align: left; }
     th.text-left { text-align: left; }
     
-    /* Badge Status Cantik */
     .badge { padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 700; display: inline-block; text-align: center; }
     .badge-success { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
     .badge-danger { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
@@ -422,20 +421,36 @@
               </div>
             </div>
           </div>
-          <div class="premium-card p-6">
-            <h3 class="font-bold text-white mb-4">Barcode Pembayaran (ABA / Wings)</h3>
-            <div class="flex flex-col md:flex-row items-center gap-6">
-              <div class="w-48 h-48 bg-white p-3 rounded-xl flex items-center justify-center overflow-hidden"><img id="barcode-img" src="https://via.placeholder.com/150x150?text=No+Image" class="w-full h-full object-contain" alt="Barcode"></div>
-              <div class="flex-1 w-full">
-                <label class="block label-dark mb-2 ml-1">MASUKKAN LINK GAMBAR BARCODE</label>
-                <div class="flex gap-2 flex-col md:flex-row">
-                  <input type="text" id="input-barcode" class="flex-1 p-3 input-dark rounded-xl transition-all" placeholder="https://contoh.com/gambar.jpg">
-                  <div class="flex gap-2">
-                    <button onclick="saveBarcode()" class="bg-blue-600 hover:bg-blue-500 px-4 rounded-xl font-bold text-white transition-all py-3 flex-1 md:flex-none">SIMPAN</button>
-                    <button onclick="copyBarcodeLink()" class="bg-slate-700 hover:bg-slate-600 px-4 rounded-xl font-bold text-white transition-all py-3 flex-1 md:flex-none"><i class="fas fa-copy"></i></button>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="premium-card p-6">
+              <h3 class="font-bold text-white mb-4">Barcode Pembayaran (ABA / Wings)</h3>
+              <div class="flex flex-col md:flex-row items-center gap-6">
+                <div class="w-48 h-48 bg-white p-3 rounded-xl flex items-center justify-center overflow-hidden"><img id="barcode-img" src="https://via.placeholder.com/150x150?text=No+Image" class="w-full h-full object-contain" alt="Barcode"></div>
+                <div class="flex-1 w-full">
+                  <label class="block label-dark mb-2 ml-1">MASUKKAN LINK GAMBAR BARCODE</label>
+                  <div class="flex gap-2 flex-col md:flex-row">
+                    <input type="text" id="input-barcode" class="flex-1 p-3 input-dark rounded-xl transition-all" placeholder="https://contoh.com/gambar.jpg">
+                    <div class="flex gap-2">
+                      <button onclick="saveBarcode()" class="bg-blue-600 hover:bg-blue-500 px-4 rounded-xl font-bold text-white transition-all py-3 flex-1 md:flex-none">SIMPAN</button>
+                      <button onclick="copyBarcodeLink()" class="bg-slate-700 hover:bg-slate-600 px-4 rounded-xl font-bold text-white transition-all py-3 flex-1 md:flex-none"><i class="fas fa-copy"></i></button>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div class="premium-card p-6">
+              <h3 class="font-bold text-white mb-4">Pengaturan Tampilan (Background)</h3>
+              <label class="block label-dark mb-2 ml-1">MASUKKAN LINK GAMBAR BACKGROUND</label>
+              <div class="flex gap-2 flex-col md:flex-row">
+                <input type="text" id="input-bg" class="flex-1 p-3 input-dark rounded-xl transition-all" placeholder="Kosongkan untuk warna default">
+                <div class="flex gap-2">
+                  <button onclick="saveBg()" class="bg-indigo-600 hover:bg-indigo-500 px-4 rounded-xl font-bold text-white transition-all py-3 flex-1 md:flex-none">SIMPAN BG</button>
+                  <button onclick="resetBg()" class="bg-red-600 hover:bg-red-500 px-4 rounded-xl font-bold text-white transition-all py-3 flex-1 md:flex-none">RESET</button>
+                </div>
+              </div>
+              <p class="text-xs text-slate-400 mt-4"><i class="fas fa-info-circle"></i> Masukkan link gambar (jpg/png) untuk mengubah background luar dashboard.</p>
             </div>
           </div>
         </div>
@@ -445,7 +460,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwvJpmtFeZWgL1nzknC4y19SoTDDNnNvIp1vfKibWX8yzUx6ZrnFL5q0fG6F-Z_cG_3/exec'; 
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyNzQprnD0YjZWVQRQPWb0O8pY1Nbq9wllko63d46wgH5XiJ-vWRbKCB4Ve03jo1HWx/exec'; 
     
     let masterData = {};
     let dashboardState = null; 
@@ -568,6 +583,7 @@
 
     async function initApp() {
       loadBarcode();
+      loadBg();
       document.getElementById('stok-tanggal').value = new Date().toISOString().slice(0, 10);
 
       const cachedMaster = localStorage.getItem('rokok_master_cache');
@@ -731,18 +747,27 @@
 
     async function deleteMaster(namaRokok) {
       if(!confirm(`Yakin hapus rokok ${namaRokok}?`)) return;
+      
+      // OPTIMISTIC UI: LANGSUNG HAPUS DI LAYAR
+      const originalMaster = {...masterData};
+      delete masterData[namaRokok];
+      populateDropdowns();
+      renderListRokok();
+      showToast("Menghapus rokok...", "success");
+
       const res = await apiCall('deleteMaster', { payload: { nama: namaRokok } });
-      if(res.error) showToast("Gagal hapus dari Sheet.", "error");
-      else {
-        showToast("Rokok dihapus permanen!", "success");
-        await loadMaster(); 
-        if(res.dashboard) { 
-          dashboardState = res.dashboard; 
-          if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-          renderDashboard(dashboardState); 
-          localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-        }
+      if(res.error) {
+        showToast("Gagal hapus, mengembalikan data...", "error");
+        masterData = originalMaster;
+        populateDropdowns();
+        renderListRokok();
+        return;
       }
+      
+      dashboardState = res.dashboard; 
+      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
+      renderDashboard(dashboardState); 
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
     }
 
     function copyText() {
@@ -1113,9 +1138,19 @@
     }
 
     async function updateJualStatus(data, newStatus) {
+      // OPTIMISTIC UI UPDATE
+      dashboardState.allSales.forEach(u => {
+        if (u.tanggal === data.tanggal && u.nama === data.nama && u.rokok === data.rokok && Number(u.jumlah) === Number(data.jumlah) && Number(u.harga) === Number(data.harga)) {
+          u.statusBayar = newStatus;
+        }
+      });
+      renderDashboard(dashboardState);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      showToast("Status diperbarui...", "success");
+
       const res = await apiCall('updateStatusPenjualan', { payload: { ...data, newStatus: newStatus } });
       if(res.error) { showToast("Gagal update status.", "error"); return; }
-      showToast("Status pembayaran diperbarui!", "success");
+      
       dashboardState = res.dashboard;
       if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
       renderDashboard(dashboardState);
@@ -1124,9 +1159,23 @@
 
     async function deleteJualData(data) {
       if(!confirm('Yakin hapus transaksi ini?')) return;
+      
+      // OPTIMISTIC UI UPDATE (LANGSUNG HILANG DARI LAYAR)
+      const originalSales = [...dashboardState.allSales];
+      dashboardState.allSales = dashboardState.allSales.filter(u => {
+        return !(u.tanggal === data.tanggal && u.nama === data.nama && u.rokok === data.rokok && Number(u.jumlah) === Number(data.jumlah) && Number(u.harga) === Number(data.harga));
+      });
+      renderDashboard(dashboardState);
+      showToast("Menghapus transaksi...", "success");
+
       const res = await apiCall('deletePenjualan', { payload: data });
-      if(res.error) { showToast("Gagal hapus data.", "error"); return; }
-      showToast("Transaksi dihapus.", "success");
+      if(res.error) { 
+        showToast("Gagal hapus, mengembalikan data...", "error"); 
+        dashboardState.allSales = originalSales;
+        renderDashboard(dashboardState);
+        return; 
+      }
+      
       dashboardState = res.dashboard;
       if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
       renderDashboard(dashboardState);
@@ -1248,6 +1297,32 @@
     function loadBarcode() { const link = localStorage.getItem('rokok_barcode_link'); if(link) { document.getElementById('barcode-img').src = link; document.getElementById('input-barcode').value = link; } }
     function saveBarcode() { const link = document.getElementById('input-barcode').value; localStorage.setItem('rokok_barcode_link', link); document.getElementById('barcode-img').src = link; showToast("Link barcode disimpan!", "success"); }
     function copyBarcodeLink() { const link = document.getElementById('input-barcode').value; if(!link) { showToast("Link kosong!", "error"); return; } navigator.clipboard.writeText(link).then(() => showToast("Link barcode berhasil di-copy!", "success")); }
+
+    // BACKGROUND SETTINGS
+    function loadBg() {
+      const link = localStorage.getItem('rokok_bg_link');
+      const inputBg = document.getElementById('input-bg');
+      if(link) {
+        document.body.style.backgroundImage = `url('${link}')`;
+        if(inputBg) inputBg.value = link;
+      }
+    }
+    function saveBg() {
+      const link = document.getElementById('input-bg').value;
+      localStorage.setItem('rokok_bg_link', link);
+      if(link) {
+        document.body.style.backgroundImage = `url('${link}')`;
+      } else {
+        document.body.style.backgroundImage = 'none';
+      }
+      showToast("Background disimpan!", "success");
+    }
+    function resetBg() {
+      localStorage.removeItem('rokok_bg_link');
+      document.body.style.backgroundImage = 'none';
+      document.getElementById('input-bg').value = '';
+      showToast("Background direset ke default!", "success");
+    }
   </script>
 </body>
 </html>
