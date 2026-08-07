@@ -19,21 +19,48 @@
     ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
     .fade-in { animation: fadeIn 0.3s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Sidebar & Navbar */
     .nav-active { background: linear-gradient(90deg, #3b82f6, #2563eb); color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
-    .premium-card { background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-    .input-dark { background: #0f172a; border: 1px solid #334155; color: #fff; }
-    .input-dark:focus { border-color: #3b82f6; }
+    
+    /* Kartu Premium Mewah */
+    .premium-card { 
+      background: linear-gradient(160deg, #1e293b 0%, #111827 100%); 
+      border: 1px solid rgba(255,255,255,0.08); 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+      border-radius: 16px;
+    }
+    
+    /* Input Form Mewah & Hidup */
+    .input-dark { 
+      background: #1e293b; 
+      border: 1px solid #3e4c66; 
+      color: #ffffff; 
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+    .input-dark:focus { 
+      border-color: #3b82f6; 
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      background: #243349;
+    }
+    
     .label-dark { color: #94a3b8; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
     .toast { animation: toastIn 0.3s ease-out; }
     @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
-    th { color: #e2e8f0; font-weight: 700; vertical-align: middle; }
-    td { color: #ffffff; font-weight: 500; vertical-align: middle; }
+    
+    /* Tabel Rapi & Hidup */
+    th { color: #e2e8f0; font-weight: 700; vertical-align: middle; background: #1e293b; }
+    td { color: #ffffff; font-weight: 500; vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    
+    /* Badge Status Cantik */
     .badge { padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 700; display: inline-block; text-align: center; }
-    .badge-success { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-    .badge-danger { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
-    .badge-purple { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
-    .badge-warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-    .filter-light { background: #f8fafc; color: #0f172a; border: 1px solid #cbd5e1; font-weight: 700; }
+    .badge-success { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-danger { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-purple { background: rgba(168, 85, 247, 0.2); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .badge-warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    
+    .filter-light { background: #f8fafc; color: #0f172a; border: 1px solid #cbd5e1; font-weight: 700; border-radius: 8px; }
   </style>
 </head>
 <body class="bg-slate-900 text-slate-100">
@@ -57,14 +84,14 @@
           <label class="block label-dark mb-2 ml-1">USERNAME</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fas fa-user"></i></span>
-            <input type="text" id="username" class="w-full pl-11 pr-4 py-3.5 input-dark rounded-xl transition-all" placeholder="Masukkan username" required>
+            <input type="text" id="username" class="w-full pl-11 pr-4 py-3.5 input-dark transition-all" placeholder="Masukkan username" required>
           </div>
         </div>
         <div class="mb-6">
           <label class="block label-dark mb-2 ml-1">PASSWORD</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fas fa-lock"></i></span>
-            <input type="password" id="password" class="w-full pl-11 pr-12 py-3.5 input-dark rounded-xl transition-all" placeholder="Masukkan password" required>
+            <input type="password" id="password" class="w-full pl-11 pr-12 py-3.5 input-dark transition-all" placeholder="Masukkan password" required>
             <button type="button" onclick="togglePass()" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-blue-400">
               <i id="eye-icon" class="fas fa-eye"></i>
             </button>
@@ -150,7 +177,7 @@
         </div>
         <div class="flex items-center gap-2">
           <label class="text-xs text-slate-300 font-bold hidden md:block">FILTER BULAN:</label>
-          <input type="month" id="month-filter" onchange="applyMonthFilter()" class="p-2 filter-light rounded-lg text-sm">
+          <input type="month" id="month-filter" onchange="applyMonthFilter()" class="p-2 filter-light text-sm">
         </div>
       </header>
       <main class="flex-1 p-4 md:p-8">
@@ -178,12 +205,12 @@
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="premium-card p-6 md:p-8 rounded-2xl">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                <div><label class="block label-dark mb-2 ml-1">NAMA PEMBELI (WAJIB)</label><input type="text" id="jual-nama" class="w-full p-3 input-dark rounded-xl transition-all" placeholder="Masukkan nama"></div>
-                <div id="wrapper-situs"><label class="block label-dark mb-2 ml-1">NAMA SITUS (WAJIB)</label><input type="text" id="jual-situs" class="w-full p-3 input-dark rounded-xl transition-all" placeholder="Contoh: DANA, OVO"></div>
-                <div><label class="block label-dark mb-2 ml-1">JENIS ROKOK</label><select id="jual-rokok" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark rounded-xl transition-all"><option value="">Pilih Rokok</option></select></div>
-                <div><label id="label-jumlah" class="block label-dark mb-2 ml-1">JUMLAH SLOP</label><input type="number" id="jual-jumlah" oninput="hitungHargaOtomatis()" class="w-full p-3 input-dark rounded-xl transition-all" placeholder="1 slop, 2 slop..."></div>
-                <div id="wrapper-tipe-bayar"><label class="block label-dark mb-2 ml-1">TIPE BAYAR</label><select id="jual-tipebayar" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark rounded-xl transition-all"><option value="Cash Riel">Cash Riel</option><option value="ABA">ABA</option><option value="Uang Makan">Uang Makan</option></select></div>
-                <div id="wrapper-status"><label class="block label-dark mb-2 ml-1">STATUS BAYAR</label><select id="jual-status" class="w-full p-3 input-dark rounded-xl transition-all"><option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option></select></div>
+                <div><label class="block label-dark mb-2 ml-1">NAMA PEMBELI (WAJIB)</label><input type="text" id="jual-nama" class="w-full p-3 input-dark transition-all" placeholder="Masukkan nama"></div>
+                <div id="wrapper-situs"><label class="block label-dark mb-2 ml-1">NAMA SITUS (WAJIB)</label><input type="text" id="jual-situs" class="w-full p-3 input-dark transition-all" placeholder="Contoh: DANA, OVO"></div>
+                <div><label class="block label-dark mb-2 ml-1">JENIS ROKOK</label><select id="jual-rokok" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark transition-all"><option value="">Pilih Rokok</option></select></div>
+                <div><label id="label-jumlah" class="block label-dark mb-2 ml-1">JUMLAH SLOP</label><input type="number" id="jual-jumlah" oninput="hitungHargaOtomatis()" class="w-full p-3 input-dark transition-all" placeholder="1 slop, 2 slop..."></div>
+                <div id="wrapper-tipe-bayar"><label class="block label-dark mb-2 ml-1">TIPE BAYAR</label><select id="jual-tipebayar" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark transition-all"><option value="Cash Riel">Cash Riel</option><option value="ABA">ABA</option><option value="Uang Makan">Uang Makan</option></select></div>
+                <div id="wrapper-status"><label class="block label-dark mb-2 ml-1">STATUS BAYAR</label><select id="jual-status" class="w-full p-3 input-dark transition-all"><option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option></select></div>
               </div>
               <div class="bg-gradient-to-r from-emerald-900/40 to-green-900/20 p-5 rounded-xl border border-emerald-500/20 mb-6 flex justify-between items-center">
                 <span class="text-sm font-bold text-emerald-300 uppercase tracking-wider">Total Harga</span><p class="text-2xl md:text-3xl font-extrabold text-emerald-400" id="jual-harga">៛ 0</p>
@@ -218,13 +245,13 @@
             <div class="premium-card p-6 rounded-2xl md:col-span-1">
               <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-plus-circle text-blue-400"></i> Catat Pengambilan</h3>
               <label class="block label-dark mb-2 ml-1">TANGGAL PENGAMBILAN</label>
-              <input type="date" id="stok-tanggal" class="w-full p-3 mb-3 input-dark rounded-xl transition-all">
+              <input type="date" id="stok-tanggal" class="w-full p-3 mb-3 input-dark transition-all">
               <label class="block label-dark mb-2 ml-1">JENIS ROKOK</label>
-              <select id="stok-rokok" class="w-full p-3 mb-3 input-dark rounded-xl transition-all"></select>
+              <select id="stok-rokok" class="w-full p-3 mb-3 input-dark transition-all"></select>
               <label class="block label-dark mb-2 ml-1">JUMLAH SLOP DIAMBIL</label>
-              <input type="number" id="stok-jumlah" class="w-full p-3 mb-3 input-dark rounded-xl transition-all" placeholder="Jumlah Slop Diambil">
+              <input type="number" id="stok-jumlah" class="w-full p-3 mb-3 input-dark transition-all" placeholder="Jumlah Slop Diambil">
               <label class="block label-dark mb-2 ml-1">MODAL HARGA BELI PER SLOP (៛)</label>
-              <input type="text" inputmode="numeric" id="stok-modal" oninput="formatNumber(this)" class="w-full p-3 mb-4 input-dark rounded-xl transition-all" placeholder="Modal Harga Beli Per Slop (៛)">
+              <input type="text" inputmode="numeric" id="stok-modal" oninput="formatNumber(this)" class="w-full p-3 mb-4 input-dark transition-all" placeholder="Modal Harga Beli Per Slop (៛)">
               <button onclick="saveAmbilStok()" id="btn-save-stok" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-xl font-bold active:scale-95 transition-all border border-slate-700">CATAT PENGAMBILAN</button>
               <p class="text-xs text-slate-400 mt-4"><i class="fas fa-info-circle"></i> Sisa stok bulan lalu otomatis terhitung dari stok yang belum terjual bulan sebelumnya.</p>
             </div>
@@ -259,19 +286,19 @@
            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="premium-card p-6 rounded-2xl">
               <h3 id="title-cc-form" class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-clock text-green-400"></i> Form Crosscheck</h3>
-              <input type="text" id="cc-catatan" class="w-full p-3 mb-3 input-dark rounded-xl transition-all" placeholder="Nama / Karyawan (Opsional)">
-              <input type="time" id="cc-jam" class="w-full p-3 mb-3 input-dark rounded-xl transition-all" required>
+              <input type="text" id="cc-catatan" class="w-full p-3 mb-3 input-dark transition-all" placeholder="Nama / Karyawan (Opsional)">
+              <input type="time" id="cc-jam" class="w-full p-3 mb-3 input-dark transition-all" required>
               <div class="mb-3">
                 <label class="block label-dark mb-2 ml-1">STATUS CEK</label>
-                <select id="cc-status" class="w-full p-3 input-dark rounded-xl transition-all"><option value="KLOP">KLOP (Sesuai Sistem)</option><option value="SELISIH">SELISIH (Beda)</option></select>
+                <select id="cc-status" class="w-full p-3 input-dark transition-all"><option value="KLOP">KLOP (Sesuai Sistem)</option><option value="SELISIH">SELISIH (Beda)</option></select>
               </div>
               <div class="mb-3">
                 <label class="block label-dark mb-2 ml-1">JUMLAH SELISIH</label>
-                <input type="number" id="cc-jml-selisih" class="w-full p-3 input-dark rounded-xl transition-all" placeholder="0">
+                <input type="number" id="cc-jml-selisih" class="w-full p-3 input-dark transition-all" placeholder="0">
               </div>
               <div class="mb-3">
                 <label class="block label-dark mb-2 ml-1">KETERANGAN SELISIH</label>
-                <select id="cc-ket-selisih" class="w-full p-3 input-dark rounded-xl transition-all"><option value="-">-</option><option value="Kurang">Kurang</option><option value="Lebih">Lebih</option></select>
+                <select id="cc-ket-selisih" class="w-full p-3 input-dark transition-all"><option value="-">-</option><option value="Kurang">Kurang</option><option value="Lebih">Lebih</option></select>
               </div>
               <button onclick="saveCrosscheck()" id="btn-save-cc" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-xl font-bold transition-all active:scale-95">SIMPAN CROSSCHECK</button>
             </div>
@@ -400,7 +427,6 @@
   </div>
 
   <script>
-    // PASTIKAN INI LINK WEB APP KAMU YANG BENAR
     const API_URL = 'https://script.google.com/macros/s/AKfycbwvJpmtFeZWgL1nzknC4y19SoTDDNnNvIp1vfKibWX8yzUx6ZrnFL5q0fG6F-Z_cG_3/exec'; 
     
     let masterData = {};
@@ -526,7 +552,6 @@
       loadBarcode();
       document.getElementById('stok-tanggal').value = new Date().toISOString().slice(0, 10);
 
-      // 1. LOAD FROM CACHE FIRST (INSTAN TANPA DELAY)
       const cachedMaster = localStorage.getItem('rokok_master_cache');
       const cachedDashboard = localStorage.getItem('rokok_dashboard_cache');
       
@@ -540,7 +565,6 @@
         renderDashboard(dashboardState);
       }
 
-      // 2. FETCH FRESH DATA IN BACKGROUND
       await loadMaster();
       const res = await apiCall('getDashboard');
       if(!res.error) {
@@ -864,7 +888,7 @@
         
         stokArr.push({ rokok: namaRokok, sisaBulanLalu, masukBulanIni, terjualBulanIni, sisaSaatIni });
         
-        tbStok.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+        tbStok.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-4 text-left font-semibold text-white">${namaRokok}</td>
           <td class="p-4 text-slate-100">${sisaBulanLalu}</td>
           <td class="p-4 text-slate-100">${masukBulanIni}</td>
@@ -876,7 +900,7 @@
       const tbAmbil = document.getElementById('table-pengambilan-recap'); tbAmbil.innerHTML = "";
       if(filteredAmbil.length > 0) {
         filteredAmbil.reverse().forEach(p => {
-          tbAmbil.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+          tbAmbil.innerHTML += `<tr class="hover:bg-slate-800/50">
             <td class="p-3 text-slate-100 text-left">${formatFullDate(p.tanggal, false)}</td>
             <td class="p-3 text-white">${p.rokok}</td>
             <td class="p-3 text-white">${p.jumlah} Slop</td>
@@ -898,7 +922,7 @@
           val2 = `<span class="text-slate-100">${s.terjualBulanIni * 10}</span>`; 
           val3 = `<span class="text-green-400 font-bold">${s.sisaSaatIni * 10}</span>`;
         }
-        tbStokCC.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+        tbStokCC.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-4 text-left font-semibold text-white">${s.rokok}</td>
           <td class="p-4">${val1}</td>
           <td class="p-4">${val2}</td>
@@ -910,7 +934,7 @@
       if(filteredCC.length > 0) {
         filteredCC.reverse().forEach(c => { 
           const badgeClass = c.status==='KLOP' ? 'badge-success' : 'badge-danger';
-          tbCC.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+          tbCC.innerHTML += `<tr class="hover:bg-slate-800/50">
             <td class="p-3 text-slate-100">${formatFullDate(c.tanggal, false)}</td>
             <td class="p-3 text-white">${c.jam}</td>
             <td class="p-3"><span class="badge ${badgeClass}">${c.status}</span></td>
@@ -942,7 +966,7 @@
             </div>
           `;
           
-          tbJual.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+          tbJual.innerHTML += `<tr class="hover:bg-slate-800/50">
             <td class="p-3 text-slate-100 text-left">${formatFullDate(u.tanggal, true)}</td>
             <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
             <td class="p-3 text-slate-100">${u.situs || '-'}</td>
@@ -970,7 +994,7 @@
           </div>
         `;
         
-        tbUM.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+        tbUM.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-slate-100 text-left">${formatFullDate(u.tanggal, true)}</td>
           <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
           <td class="p-3 text-slate-100">${u.rokok}</td>
