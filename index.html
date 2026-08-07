@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Dashboard Rokok Premium</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background: #0f172a; }
+    .hidden { display: none !important; }
+    input, select, button { outline: none; }
+    .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { min-width: 100%; white-space: nowrap; border-collapse: collapse; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+    .fade-in { animation: fadeIn 0.3s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .nav-active { background: linear-gradient(90deg, #3b82f6, #2563eb); color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
+    .premium-card { background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .input-dark { background: #0f172a; border: 1px solid #334155; color: #fff; }
+    .input-dark:focus { border-color: #3b82f6; }
+    .label-dark { color: #94a3b8; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .toast { animation: toastIn 0.3s ease-out; }
+    @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+    th { color: #e2e8f0; font-weight: 700; vertical-align: middle; }
+    td { color: #ffffff; font-weight: 500; vertical-align: middle; }
+    .badge { padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 700; display: inline-block; text-align: center; }
+    .badge-success { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .badge-danger { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .badge-purple { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+    .badge-warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+    .filter-light { background: #f8fafc; color: #0f172a; border: 1px solid #cbd5e1; font-weight: 700; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100">
+
+  <div id="toast" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl shadow-2xl z-50 font-bold text-sm toast"></div>
+
+  <!-- LOGIN -->
+  <div id="login-view" class="min-h-screen flex items-center justify-center p-4 bg-slate-900 relative overflow-hidden">
+    <div class="absolute top-0 -left-10 w-60 h-60 bg-blue-600 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+    <div class="absolute bottom-0 -right-10 w-80 h-80 bg-indigo-600 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+    <div class="relative z-10 premium-card p-8 rounded-3xl w-full max-w-sm fade-in">
+      <div class="flex flex-col items-center mb-8">
+        <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg mb-4 shadow-blue-500/30">
+          <i class="fas fa-smoking text-3xl text-white"></i>
+        </div>
+        <h1 class="text-2xl font-extrabold tracking-tight text-white">Dashboard Rokok Pro</h1>
+        <p class="text-sm text-slate-300 mt-1 font-medium">Masuk untuk mengelola data</p>
+      </div>
+      <form onsubmit="doLogin(event)">
+        <div class="mb-4">
+          <label class="block label-dark mb-2 ml-1">USERNAME</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fas fa-user"></i></span>
+            <input type="text" id="username" class="w-full pl-11 pr-4 py-3.5 input-dark rounded-xl transition-all" placeholder="Masukkan username" required>
+          </div>
+        </div>
+        <div class="mb-6">
+          <label class="block label-dark mb-2 ml-1">PASSWORD</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fas fa-lock"></i></span>
+            <input type="password" id="password" class="w-full pl-11 pr-12 py-3.5 input-dark rounded-xl transition-all" placeholder="Masukkan password" required>
+            <button type="button" onclick="togglePass()" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-blue-400">
+              <i id="eye-icon" class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <button type="submit" id="btn-login" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-blue-500/40 active:scale-95 transition-all flex justify-center items-center gap-2">
+          <span id="btn-login-text">MASUK</span>
+          <i id="btn-login-spinner" class="hidden animate-spin fas fa-circle-notch"></i>
+        </button>
+        <p id="login-msg" class="text-red-400 text-sm text-center mt-4 font-medium hidden"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- APP DASHBOARD -->
+  <div id="app-view" class="hidden min-h-screen">
+    <aside id="sidebar" class="fixed top-0 left-0 z-40 h-screen w-72 bg-slate-950 text-white flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 border-r border-slate-800">
+      <div class="p-6 flex items-center gap-3 border-b border-slate-800">
+        <div class="w-10 h-10 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30"><i class="fas fa-smoking text-xl"></i></div>
+        <div>
+          <h1 class="font-bold text-lg leading-none text-white">Dashboard Rokok</h1>
+          <p class="text-xs text-slate-400 mt-1">Sistem Pencatatan</p>
+        </div>
+        <button onclick="toggleSidebar()" class="lg:hidden ml-auto text-slate-300"><i class="fas fa-times text-xl"></i></button>
+      </div>
+      <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider px-4 mb-2 mt-2">Menu Utama</p>
+        <button onclick="switchPage('dashboard')" id="nav-dashboard" class="nav-active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all">
+          <i class="fas fa-chart-line w-5 text-center"></i> Dashboard Analytics
+        </button>
+        
+        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider px-4 mb-2 mt-4">Transaksi Penjualan</p>
+        <button onclick="switchPage('jual', 'Perslop Cash')" id="nav-jual-cash" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white font-semibold text-sm transition-all">
+          <i class="fas fa-money-bill-wave w-5 text-center"></i> Penjualan Perslop Cash
+        </button>
+        <button onclick="switchPage('jual', 'Perslop UM')" id="nav-jual-um" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white font-semibold text-sm transition-all">
+          <i class="fas fa-utensils w-5 text-center"></i> Penjualan Perslop Uang Makan
+        </button>
+        <button onclick="switchPage('jual', 'Eceran')" id="nav-jual-eceran" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white font-semibold text-sm transition-all">
+          <i class="fas fa-shopping-basket w-5 text-center"></i> Penjualan Rokok Eceran
+        </button>
+        
+        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider px-4 mb-2 mt-4">Inventaris & Stok</p>
+        <button onclick="switchPage('stok')" id="nav-stok" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white font-semibold text-sm transition-all">
+          <i class="fas fa-boxes w-5 text-center"></i> Stok & Pengambilan
+        </button>
+        <button onclick="switchPage('crosscheck', 'Perslop')" id="nav-crosscheck-perslop" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white font-semibold text-sm transition-all">
+          <i class="fas fa-box w-5 text-center"></i> Crosscheck Stok Perslop
+        </button>
+        <button onclick="switchPage('crosscheck', 'Eceran')" id="nav-crosscheck-eceran" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white font-semibold text-sm transition-all">
+          <i class="fas fa-check-double w-5 text-center"></i> Crosscheck Stok Eceran
+        </button>
+        <button onclick="switchPage('rokok')" id="nav-rokok" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white font-semibold text-sm transition-all">
+          <i class="fas fa-list w-5 text-center"></i> List Harga Rokok
+        </button>
+        
+        <p class="text-slate-500 text-xs font-bold uppercase tracking-wider px-4 mb-2 mt-4">Keuangan</p>
+        <button onclick="switchPage('rekap')" id="nav-rekap" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white font-semibold text-sm transition-all">
+          <i class="fas fa-file-invoice w-5 text-center"></i> Rekapan Pembayaran UM
+        </button>
+        <button onclick="switchPage('kas')" id="nav-kas" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white font-semibold text-sm transition-all">
+          <i class="fas fa-wallet w-5 text-center"></i> Kas & Setoran Bulanan
+        </button>
+      </nav>
+      <div class="p-4 border-t border-slate-800">
+        <button onclick="doLogout()" class="w-full bg-slate-900 p-4 rounded-xl flex items-center gap-3 hover:bg-red-900/50 transition-colors group">
+          <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center font-bold text-blue-400 group-hover:text-white transition-colors">A</div>
+          <div class="text-left">
+            <p class="font-bold text-sm text-white">Admin</p>
+            <p class="text-xs text-slate-400 group-hover:text-red-300 transition-colors">Klik untuk Logout</p>
+          </div>
+          <i class="fas fa-sign-out-alt ml-auto text-slate-400 group-hover:text-white transition-colors"></i>
+        </button>
+      </div>
+    </aside>
+    <div id="overlay" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden"></div>
+
+    <div class="lg:ml-72 min-h-screen flex flex-col bg-slate-900">
+      <header class="bg-slate-950/80 backdrop-blur p-4 pt-6 sticky top-0 z-20 border-b border-slate-800 flex justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleSidebar()" class="lg:hidden text-slate-200 text-xl"><i class="fas fa-bars"></i></button>
+          <h2 id="page-title" class="text-xl font-extrabold tracking-tight text-white">Dashboard Analytics</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-xs text-slate-300 font-bold hidden md:block">FILTER BULAN:</label>
+          <input type="month" id="month-filter" onchange="applyMonthFilter()" class="p-2 filter-light rounded-lg text-sm">
+        </div>
+      </header>
+      <main class="flex-1 p-4 md:p-8">
+
+        <!-- DASHBOARD -->
+        <div id="page-dashboard" class="fade-in">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+            <div class="premium-card p-5 rounded-2xl"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Pendapatan</p><i class="fas fa-arrow-trend-up text-green-400 text-sm bg-green-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-white" id="kas-total-pendapatan">៛ 0</p></div>
+            <div class="premium-card p-5 rounded-2xl border-yellow-500/30"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Untung (Gabungan)</p><i class="fas fa-sack-dollar text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-yellow-400" id="kas-untung">៛ 0</p></div>
+            <div class="premium-card p-5 rounded-2xl"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Perslop</p><i class="fas fa-box text-blue-400 text-sm bg-blue-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-blue-400" id="kas-untung-perslop">៛ 0</p></div>
+            <div class="premium-card p-5 rounded-2xl"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Eceran</p><i class="fas fa-shopping-basket text-purple-400 text-sm bg-purple-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-purple-400" id="kas-untung-eceran">៛ 0</p></div>
+            <div class="premium-card p-5 rounded-2xl"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Cash Riel</p><i class="fas fa-money-bill-wave text-green-400 text-sm bg-green-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-green-400" id="kas-cash-riel">៛ 0</p></div>
+            <div class="premium-card p-5 rounded-2xl"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">ABA</p><i class="fas fa-clock text-purple-400 text-sm bg-purple-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-purple-400" id="kas-aba">៛ 0</p></div>
+            <div class="premium-card p-5 rounded-2xl"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Uang Makan (Belum Cair)</p><i class="fas fa-utensils text-amber-400 text-sm bg-amber-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-amber-400" id="kas-um">៛ 0</p></div>
+            <div class="premium-card p-5 rounded-2xl"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Slop Terjual</p><i class="fas fa-box-open text-cyan-400 text-sm bg-cyan-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-cyan-400" id="kas-total-slop-terjual">0 Slop</p></div>
+          </div>
+          <div class="premium-card p-6 rounded-2xl mt-6 border-indigo-500/20">
+            <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-chart-bar text-indigo-400"></i> Grafik Penjualan 6 Bulan Terakhir</h3>
+            <div style="height: 350px; position: relative;"><canvas id="salesChart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- JUAL (CASH, UM, ECERAN) -->
+        <div id="page-jual" class="hidden fade-in">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="premium-card p-6 md:p-8 rounded-2xl">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                <div><label class="block label-dark mb-2 ml-1">NAMA PEMBELI (WAJIB)</label><input type="text" id="jual-nama" class="w-full p-3 input-dark rounded-xl transition-all" placeholder="Masukkan nama"></div>
+                <div id="wrapper-situs"><label class="block label-dark mb-2 ml-1">NAMA SITUS (WAJIB)</label><input type="text" id="jual-situs" class="w-full p-3 input-dark rounded-xl transition-all" placeholder="Contoh: DANA, OVO"></div>
+                <div><label class="block label-dark mb-2 ml-1">JENIS ROKOK</label><select id="jual-rokok" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark rounded-xl transition-all"><option value="">Pilih Rokok</option></select></div>
+                <div><label id="label-jumlah" class="block label-dark mb-2 ml-1">JUMLAH SLOP</label><input type="number" id="jual-jumlah" oninput="hitungHargaOtomatis()" class="w-full p-3 input-dark rounded-xl transition-all" placeholder="1 slop, 2 slop..."></div>
+                <div id="wrapper-tipe-bayar"><label class="block label-dark mb-2 ml-1">TIPE BAYAR</label><select id="jual-tipebayar" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark rounded-xl transition-all"><option value="Cash Riel">Cash Riel</option><option value="ABA">ABA</option><option value="Uang Makan">Uang Makan</option></select></div>
+                <div id="wrapper-status"><label class="block label-dark mb-2 ml-1">STATUS BAYAR</label><select id="jual-status" class="w-full p-3 input-dark rounded-xl transition-all"><option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option></select></div>
+              </div>
+              <div class="bg-gradient-to-r from-emerald-900/40 to-green-900/20 p-5 rounded-xl border border-emerald-500/20 mb-6 flex justify-between items-center">
+                <span class="text-sm font-bold text-emerald-300 uppercase tracking-wider">Total Harga</span><p class="text-2xl md:text-3xl font-extrabold text-emerald-400" id="jual-harga">៛ 0</p>
+              </div>
+              <button onclick="saveJual()" id="btn-save-jual" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-blue-500/30 active:scale-95 transition-all">SIMPAN TRANSAKSI</button>
+            </div>
+            
+            <div class="premium-card rounded-2xl overflow-hidden scroll-x flex flex-col">
+              <h4 id="title-rekap-jual" class="font-bold bg-blue-500/10 text-blue-400 p-4 border-b border-slate-800 text-sm">Riwayat Penjualan Cash</h4>
+              <table class="text-sm text-center w-full">
+                <thead class="bg-slate-950 text-slate-200 text-xs uppercase">
+                  <tr>
+                    <th class="p-3 text-left">Waktu</th>
+                    <th class="p-3">Nama Pembeli</th>
+                    <th class="p-3">Situs</th>
+                    <th class="p-3">Rokok</th>
+                    <th class="p-3">Jumlah</th>
+                    <th class="p-3">Harga</th>
+                    <th class="p-3">Status</th>
+                    <th class="p-3">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="table-jual-recap" class="divide-y divide-slate-800"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- STOK PERSLOP -->
+        <div id="page-stok" class="hidden fade-in">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="premium-card p-6 rounded-2xl md:col-span-1">
+              <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-plus-circle text-blue-400"></i> Catat Pengambilan</h3>
+              <label class="block label-dark mb-2 ml-1">TANGGAL PENGAMBILAN</label>
+              <input type="date" id="stok-tanggal" class="w-full p-3 mb-3 input-dark rounded-xl transition-all">
+              <label class="block label-dark mb-2 ml-1">JENIS ROKOK</label>
+              <select id="stok-rokok" class="w-full p-3 mb-3 input-dark rounded-xl transition-all"></select>
+              <label class="block label-dark mb-2 ml-1">JUMLAH SLOP DIAMBIL</label>
+              <input type="number" id="stok-jumlah" class="w-full p-3 mb-3 input-dark rounded-xl transition-all" placeholder="Jumlah Slop Diambil">
+              <label class="block label-dark mb-2 ml-1">MODAL HARGA BELI PER SLOP (៛)</label>
+              <input type="text" inputmode="numeric" id="stok-modal" oninput="formatNumber(this)" class="w-full p-3 mb-4 input-dark rounded-xl transition-all" placeholder="Modal Harga Beli Per Slop (៛)">
+              <button onclick="saveAmbilStok()" id="btn-save-stok" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-xl font-bold active:scale-95 transition-all border border-slate-700">CATAT PENGAMBILAN</button>
+              <p class="text-xs text-slate-400 mt-4"><i class="fas fa-info-circle"></i> Sisa stok bulan lalu otomatis terhitung dari stok yang belum terjual bulan sebelumnya.</p>
+            </div>
+            <div class="premium-card rounded-2xl overflow-hidden md:col-span-2 scroll-x">
+              <table class="text-sm text-center w-full">
+                <thead class="bg-slate-950 text-slate-200 text-xs uppercase border-b border-slate-800">
+                  <tr>
+                    <th class="p-4 text-left">Jenis Rokok</th>
+                    <th class="p-4">Sisa Bulan Lalu</th>
+                    <th class="p-4">Masuk Bulan Ini</th>
+                    <th class="p-4">Terjual Bulan Ini</th>
+                    <th class="p-4">Sisa Saat Ini</th>
+                  </tr>
+                </thead>
+                <tbody id="table-stok" class="divide-y divide-slate-800"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="premium-card rounded-2xl overflow-hidden scroll-x">
+            <h4 class="font-bold bg-blue-500/10 text-blue-400 p-4 border-b border-slate-800 text-sm">Riwayat Pengambilan Stok Bulan Ini</h4>
+            <table class="text-sm text-center w-full">
+              <thead class="bg-slate-950 text-slate-200 text-xs uppercase">
+                <tr><th class="p-3 text-left">Tanggal Pengambilan</th><th class="p-3">Rokok</th><th class="p-3">Jumlah Diambil</th><th class="p-3">Modal Per Slop</th></tr>
+              </thead>
+              <tbody id="table-pengambilan-recap" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CROSSCHECK (PERSLOP & ECERAN) -->
+        <div id="page-crosscheck" class="hidden fade-in">
+           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="premium-card p-6 rounded-2xl">
+              <h3 id="title-cc-form" class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-clock text-green-400"></i> Form Crosscheck</h3>
+              <input type="text" id="cc-catatan" class="w-full p-3 mb-3 input-dark rounded-xl transition-all" placeholder="Nama / Karyawan (Opsional)">
+              <input type="time" id="cc-jam" class="w-full p-3 mb-3 input-dark rounded-xl transition-all" required>
+              <div class="mb-3">
+                <label class="block label-dark mb-2 ml-1">STATUS CEK</label>
+                <select id="cc-status" class="w-full p-3 input-dark rounded-xl transition-all"><option value="KLOP">KLOP (Sesuai Sistem)</option><option value="SELISIH">SELISIH (Beda)</option></select>
+              </div>
+              <div class="mb-3">
+                <label class="block label-dark mb-2 ml-1">JUMLAH SELISIH</label>
+                <input type="number" id="cc-jml-selisih" class="w-full p-3 input-dark rounded-xl transition-all" placeholder="0">
+              </div>
+              <div class="mb-3">
+                <label class="block label-dark mb-2 ml-1">KETERANGAN SELISIH</label>
+                <select id="cc-ket-selisih" class="w-full p-3 input-dark rounded-xl transition-all"><option value="-">-</option><option value="Kurang">Kurang</option><option value="Lebih">Lebih</option></select>
+              </div>
+              <button onclick="saveCrosscheck()" id="btn-save-cc" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-xl font-bold transition-all active:scale-95">SIMPAN CROSSCHECK</button>
+            </div>
+            <div class="premium-card rounded-2xl overflow-hidden md:col-span-2 scroll-x">
+              <table class="text-sm text-center w-full">
+                <thead class="bg-slate-950 text-slate-200 text-xs uppercase border-b border-slate-800">
+                  <tr>
+                    <th class="p-4 text-left">Jenis Rokok</th>
+                    <th id="th-cc-1" class="p-4">Terjual Eceran</th>
+                    <th id="th-cc-2" class="p-4">Dibuka Dari Slop</th>
+                    <th id="th-cc-3" class="p-4">Sisa Eceran</th>
+                  </tr>
+                </thead>
+                <tbody id="table-stok-cc" class="divide-y divide-slate-800"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="premium-card rounded-2xl overflow-hidden scroll-x">
+            <h4 class="font-bold bg-purple-500/10 text-purple-400 p-4 border-b border-slate-800 text-sm">Riwayat Crosscheck Bulan Ini</h4>
+            <table class="text-sm text-center w-full">
+              <thead class="bg-slate-950 text-slate-200 text-xs uppercase">
+                <tr><th class="p-3">Tanggal</th><th class="p-3">Jam</th><th class="p-3">Status</th><th class="p-3">Jml Selisih</th><th class="p-3">Ket</th><th class="p-3">Catatan</th></tr>
+              </thead>
+              <tbody id="table-crosscheck" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- LIST ROKOK -->
+        <div id="page-rokok" class="hidden fade-in">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="premium-card p-6 rounded-2xl">
+              <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-plus text-blue-400"></i> Kelola Rokok</h3>
+              <div class="grid grid-cols-1 gap-3 mb-4">
+                <input type="hidden" id="m-id">
+                <input type="text" id="m-nama" class="w-full p-3 input-dark rounded-xl" placeholder="Nama Rokok">
+                <input type="text" inputmode="numeric" id="m-modal" oninput="formatNumber(this)" class="w-full p-3 input-dark rounded-xl" placeholder="Modal / Slop (៛)">
+                <input type="text" inputmode="numeric" id="m-cash" oninput="formatNumber(this)" class="w-full p-3 input-dark rounded-xl" placeholder="Harga Cash Riel / Slop (៛)">
+                <input type="text" inputmode="numeric" id="m-um" oninput="formatNumber(this)" class="w-full p-3 input-dark rounded-xl" placeholder="Harga Uang Makan / Slop (៛)">
+                <input type="text" inputmode="numeric" id="m-eceran" oninput="formatNumber(this)" class="w-full p-3 input-dark rounded-xl" placeholder="Harga Eceran / Bungkus (៛)">
+              </div>
+              <div class="flex gap-2">
+                <button onclick="saveMaster()" id="btn-save-master" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-bold transition-all">SIMPAN ROKOK BARU</button>
+                <button onclick="cancelEdit()" id="btn-cancel-edit" class="hidden w-full bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-xl font-bold transition-all">BATAL</button>
+              </div>
+            </div>
+            <div class="premium-card p-6 rounded-2xl flex flex-col">
+              <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-share-alt text-green-400"></i> Format List Buat Share</h3>
+              <div id="text-share" class="bg-slate-950 p-4 rounded-xl mb-4 text-sm text-slate-200 whitespace-pre-wrap flex-1 overflow-auto max-h-96"></div>
+              <button onclick="copyText()" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl font-bold transition-all active:scale-95"><i class="fas fa-copy mr-2"></i> COPY TEXT</button>
+            </div>
+          </div>
+          <div class="premium-card rounded-2xl overflow-hidden scroll-x">
+            <table class="text-sm text-center w-full">
+              <thead class="bg-slate-950 text-slate-200 text-xs uppercase border-b border-slate-800">
+                <tr>
+                  <th class="p-4 text-left">Nama Rokok</th><th class="p-4">Modal</th><th class="p-4">Cash Riel</th><th class="p-4">UM</th><th class="p-4">Eceran</th><th class="p-4">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="table-rokok" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- REKAP PEMBAYARAN UM (KHUSUS) -->
+        <div id="page-rekap" class="hidden fade-in">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="premium-card p-5 rounded-2xl border-amber-500/30"><p class="text-sm text-slate-300 font-semibold mb-2">Total UM Keseluruhan</p><p class="text-2xl font-extrabold text-amber-400" id="um-total-keseluruhan">៛ 0</p></div>
+            <div class="premium-card p-5 rounded-2xl"><p class="text-sm text-slate-300 font-semibold mb-2">Total Sudah Cair</p><p class="text-2xl font-extrabold text-green-400" id="um-total-sudah-cair">៛ 0</p></div>
+            <div class="premium-card p-5 rounded-2xl"><p class="text-sm text-slate-300 font-semibold mb-2">Total Belum Cair</p><p class="text-2xl font-extrabold text-red-400" id="um-total-belum-cair">៛ 0</p></div>
+          </div>
+          <div class="premium-card rounded-2xl overflow-hidden scroll-x">
+            <h4 class="font-bold bg-amber-500/10 text-amber-400 p-4 border-b border-slate-800 text-sm flex items-center gap-2"><i class="fas fa-utensils"></i> Rekapan Pembayaran Uang Makan Bulan Ini</h4>
+            <table class="text-sm text-center w-full">
+              <thead class="bg-slate-950 text-slate-200 text-xs uppercase">
+                <tr>
+                  <th class="p-3 text-left">Waktu</th>
+                  <th class="p-3">Nama Pembeli</th>
+                  <th class="p-3">Rokok</th>
+                  <th class="p-3">Jumlah</th>
+                  <th class="p-3">Harga</th>
+                  <th class="p-3">Status Bayar</th>
+                  <th class="p-3">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="table-um-recap" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- KAS & SETORAN BULANAN -->
+        <div id="page-kas" class="hidden fade-in">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="premium-card p-6 rounded-2xl">
+              <h3 class="font-bold text-white mb-5 flex items-center gap-2"><i class="fas fa-coins text-yellow-400"></i> Laporan Setoran Bulan Ini</h3>
+              <div class="space-y-4">
+                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Penjualan (Laku):</span><span class="font-bold text-lg text-white" id="kas-month-pendapatan">៛ 0</span></div>
+                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Modal Rokok:</span><span class="font-bold text-lg text-red-400" id="kas-month-modal">៛ 0</span></div>
+                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Untung Bersih:</span><span class="font-bold text-lg text-green-400" id="kas-month-untung">៛ 0</span></div>
+                <div class="bg-amber-500/10 p-4 rounded-xl mt-4">
+                  <p class="text-sm text-amber-300 text-center font-bold">Pastikan setoran modal diselesaikan sebelum tanggal tutup buku.</p>
+                </div>
+              </div>
+            </div>
+            <div class="premium-card p-6 rounded-2xl">
+              <h3 class="font-bold text-white mb-5">Detail Kas Bulan Ini</h3>
+              <div class="space-y-4">
+                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Pendapatan:</span><span class="font-bold text-lg text-white" id="kas-uang-ada">៛ 0</span></div>
+                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Cash Riel:</span><span class="font-bold text-green-400" id="kas-riel-detail">៛ 0</span></div>
+                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Uang di ABA:</span><span class="font-bold text-purple-400" id="kas-aba-detail">៛ 0</span></div>
+                <div class="flex justify-between items-center"><span class="text-slate-300 text-sm">UM Belum Cair:</span><span class="font-bold text-amber-400" id="kas-um-detail">៛ 0</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="premium-card p-6 rounded-2xl">
+            <h3 class="font-bold text-white mb-4">Barcode Pembayaran (ABA / Wings)</h3>
+            <div class="flex flex-col md:flex-row items-center gap-6">
+              <div class="w-48 h-48 bg-white p-3 rounded-xl flex items-center justify-center overflow-hidden"><img id="barcode-img" src="https://via.placeholder.com/150x150?text=No+Image" class="w-full h-full object-contain" alt="Barcode"></div>
+              <div class="flex-1 w-full"><label class="block label-dark mb-2 ml-1">MASUKKAN LINK GAMBAR BARCODE</label><div class="flex gap-2"><input type="text" id="input-barcode" class="flex-1 p-3 input-dark rounded-xl transition-all" placeholder="https://contoh.com/gambar.jpg"><button onclick="saveBarcode()" class="bg-blue-600 hover:bg-blue-500 px-4 rounded-xl font-bold text-white transition-all">SIMPAN</button></div></div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyNzQprnD0YjZWVQRQPWb0O8pY1Nbq9wllko63d46wgH5XiJ-vWRbKCB4Ve03jo1HWx/exec'; 
+    
+    let masterData = {};
+    let dashboardState = null; 
+    let currentJualTipe = "Perslop";
+    let currentJualFilter = "Cash";
+    let currentCCTipe = "Eceran";
+    let editMode = null;
+    let selectedMonth = new Date().toISOString().slice(0, 7); 
+    let salesChart = null;
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', checkSession);
+    } else {
+      checkSession();
+    }
+
+    function checkSession() {
+      if(localStorage.getItem('rokok_app_session') === 'active') {
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('app-view').classList.remove('hidden');
+        document.getElementById('month-filter').value = selectedMonth;
+        initApp();
+      }
+    }
+
+    function doLogout() {
+      localStorage.removeItem('rokok_app_session');
+      window.location.reload();
+    }
+
+    async function apiCall(action, payload = {}) {
+      try {
+        const noCache = `&_t=${Date.now()}_${Math.random()}`;
+        const isGet = (action === 'getDashboard' || action === 'getMaster');
+        const res = await fetch(`${API_URL}?action=${action}${noCache}`, {
+          method: isGet ? 'GET' : 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: isGet ? null : JSON.stringify(payload)
+        });
+        const text = await res.text();
+        try { return JSON.parse(text); } 
+        catch (e) { return { error: "Server error" }; }
+      } catch (e) { return { error: "Koneksi gagal" }; }
+    }
+
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.className = `fixed bottom-10 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl shadow-2xl z-50 font-bold text-sm toast ${type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}`;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2500);
+    }
+
+    function toggleLoadingButton(btnId, isLoading, originalText) {
+      const btn = document.getElementById(btnId);
+      if(!btn) return;
+      if(isLoading) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="animate-spin fas fa-circle-notch mr-2"></i> Menyimpan...`;
+      } else {
+        btn.disabled = false;
+        btn.innerText = originalText;
+      }
+    }
+
+    function togglePass() {
+      const input = document.getElementById('password');
+      const icon = document.getElementById('eye-icon');
+      if (input.type === 'password') { input.type = 'text'; icon.classList.replace('fa-eye', 'fa-eye-slash'); }
+      else { input.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('overlay').classList.toggle('hidden');
+    }
+
+    function formatNumber(input) {
+      let val = input.value.replace(/\D/g, '');
+      if(val) { input.value = parseInt(val).toLocaleString('id-ID'); } 
+      else { input.value = ''; }
+    }
+
+    function getMonthFromDate(dateStr) {
+      if(!dateStr) return "";
+      const d = new Date(dateStr);
+      return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+    }
+
+    function formatFullDate(dateStr, withTime = true) {
+      if(!dateStr) return "-";
+      const d = new Date(dateStr);
+      const date = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+      if(withTime) {
+        const time = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        return `${date} ${time}`;
+      }
+      return date;
+    }
+
+    function applyMonthFilter() {
+      selectedMonth = document.getElementById('month-filter').value;
+      if(dashboardState) renderDashboard(dashboardState);
+    }
+
+    async function doLogin(e) {
+      if(e) e.preventDefault();
+      const u = document.getElementById('username').value;
+      const p = document.getElementById('password').value;
+      if(u === 'admin' && p === 'admin123') {
+        localStorage.setItem('rokok_app_session', 'active');
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('app-view').classList.remove('hidden');
+        document.getElementById('month-filter').value = selectedMonth;
+        initApp();
+      } else {
+        showToast("Username atau Password salah!", "error");
+      }
+    }
+
+    async function initApp() {
+      loadBarcode();
+      document.getElementById('stok-tanggal').value = new Date().toISOString().slice(0, 10);
+
+      await loadMaster();
+      const res = await apiCall('getDashboard');
+      if(!res.error) {
+        dashboardState = res;
+        if(dashboardState.masterMap) {
+          masterData = dashboardState.masterMap;
+          populateDropdowns();
+          renderListRokok();
+        }
+        renderDashboard(dashboardState);
+      }
+    }
+
+    async function loadMaster() {
+      const res = await apiCall('getMaster');
+      if(res && res.hargaMap) {
+        masterData = res.hargaMap;
+        populateDropdowns();
+        renderListRokok();
+      }
+    }
+
+    async function loadDashboardSilent() {
+      const res = await apiCall('getDashboard');
+      if(!res || res.error) return;
+      dashboardState = res;
+      if(dashboardState.masterMap) {
+        masterData = dashboardState.masterMap;
+        populateDropdowns();
+        renderListRokok();
+      }
+      renderDashboard(dashboardState);
+    }
+
+    function populateDropdowns() {
+      const selJual = document.getElementById('jual-rokok');
+      const selStok = document.getElementById('stok-rokok');
+      selJual.innerHTML = '<option value="">Pilih Rokok</option>';
+      selStok.innerHTML = '';
+      Object.keys(masterData).forEach(r => {
+        selJual.appendChild(new Option(r, r));
+        selStok.appendChild(new Option(r, r));
+      });
+    }
+
+    function renderListRokok() {
+      const tbRokok = document.getElementById('table-rokok');
+      const textShare = document.getElementById('text-share');
+      tbRokok.innerHTML = "";
+      let txt = "READY ROKOK INDO PERSLOP/BUNGKUS\n\n";
+      
+      Object.keys(masterData).forEach(r => {
+        const d = masterData[r];
+        const modal = d.modal || 0, cashRiel = d.cashRiel || d.cash || 0, um = d.um || 0, eceran = d.eceran || 0;
+        
+        tbRokok.innerHTML += `<tr class="hover:bg-slate-800/50">
+          <td class="p-4 text-left font-semibold text-white">${r}</td>
+          <td class="p-4 text-slate-100">៛ ${modal.toLocaleString('id-ID')}</td>
+          <td class="p-4 text-green-400">៛ ${cashRiel.toLocaleString('id-ID')}</td>
+          <td class="p-4 text-amber-400">៛ ${um.toLocaleString('id-ID')}</td>
+          <td class="p-4 text-purple-400">៛ ${eceran.toLocaleString('id-ID')}</td>
+          <td class="p-4 flex gap-2 justify-center">
+            <button onclick="editMaster('${r}')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded-lg text-xs font-bold">EDIT</button>
+            <button onclick="deleteMaster('${r}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold">HAPUS</button>
+          </td>
+        </tr>`;
+      });
+
+      txt += "*HARGA PER BUNGKUS*\n";
+      Object.keys(masterData).forEach(r => {
+        const eceran = masterData[r].eceran || 0;
+        if(eceran > 0) txt += `${r} - ${eceran.toLocaleString('en-US')}/Bungkus\n`;
+      });
+
+      txt += "\n\n";
+      Object.keys(masterData).forEach(r => {
+        const d = masterData[r], cashRiel = d.cashRiel || d.cash || 0, um = d.um || 0;
+        txt += `${r}\nCash: ${cashRiel.toLocaleString('en-US')} riel /Slop\nPembayaran uang makan: ${um.toLocaleString('en-US')} riel /Slop\n\n`;
+      });
+
+      textShare.innerText = txt;
+    }
+
+    async function saveMaster() {
+      const data = {
+        nama: document.getElementById('m-nama').value,
+        modal: parseFloat(document.getElementById('m-modal').value.replace(/\./g, '')) || 0,
+        cashRiel: parseFloat(document.getElementById('m-cash').value.replace(/\./g, '')) || 0,
+        um: parseFloat(document.getElementById('m-um').value.replace(/\./g, '')) || 0,
+        eceran: parseFloat(document.getElementById('m-eceran').value.replace(/\./g, '')) || 0
+      };
+      if(!data.nama) { showToast("Nama rokok wajib diisi!", "error"); return; }
+
+      var action = editMode ? 'updateMaster' : 'saveMaster';
+      var btnText = editMode ? 'UPDATE ROKOK' : 'SIMPAN ROKOK BARU';
+
+      toggleLoadingButton('btn-save-master', true, btnText);
+      const res = await apiCall(action, { payload: data });
+      
+      if(res.error) showToast("Gagal simpan ke Sheet, cek internet.", "error");
+      else {
+        showToast("Data tersimpan permanen!", "success");
+        await loadMaster(); 
+        if(res.dashboard) { 
+          dashboardState = res.dashboard; 
+          if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+          renderDashboard(dashboardState); 
+        }
+        cancelEdit();
+      }
+      toggleLoadingButton('btn-save-master', false, btnText);
+    }
+
+    function editMaster(namaRokok) {
+      const d = masterData[namaRokok];
+      document.getElementById('m-nama').value = namaRokok;
+      document.getElementById('m-nama').disabled = true;
+      document.getElementById('m-modal').value = (d.modal || 0).toLocaleString('id-ID');
+      document.getElementById('m-cash').value = (d.cashRiel || d.cash || 0).toLocaleString('id-ID');
+      document.getElementById('m-um').value = (d.um || 0).toLocaleString('id-ID');
+      document.getElementById('m-eceran').value = (d.eceran || 0).toLocaleString('id-ID');
+      
+      editMode = namaRokok;
+      const btn = document.getElementById('btn-save-master');
+      btn.innerText = "UPDATE ROKOK";
+      btn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
+      btn.classList.add('bg-amber-500', 'hover:bg-amber-400');
+      document.getElementById('btn-cancel-edit').classList.remove('hidden');
+      document.getElementById('page-rokok').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function cancelEdit() {
+      editMode = null;
+      document.getElementById('m-nama').value = '';
+      document.getElementById('m-nama').disabled = false;
+      ['m-modal','m-cash','m-um','m-eceran'].forEach(id => document.getElementById(id).value = '');
+      const btn = document.getElementById('btn-save-master');
+      btn.innerText = "SIMPAN ROKOK BARU";
+      btn.classList.remove('bg-amber-500', 'hover:bg-amber-400');
+      btn.classList.add('bg-blue-600', 'hover:bg-blue-500');
+      document.getElementById('btn-cancel-edit').classList.add('hidden');
+    }
+
+    async function deleteMaster(namaRokok) {
+      if(!confirm(`Yakin hapus rokok ${namaRokok}?`)) return;
+      const res = await apiCall('deleteMaster', { payload: { nama: namaRokok } });
+      if(res.error) showToast("Gagal hapus dari Sheet.", "error");
+      else {
+        showToast("Rokok dihapus permanen!", "success");
+        await loadMaster(); 
+        if(res.dashboard) { 
+          dashboardState = res.dashboard; 
+          if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+          renderDashboard(dashboardState); 
+        }
+      }
+    }
+
+    function copyText() {
+      navigator.clipboard.writeText(document.getElementById('text-share').innerText).then(() => showToast("List harga berhasil di-copy!", "success"));
+    }
+
+    function switchPage(page, customArg = null) {
+      ['dashboard', 'jual', 'stok', 'crosscheck', 'rokok', 'rekap', 'kas'].forEach(p => document.getElementById('page-' + p).classList.add('hidden'));
+      document.getElementById('page-' + page).classList.remove('hidden');
+      
+      const titles = { 'dashboard': 'Dashboard Analytics', 'stok': 'Stok & Pengambilan', 'crosscheck': 'Crosscheck Stok', 'rokok': 'List Harga Rokok', 'rekap': 'Rekapan Pembayaran UM', 'kas': 'Kas & Setoran Bulanan' };
+      if(titles[page]) document.getElementById('page-title').innerText = titles[page];
+      
+      if(page === 'jual' && customArg) {
+        const jualTipe = customArg;
+        const lblJumlah = document.getElementById('label-jumlah');
+        const inputJumlah = document.getElementById('jual-jumlah');
+        const wrapperBayar = document.getElementById('wrapper-tipe-bayar');
+        const wrapperSitus = document.getElementById('wrapper-situs');
+        const wrapperStatus = document.getElementById('wrapper-status');
+        const selBayar = document.getElementById('jual-tipebayar');
+        const titleRekap = document.getElementById('title-rekap-jual');
+        
+        if(jualTipe === 'Perslop Cash') { 
+          currentJualTipe = 'Perslop'; currentJualFilter = 'Cash';
+          lblJumlah.innerText = "JUMLAH SLOP"; inputJumlah.placeholder = "1 slop, 2 slop..."; 
+          wrapperBayar.classList.remove('hidden'); wrapperSitus.classList.remove('hidden'); wrapperStatus.classList.remove('hidden');
+          selBayar.value = 'Cash Riel'; titleRekap.innerText = "Riwayat Penjualan Cash / ABA";
+          document.getElementById('page-title').innerText = 'Penjualan Perslop Cash'; 
+        } 
+        else if(jualTipe === 'Perslop UM') { 
+          currentJualTipe = 'Perslop'; currentJualFilter = 'UM';
+          lblJumlah.innerText = "JUMLAH SLOP"; inputJumlah.placeholder = "1 slop, 2 slop..."; 
+          wrapperBayar.classList.add('hidden'); wrapperSitus.classList.remove('hidden'); wrapperStatus.classList.add('hidden'); 
+          selBayar.value = 'Uang Makan'; titleRekap.innerText = "Riwayat Penjualan UM";
+          document.getElementById('page-title').innerText = 'Penjualan Perslop Uang Makan'; 
+        } 
+        else if(jualTipe === 'Eceran') { 
+          currentJualTipe = 'Eceran'; currentJualFilter = 'Eceran';
+          lblJumlah.innerText = "JUMLAH BUNGKUS"; inputJumlah.placeholder = "1 bungkus, 2 bungkus..."; 
+          wrapperBayar.classList.remove('hidden'); wrapperSitus.classList.add('hidden'); wrapperStatus.classList.remove('hidden');
+          selBayar.value = 'Cash Riel'; titleRekap.innerText = "Riwayat Penjualan Eceran";
+          document.getElementById('page-title').innerText = 'Penjualan Rokok Eceran'; 
+        }
+        hitungHargaOtomatis();
+      }
+      
+      if(page === 'crosscheck' && customArg) {
+        currentCCTipe = customArg;
+        document.getElementById('title-cc-form').innerText = `Form Crosscheck ${currentCCTipe}`;
+        document.getElementById('page-title').innerText = `Crosscheck Stok ${currentCCTipe}`;
+        
+        const th1 = document.getElementById('th-cc-1');
+        const th2 = document.getElementById('th-cc-2');
+        const th3 = document.getElementById('th-cc-3');
+        
+        if(currentCCTipe === 'Perslop') {
+          th1.innerText = "Masuk Bulan Ini";
+          th2.innerText = "Terjual Bulan Ini";
+          th3.innerText = "Sisa Saat Ini";
+        } else {
+          th1.innerText = "Terjual Eceran";
+          th2.innerText = "Dibuka Dari Slop";
+          th3.innerText = "Sisa Eceran";
+        }
+      }
+      
+      if(window.innerWidth < 1024) toggleSidebar();
+      if(dashboardState) renderDashboard(dashboardState);
+      loadDashboardSilent();
+    }
+
+    function getBadgeClass(status) {
+      if(status.includes('CASH')) return 'badge-success';
+      if(status.includes('ABA')) return 'badge-purple';
+      if(status.includes('BELUM')) return 'badge-danger';
+      return 'badge-warning';
+    }
+
+    function renderDashboard(res) {
+      if(!res || !res.allSales) return;
+      const fmt = (val) => (val || 0).toLocaleString('id-ID');
+      
+      const filteredSales = res.allSales.filter(u => getMonthFromDate(u.tanggal) === selectedMonth);
+      const filteredAmbil = res.allPengambilan.filter(p => getMonthFromDate(p.tanggal) === selectedMonth);
+      const filteredCC = res.allCrosscheck.filter(c => c.tipe === currentCCTipe && getMonthFromDate(c.tanggal) === selectedMonth);
+      
+      let totalPendapatan = 0, untungPerslop = 0, untungEceran = 0;
+      let cashRiel = 0, abaRiel = 0, umBelumBayar = 0, monthModal = 0;
+      let totalUMKeseluruhan = 0, totalUMSudahCair = 0, totalUMBelumCair = 0;
+      let totalSlopTerjual = 0; 
+
+      filteredSales.forEach(u => {
+        let modalVal = 0;
+        if(u.tipe === "Perslop") {
+          modalVal = (res.masterMap[u.rokok] ? res.masterMap[u.rokok].modal : 0) * u.jumlah;
+          untungPerslop += (u.harga - modalVal);
+          totalSlopTerjual += u.jumlah;
+        } else if(u.tipe === "Eceran") {
+          modalVal = (res.masterMap[u.rokok] ? res.masterMap[u.rokok].modal / 10 : 0) * u.jumlah;
+          untungEceran += (u.harga - modalVal); 
+        }
+        
+        if(u.tipeBayar === "Uang Makan") {
+          totalUMKeseluruhan += u.harga;
+          if(u.statusBayar === "BELUM BAYAR") totalUMBelumCair += u.harga;
+          else totalUMSudahCair += u.harga;
+        }
+        
+        if(u.statusBayar === "SUDAH BAYAR CASH") {
+          totalPendapatan += u.harga; cashRiel += u.harga; monthModal += modalVal;
+        } else if(u.statusBayar === "SUDAH BAYAR ABA") {
+          totalPendapatan += u.harga; abaRiel += u.harga; monthModal += modalVal;
+        } else if(u.statusBayar === "BELUM BAYAR") {
+          if(u.tipeBayar === "Uang Makan") umBelumBayar += u.harga;
+        }
+      });
+      
+      let totalUntung = untungPerslop + untungEceran;
+
+      document.getElementById('kas-total-pendapatan').innerText = "៛ " + fmt(totalPendapatan);
+      document.getElementById('kas-untung').innerText = "៛ " + fmt(totalUntung);
+      document.getElementById('kas-untung-perslop').innerText = "៛ " + fmt(untungPerslop);
+      document.getElementById('kas-untung-eceran').innerText = "៛ " + fmt(untungEceran);
+      document.getElementById('kas-cash-riel').innerText = "៛ " + fmt(cashRiel);
+      document.getElementById('kas-um').innerText = "៛ " + fmt(umBelumBayar);
+      document.getElementById('kas-aba').innerText = "៛ " + fmt(abaRiel);
+      
+      document.getElementById('kas-total-slop-terjual').innerText = totalSlopTerjual + " Slop";
+      
+      document.getElementById('kas-uang-ada').innerText = "៛ " + fmt(totalPendapatan);
+      document.getElementById('kas-riel-detail').innerText = "៛ " + fmt(cashRiel);
+      document.getElementById('kas-aba-detail').innerText = "៛ " + fmt(abaRiel);
+      document.getElementById('kas-um-detail').innerText = "៛ " + fmt(umBelumBayar);
+      
+      document.getElementById('kas-month-pendapatan').innerText = "៛ " + fmt(totalPendapatan);
+      document.getElementById('kas-month-modal').innerText = "៛ " + fmt(monthModal);
+      document.getElementById('kas-month-untung').innerText = "៛ " + fmt(totalUntung);
+
+      document.getElementById('um-total-keseluruhan').innerText = "៛ " + fmt(totalUMKeseluruhan);
+      document.getElementById('um-total-sudah-cair').innerText = "៛ " + fmt(totalUMSudahCair);
+      document.getElementById('um-total-belum-cair').innerText = "៛ " + fmt(totalUMBelumCair);
+
+      const tbStok = document.getElementById('table-stok'); tbStok.innerHTML = "";
+      let stokArr = [];
+      for(let namaRokok in res.masterMap) {
+        let prevAmbil = 0, prevJual = 0;
+        res.allPengambilan.forEach(p => {
+          if(p.rokok === namaRokok && getMonthFromDate(p.tanggal) < selectedMonth) prevAmbil += p.jumlah;
+        });
+        res.allSales.forEach(u => {
+          if(u.rokok === namaRokok && getMonthFromDate(u.tanggal) < selectedMonth) prevJual += u.jumlah;
+        });
+        let sisaBulanLalu = prevAmbil - prevJual;
+        
+        let masukBulanIni = 0, terjualBulanIni = 0;
+        filteredAmbil.forEach(p => { if(p.rokok === namaRokok) masukBulanIni += p.jumlah; });
+        filteredSales.forEach(u => { if(u.rokok === namaRokok) terjualBulanIni += u.jumlah; });
+        
+        let sisaSaatIni = sisaBulanLalu + masukBulanIni - terjualBulanIni;
+        
+        stokArr.push({ rokok: namaRokok, sisaBulanLalu, masukBulanIni, terjualBulanIni, sisaSaatIni });
+        
+        tbStok.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+          <td class="p-4 text-left font-semibold text-white">${namaRokok}</td>
+          <td class="p-4 text-slate-100">${sisaBulanLalu}</td>
+          <td class="p-4 text-slate-100">${masukBulanIni}</td>
+          <td class="p-4 text-slate-100">${terjualBulanIni}</td>
+          <td class="p-4 font-bold text-blue-400">${sisaSaatIni}</td>
+        </tr>`;
+      }
+
+      const tbAmbil = document.getElementById('table-pengambilan-recap'); tbAmbil.innerHTML = "";
+      if(filteredAmbil.length > 0) {
+        filteredAmbil.reverse().forEach(p => {
+          tbAmbil.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+            <td class="p-3 text-slate-100 text-left">${formatFullDate(p.tanggal, false)}</td>
+            <td class="p-3 text-white">${p.rokok}</td>
+            <td class="p-3 text-white">${p.jumlah} Slop</td>
+            <td class="p-3 text-white">៛ ${fmt(p.modal)}</td>
+          </tr>`;
+        });
+      } else tbAmbil.innerHTML = `<tr><td colspan="4" class="p-4 text-slate-400 text-center">Belum ada pengambilan stok bulan ini</td></tr>`;
+
+      const tbStokCC = document.getElementById('table-stok-cc'); tbStokCC.innerHTML = "";
+      let ccStokData = stokArr; 
+      if(ccStokData && ccStokData.length > 0) ccStokData.forEach(s => {
+        let val1, val2, val3;
+        if(currentCCTipe === 'Perslop') {
+          val1 = `<span class="text-slate-100">${s.masukBulanIni}</span>`; 
+          val2 = `<span class="text-slate-100">${s.terjualBulanIni}</span>`; 
+          val3 = `<span class="text-blue-400 font-bold">${s.sisaSaatIni}</span>`;
+        } else {
+          val1 = `<span class="text-purple-400 font-bold">0</span>`; 
+          val2 = `<span class="text-slate-100">${s.terjualBulanIni * 10}</span>`; 
+          val3 = `<span class="text-green-400 font-bold">${s.sisaSaatIni * 10}</span>`;
+        }
+        tbStokCC.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+          <td class="p-4 text-left font-semibold text-white">${s.rokok}</td>
+          <td class="p-4">${val1}</td>
+          <td class="p-4">${val2}</td>
+          <td class="p-4">${val3}</td>
+        </tr>`;
+      });
+
+      const tbCC = document.getElementById('table-crosscheck'); tbCC.innerHTML = "";
+      if(filteredCC.length > 0) {
+        filteredCC.reverse().forEach(c => { 
+          const badgeClass = c.status==='KLOP' ? 'badge-success' : 'badge-danger';
+          tbCC.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+            <td class="p-3 text-slate-100">${formatFullDate(c.tanggal, false)}</td>
+            <td class="p-3 text-white">${c.jam}</td>
+            <td class="p-3"><span class="badge ${badgeClass}">${c.status}</span></td>
+            <td class="p-3 text-white">${c.jmlSelisih || 0}</td>
+            <td class="p-3 text-slate-100">${c.ketSelisih || '-'}</td>
+            <td class="p-3 text-slate-100">${c.catatan || '-'}</td>
+          </tr>`; 
+        });
+      } else tbCC.innerHTML = `<tr><td colspan="6" class="p-4 text-slate-400 text-center">Belum ada riwayat bulan ini</td></tr>`;
+
+      const tbJual = document.getElementById('table-jual-recap'); tbJual.innerHTML = "";
+      let jualFiltered = filteredSales.filter(u => {
+        if(currentJualFilter === 'Cash') return u.tipeBayar === "Cash Riel" || u.tipeBayar === "ABA";
+        if(currentJualFilter === 'UM') return u.tipeBayar === "Uang Makan";
+        if(currentJualFilter === 'Eceran') return u.tipe === "Eceran";
+        return true;
+      }).reverse();
+
+      if(jualFiltered.length > 0) {
+        jualFiltered.forEach(u => { 
+          let actionButtons = `
+            <div class="flex flex-col gap-1 items-center">
+              <select onchange='updateJualStatus(${JSON.stringify(u)}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
+                <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>SUDAH BAYAR CASH</option>
+                <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDAH BAYAR ABA' ? 'selected' : ''}>SUDAH BAYAR ABA</option>
+                <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM BAYAR</option>
+              </select>
+              <button onclick='deleteJualData(${JSON.stringify(u)})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
+            </div>
+          `;
+          
+          tbJual.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+            <td class="p-3 text-slate-100 text-left">${formatFullDate(u.tanggal, true)}</td>
+            <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
+            <td class="p-3 text-slate-100">${u.situs || '-'}</td>
+            <td class="p-3 text-slate-100">${u.rokok}</td>
+            <td class="p-3 text-slate-100">${u.jumlahTxt}</td>
+            <td class="p-3 text-slate-100">៛ ${fmt(u.harga)}</td>
+            <td class="p-3"><span class="badge ${getBadgeClass(u.statusBayar)}">${u.statusBayar}</span></td>
+            <td class="p-3 text-center">${actionButtons}</td>
+          </tr>`; 
+        });
+      } else tbJual.innerHTML = `<tr><td colspan="8" class="p-4 text-slate-400 text-center">Belum ada penjualan bulan ini</td></tr>`;
+
+      const tbUM = document.getElementById('table-um-recap'); tbUM.innerHTML = "";
+      let umSales = filteredSales.filter(u => u.tipeBayar === "Uang Makan").reverse();
+      if(umSales.length === 0) tbUM.innerHTML = `<tr><td colspan="7" class="p-4 text-slate-400 text-center">Belum ada data UM bulan ini</td></tr>`;
+      umSales.forEach(u => { 
+        let actionButtons = `
+          <div class="flex flex-col gap-1 items-center">
+            <select onchange='updateJualStatus(${JSON.stringify(u)}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
+              <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM CAIR</option>
+              <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
+              <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDAH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
+            </select>
+            <button onclick='deleteJualData(${JSON.stringify(u)})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
+          </div>
+        `;
+        
+        tbUM.innerHTML += `<tr class="hover:bg-slate-800/50 border-b border-slate-700">
+          <td class="p-3 text-slate-100 text-left">${formatFullDate(u.tanggal, true)}</td>
+          <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
+          <td class="p-3 text-slate-100">${u.rokok}</td>
+          <td class="p-3 text-slate-100">${u.jumlahTxt}</td>
+          <td class="p-3 text-slate-100">៛ ${fmt(u.harga)}</td>
+          <td class="p-3"><span class="badge ${getBadgeClass(u.statusBayar)}">${u.statusBayar}</span></td>
+          <td class="p-3 text-center">${actionButtons}</td>
+        </tr>`; 
+      });
+
+      renderChart(res.allSales);
+    }
+
+    function renderChart(allSales) {
+      const ctx = document.getElementById('salesChart').getContext('2d');
+      const labels = [];
+      const data = [];
+      
+      const now = new Date();
+      for(let i=5; i>=0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthStr = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+        labels.push(d.toLocaleDateString('id-ID', { month: 'short', year: '2-digit' }));
+        
+        let total = 0;
+        allSales.forEach(u => {
+          if(getMonthFromDate(u.tanggal) === monthStr && (u.statusBayar === 'SUDAH BAYAR CASH' || u.statusBayar === 'SUDAH BAYAR ABA')) {
+            total += u.harga;
+          }
+        });
+        data.push(total);
+      }
+
+      // Gradient Warna Mewah (Ungu ke Biru ke Transparan)
+      const chartGradient = ctx.createLinearGradient(0, 0, 0, 350);
+      chartGradient.addColorStop(0, 'rgba(139, 92, 246, 0.9)'); // Ungu di atas
+      chartGradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.7)'); // Biru di tengah
+      chartGradient.addColorStop(1, 'rgba(15, 23, 42, 0.1)'); // Transparan di bawah
+
+      // Gradient saat Hover (Emas/Hijau Cerah)
+      const hoverGradient = ctx.createLinearGradient(0, 0, 0, 350);
+      hoverGradient.addColorStop(0, 'rgba(16, 185, 129, 1)');
+      hoverGradient.addColorStop(1, 'rgba(5, 150, 105, 0.5)');
+
+      if(salesChart) salesChart.destroy();
+      salesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Total Penjualan (៛)',
+            data: data,
+            backgroundColor: chartGradient,
+            hoverBackgroundColor: hoverGradient,
+            borderColor: 'rgba(255, 255, 255, 0.1)',
+            borderWidth: 1,
+            borderRadius: 10, // Sudut membulat elegan
+            borderSkipped: false,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 20, right: 10, bottom: 0, left: 0 } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
+              ticks: { color: '#94a3b8', font: { family: 'Inter', size: 11 }, callback: function(value) { return '៛ ' + (value/1000) + 'k'; } }
+            },
+            x: {
+              grid: { display: false, drawBorder: false },
+              ticks: { color: '#cbd5e1', font: { family: 'Inter', size: 12, weight: '600' } }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              enabled: true,
+              backgroundColor: 'rgba(15, 23, 42, 0.95)',
+              titleColor: '#fff',
+              bodyColor: '#10b981',
+              borderColor: 'rgba(139, 92, 246, 0.5)',
+              borderWidth: 2,
+              padding: 12,
+              cornerRadius: 8,
+              titleFont: { family: 'Inter', size: 13, weight: 'bold' },
+              bodyFont: { family: 'Inter', size: 15, weight: 'bold' },
+              displayColors: false,
+              callbacks: {
+                label: function(context) {
+                  return ' ៛ ' + context.parsed.y.toLocaleString('id-ID');
+                }
+              }
+            }
+          },
+          animation: { duration: 1500, easing: 'easeInOutQuart' }
+        }
+      });
+    }
+
+    async function updateJualStatus(data, newStatus) {
+      const res = await apiCall('updateStatusPenjualan', { payload: { ...data, newStatus: newStatus } });
+      if(res.error) { showToast("Gagal update status.", "error"); return; }
+      showToast("Status pembayaran diperbarui!", "success");
+      dashboardState = res.dashboard;
+      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+      renderDashboard(dashboardState);
+    }
+
+    async function deleteJualData(data) {
+      if(!confirm('Yakin hapus transaksi ini?')) return;
+      const res = await apiCall('deletePenjualan', { payload: data });
+      if(res.error) { showToast("Gagal hapus data.", "error"); return; }
+      showToast("Transaksi dihapus.", "success");
+      dashboardState = res.dashboard;
+      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+      renderDashboard(dashboardState);
+    }
+
+    function hitungHargaOtomatis() {
+      const rokok = document.getElementById('jual-rokok').value;
+      const jumlahVal = document.getElementById('jual-jumlah').value;
+      const jumlah = parseFloat(jumlahVal) || 0;
+      const tipeBayar = document.getElementById('jual-tipebayar').value;
+      let harga = 0; 
+      if(rokok && masterData[rokok]) {
+        const d = masterData[rokok];
+        if(currentJualTipe === "Perslop") {
+          if(tipeBayar === "Uang Makan") { harga = (d.um || 0) * jumlah; } 
+          else { harga = (d.cashRiel || 0) * jumlah; }
+        } else { harga = (d.eceran || 0) * jumlah; }
+      }
+      document.getElementById('jual-harga').innerText = "៛ " + harga.toLocaleString('id-ID');
+    }
+
+    async function saveJual() {
+      const tipeBayar = document.getElementById('jual-tipebayar').value;
+      const hargaText = document.getElementById('jual-harga').innerText;
+      const hargaNum = parseInt(hargaText.replace(/\D/g, '')) || 0;
+      const namaVal = document.getElementById('jual-nama').value;
+      const situsVal = document.getElementById('jual-situs').value;
+      
+      let statusVal = "";
+      if(tipeBayar !== "Uang Makan") {
+        statusVal = document.getElementById('jual-status').value;
+      }
+      
+      if(!namaVal) { showToast("Nama pembeli wajib diisi!", "error"); return; }
+      if(currentJualTipe === "Perslop" && !situsVal) { showToast("Nama situs wajib diisi!", "error"); return; }
+      
+      const data = { 
+        tipe: currentJualTipe, 
+        nama: namaVal, 
+        situs: currentJualTipe === "Eceran" ? "" : situsVal, 
+        rokok: document.getElementById('jual-rokok').value, 
+        jumlah: parseFloat(document.getElementById('jual-jumlah').value), 
+        tipeBayar: tipeBayar, 
+        harga: hargaNum,
+        statusBayar: statusVal
+      };
+      
+      toggleLoadingButton('btn-save-jual', true, 'SIMPAN TRANSAKSI');
+      const res = await apiCall('savePenjualan', { payload: data });
+      toggleLoadingButton('btn-save-jual', false, 'SIMPAN TRANSAKSI');
+      
+      if(res.error) { showToast("Gagal simpan transaksi.", "error"); return; }
+      
+      document.getElementById('jual-nama').value = ""; 
+      document.getElementById('jual-situs').value = ""; 
+      document.getElementById('jual-jumlah').value = "";
+      document.getElementById('jual-harga').innerText = "៛ 0";
+      showToast("Transaksi tersimpan permanen!", "success");
+      if(res.dashboard) { 
+        dashboardState = res.dashboard; 
+        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+        renderDashboard(dashboardState); 
+      }
+    }
+
+    async function saveAmbilStok() {
+      const tglVal = document.getElementById('stok-tanggal').value;
+      const data = { 
+        tanggal: tglVal ? new Date(tglVal).toISOString() : new Date().toISOString(),
+        rokok: document.getElementById('stok-rokok').value, 
+        jumlah: parseFloat(document.getElementById('stok-jumlah').value), 
+        modal: parseFloat(document.getElementById('stok-modal').value.replace(/\./g, '')) || 0 
+      };
+      if(!data.rokok || !data.jumlah) { showToast("Lengkapi data rokok & jumlah!", "error"); return; }
+      
+      toggleLoadingButton('btn-save-stok', true, 'CATAT PENGAMBILAN');
+      const res = await apiCall('savePengambilan', { payload: data });
+      toggleLoadingButton('btn-save-stok', false, 'CATAT PENGAMBILAN');
+      
+      if(res.error) { showToast(res.error, "error"); return; }
+      showToast("Pengambilan stok dicatat permanen!", "success");
+      document.getElementById('stok-jumlah').value = ""; document.getElementById('stok-modal').value = "";
+      if(res.dashboard) { 
+        dashboardState = res.dashboard; 
+        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+        renderDashboard(dashboardState); 
+      }
+    }
+
+    async function saveCrosscheck() {
+      const catatan = document.getElementById('cc-catatan').value;
+      const jam = document.getElementById('cc-jam').value;
+      const status = document.getElementById('cc-status').value;
+      const jmlSelisih = document.getElementById('cc-jml-selisih').value || 0;
+      const ketSelisih = document.getElementById('cc-ket-selisih').value;
+      if(!jam) { showToast("Jam wajib diisi!", "error"); return; }
+      
+      toggleLoadingButton('btn-save-cc', true, 'SIMPAN CROSSCHECK');
+      const res = await apiCall('saveCrosscheck', { payload: { jam: jam, status: status, catatan: catatan, tipe: currentCCTipe, jmlSelisih: jmlSelisih, ketSelisih: ketSelisih } });
+      toggleLoadingButton('btn-save-cc', false, 'SIMPAN CROSSCHECK');
+      
+      if(res.error) { showToast(res.error, "error"); return; }
+      showToast("Crosscheck disimpan permanen!", "success");
+      document.getElementById('cc-jam').value = "";
+      document.getElementById('cc-catatan').value = "";
+      document.getElementById('cc-jml-selisih').value = "";
+      document.getElementById('cc-ket-selisih').value = "-";
+      if(res.dashboard) { 
+        dashboardState = res.dashboard; 
+        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); }
+        renderDashboard(dashboardState); 
+      }
+    }
+
+    function loadBarcode() { const link = localStorage.getItem('rokok_barcode_link'); if(link) { document.getElementById('barcode-img').src = link; document.getElementById('input-barcode').value = link; } }
+    function saveBarcode() { const link = document.getElementById('input-barcode').value; localStorage.setItem('rokok_barcode_link', link); document.getElementById('barcode-img').src = link; showToast("Link barcode disimpan!", "success"); }
+  </script>
+</body>
+</html>
