@@ -61,9 +61,9 @@
     td.text-left { text-align: left; }
     th.text-left { text-align: left; }
     
-    /* BADGE LEBIH KONTRAS */
+    /* BADGE WARNA BIRU/CYAN (NO HIJAU) */
     .badge { padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 800; display: inline-block; text-align: center; }
-    .badge-success { background: #10b981; color: #ffffff; border: 1px solid #34d399; }
+    .badge-success { background: #3b82f6; color: #ffffff; border: 1px solid #60a5fa; }
     .badge-danger { background: #ef4444; color: #ffffff; border: 1px solid #f87171; }
     .badge-purple { background: #a855f7; color: #ffffff; border: 1px solid #c084fc; }
     .badge-warning { background: #f59e0b; color: #000000; border: 1px solid #fbbf24; }
@@ -81,7 +81,7 @@
     <div class="absolute bottom-0 -right-10 w-80 h-80 bg-indigo-600 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
     <div class="relative z-10 premium-card p-8 rounded-3xl w-full max-w-sm fade-in">
       <div class="flex flex-col items-center mb-8">
-        <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-w-[200px] h-auto object-contain mb-4" alt="Logo">
+        <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-w-[200px] h-auto object-fill mb-4" alt="Logo">
         <h1 class="text-2xl font-extrabold tracking-tight text-white">Dashboard Rokok Pro</h1>
         <p class="text-sm text-slate-300 mt-1 font-medium">Masuk untuk mengelola data</p>
       </div>
@@ -115,9 +115,9 @@
   <!-- APP DASHBOARD -->
   <div id="app-view" class="hidden min-h-screen">
     <aside id="sidebar" class="fixed top-0 left-0 z-40 h-screen w-72 bg-slate-950 text-white flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 border-r border-slate-800">
-      <!-- LOGO DIPERLEBAR SESUAI BENTUK ASLI -->
-      <div class="p-4 flex items-center justify-center border-b border-slate-800 h-24">
-        <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-h-20 object-contain" alt="Logo">
+      <!-- LOGO DIPERLEBAR (PERSEGI PANJANG) -->
+      <div class="p-4 flex items-center justify-center border-b border-slate-800">
+        <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-h-24 object-fill" alt="Logo">
         <button onclick="toggleSidebar()" class="lg:hidden ml-auto text-slate-300 absolute right-4 top-4"><i class="fas fa-times text-xl"></i></button>
       </div>
       <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -188,11 +188,11 @@
         <!-- DASHBOARD -->
         <div id="page-dashboard" class="fade-in">
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Pendapatan</p><i class="fas fa-arrow-trend-up text-green-400 text-sm bg-green-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-white" id="kas-total-pendapatan">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Pendapatan</p><i class="fas fa-arrow-trend-up text-blue-400 text-sm bg-blue-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-white" id="kas-total-pendapatan">៛ 0</p></div>
             <div class="premium-card p-5 border border-yellow-500/20"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Untung (Gabungan)</p><i class="fas fa-sack-dollar text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-yellow-400" id="kas-untung">៛ 0</p></div>
             <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Perslop</p><i class="fas fa-box text-blue-400 text-sm bg-blue-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-blue-400" id="kas-untung-perslop">៛ 0</p></div>
             <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Eceran</p><i class="fas fa-shopping-basket text-purple-400 text-sm bg-purple-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-purple-400" id="kas-untung-eceran">៛ 0</p></div>
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Cash Riel</p><i class="fas fa-money-bill-wave text-green-400 text-sm bg-green-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-green-400" id="kas-cash-riel">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Cash Riel</p><i class="fas fa-money-bill-wave text-blue-400 text-sm bg-blue-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-blue-400" id="kas-cash-riel">៛ 0</p></div>
             <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">ABA</p><i class="fas fa-clock text-purple-400 text-sm bg-purple-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-purple-400" id="kas-aba">៛ 0</p></div>
             <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Uang Makan (Belum Cair)</p><i class="fas fa-utensils text-amber-400 text-sm bg-amber-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-amber-400" id="kas-um">៛ 0</p></div>
             <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Slop Terjual</p><i class="fas fa-box-open text-cyan-400 text-sm bg-cyan-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-cyan-400" id="kas-total-slop-terjual">0 Slop</p></div>
@@ -215,8 +215,8 @@
                 <div id="wrapper-tipe-bayar"><label class="block label-dark mb-2 ml-1">TIPE BAYAR</label><select id="jual-tipebayar" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark transition-all"><option value="Cash Riel">Cash Riel</option><option value="ABA">ABA</option><option value="Uang Makan">Uang Makan</option></select></div>
                 <div id="wrapper-status"><label class="block label-dark mb-2 ml-1">STATUS BAYAR</label><select id="jual-status" class="w-full p-3 input-dark transition-all"><option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option></select></div>
               </div>
-              <div class="bg-gradient-to-r from-emerald-900/40 to-green-900/20 p-5 rounded-xl border border-emerald-500/20 mb-6 flex justify-between items-center">
-                <span class="text-sm font-bold text-emerald-300 uppercase tracking-wider">Total Harga</span><p class="text-2xl md:text-3xl font-extrabold text-emerald-400" id="jual-harga">៛ 0</p>
+              <div class="bg-gradient-to-r from-blue-900/40 to-cyan-900/20 p-5 rounded-xl border border-blue-500/20 mb-6 flex justify-between items-center">
+                <span class="text-sm font-bold text-blue-300 uppercase tracking-wider">Total Harga</span><p class="text-2xl md:text-3xl font-extrabold text-blue-400" id="jual-harga">៛ 0</p>
               </div>
               <button onclick="saveJual()" id="btn-save-jual" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-blue-500/30 active:scale-95 transition-all">SIMPAN TRANSAKSI</button>
             </div>
@@ -340,7 +340,7 @@
         <div id="page-crosscheck" class="hidden fade-in">
            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="premium-card p-6">
-              <h3 id="title-cc-form" class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-clock text-green-400"></i> Form Crosscheck</h3>
+              <h3 id="title-cc-form" class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-clock text-blue-400"></i> Form Crosscheck</h3>
               <input type="text" id="cc-catatan" class="w-full p-3 mb-3 input-dark transition-all" placeholder="Nama / Karyawan (Opsional)">
               <input type="time" id="cc-jam" class="w-full p-3 mb-3 input-dark transition-all" required>
               <div class="mb-3">
@@ -355,7 +355,7 @@
                 <label class="block label-dark mb-2 ml-1">KETERANGAN SELISIH</label>
                 <select id="cc-ket-selisih" class="w-full p-3 input-dark transition-all"><option value="-">-</option><option value="Kurang">Kurang</option><option value="Lebih">Lebih</option></select>
               </div>
-              <button onclick="saveCrosscheck()" id="btn-save-cc" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-xl font-bold transition-all active:scale-95">SIMPAN CROSSCHECK</button>
+              <button onclick="saveCrosscheck()" id="btn-save-cc" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-bold transition-all active:scale-95">SIMPAN CROSSCHECK</button>
             </div>
             <div class="premium-card rounded-2xl overflow-hidden md:col-span-2 scroll-x">
               <table class="text-center w-full">
@@ -401,9 +401,9 @@
               </div>
             </div>
             <div class="premium-card p-6 flex flex-col">
-              <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-share-alt text-green-400"></i> Format List Buat Share</h3>
+              <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-share-alt text-blue-400"></i> Format List Buat Share</h3>
               <div id="text-share" class="bg-slate-950 p-4 rounded-xl mb-4 text-sm text-slate-200 whitespace-pre-wrap flex-1 overflow-auto max-h-96"></div>
-              <button onclick="copyText()" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl font-bold transition-all active:scale-95"><i class="fas fa-copy mr-2"></i> COPY TEXT</button>
+              <button onclick="copyText()" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-xl font-bold transition-all active:scale-95"><i class="fas fa-copy mr-2"></i> COPY TEXT</button>
             </div>
           </div>
           <div class="premium-card rounded-2xl overflow-hidden scroll-x">
@@ -422,7 +422,7 @@
         <div id="page-rekap" class="hidden fade-in">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div class="premium-card p-5 border border-amber-500/30"><p class="text-sm text-slate-300 font-semibold mb-2">Total UM Keseluruhan</p><p class="text-2xl font-extrabold text-amber-400" id="um-total-keseluruhan">៛ 0</p></div>
-            <div class="premium-card p-5"><p class="text-sm text-slate-300 font-semibold mb-2">Total Sudah Cair</p><p class="text-2xl font-extrabold text-green-400" id="um-total-sudah-cair">៛ 0</p></div>
+            <div class="premium-card p-5"><p class="text-sm text-slate-300 font-semibold mb-2">Total Sudah Cair</p><p class="text-2xl font-extrabold text-blue-400" id="um-total-sudah-cair">៛ 0</p></div>
             <div class="premium-card p-5"><p class="text-sm text-slate-300 font-semibold mb-2">Total Belum Cair</p><p class="text-2xl font-extrabold text-red-400" id="um-total-belum-cair">៛ 0</p></div>
           </div>
           <div class="premium-card rounded-2xl overflow-hidden scroll-x">
@@ -452,7 +452,7 @@
               <div class="space-y-4">
                 <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Penjualan (Laku):</span><span class="font-bold text-lg text-white" id="kas-month-pendapatan">៛ 0</span></div>
                 <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Modal Rokok:</span><span class="font-bold text-lg text-red-400" id="kas-month-modal">៛ 0</span></div>
-                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Untung Bersih:</span><span class="font-bold text-lg text-green-400" id="kas-month-untung">៛ 0</span></div>
+                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Untung Bersih:</span><span class="font-bold text-lg text-blue-400" id="kas-month-untung">៛ 0</span></div>
                 <div class="bg-amber-500/10 p-4 rounded-xl mt-4">
                   <p class="text-sm text-amber-300 text-center font-bold">Pastikan setoran modal diselesaikan sebelum tanggal tutup buku.</p>
                 </div>
@@ -462,7 +462,7 @@
               <h3 class="font-bold text-white mb-5">Detail Kas Bulan Ini</h3>
               <div class="space-y-4">
                 <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Pendapatan:</span><span class="font-bold text-lg text-white" id="kas-uang-ada">៛ 0</span></div>
-                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Cash Riel:</span><span class="font-bold text-green-400" id="kas-riel-detail">៛ 0</span></div>
+                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Cash Riel:</span><span class="font-bold text-blue-400" id="kas-riel-detail">៛ 0</span></div>
                 <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Uang di ABA:</span><span class="font-bold text-purple-400" id="kas-aba-detail">៛ 0</span></div>
                 <div class="flex justify-between items-center"><span class="text-slate-300 text-sm">UM Belum Cair:</span><span class="font-bold text-amber-400" id="kas-um-detail">៛ 0</span></div>
               </div>
@@ -496,7 +496,7 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbzQ1ualbx0PIHfp-CrGIuCH4oBsbqrAcvHfyJTxk78vfd42LrpshWRw8oeK_hVq4L0/exec'; 
     const LOGO_LINK = 'https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf';
     const BG_LINK = 'https://lh3.googleusercontent.com/d/1zoGFZJ_fpKsMOf29YqGXxjl3K1RMo4zW';
-    const BARCODE_LINK = 'https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN'; // INI LINK HALAMAN, BUKAN GAMBAR. GANTI DENGAN LINK .JPG/.PNG
+    const BARCODE_LINK = 'https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN'; // GANTI DENGAN LINK .JPG/.PNG
     // =======================================================
 
     let masterData = {};
@@ -505,7 +505,9 @@
     let currentJualFilter = "Cash";
     let currentCCTipe = "Eceran";
     let editMode = null;
-    let selectedMonth = new Date().toISOString().slice(0, 7); 
+    // PERBAIKAN FILTER BULAN: Pakai waktu lokal biar data gak hilang
+    let today = new Date();
+    let selectedMonth = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
     let salesChart = null;
 
     // Apply Barcode Link & Error Handler
@@ -559,7 +561,7 @@
     function showToast(msg, type = 'success') {
       const toast = document.getElementById('toast');
       toast.innerText = msg;
-      toast.className = `fixed bottom-10 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl shadow-2xl z-50 font-bold text-sm toast ${type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}`;
+      toast.className = `fixed bottom-10 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl shadow-2xl z-50 font-bold text-sm toast ${type === 'success' ? 'bg-blue-600 text-white' : 'bg-red-600 text-white'}`;
       toast.classList.remove('hidden');
       setTimeout(() => toast.classList.add('hidden'), 2500);
     }
@@ -594,10 +596,12 @@
       else { input.value = ''; }
     }
 
+    // PERBAIKAN: Cek bulan berdasarkan lokal (biar data pengambilan muncul)
     function getMonthFromDate(dateStr) {
       if(!dateStr) return "";
-      const d = new Date(dateStr);
-      return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+      let d = new Date(dateStr);
+      if (isNaN(d.getTime())) return "";
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
     }
 
     function formatFullDate(dateStr, withTime = true) {
@@ -710,7 +714,7 @@
         tbRokok.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-4 text-left font-semibold text-white">${r}</td>
           <td class="p-4 text-slate-100">៛ ${modal.toLocaleString('id-ID')}</td>
-          <td class="p-4 text-green-400">៛ ${cashRiel.toLocaleString('id-ID')}</td>
+          <td class="p-4 text-blue-400">៛ ${cashRiel.toLocaleString('id-ID')}</td>
           <td class="p-4 text-amber-400">៛ ${um.toLocaleString('id-ID')}</td>
           <td class="p-4 text-purple-400">៛ ${eceran.toLocaleString('id-ID')}</td>
           <td class="p-4 flex gap-2 justify-center">
@@ -1035,7 +1039,7 @@
         tbStok.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
           <td class="p-3 text-slate-100">${sisaSlopBulanLalu} Slop</td>
-          <td class="p-3 text-green-400">${masukBulanIni} Slop</td>
+          <td class="p-3 text-blue-400">${masukBulanIni} Slop</td>
           <td class="p-3 text-purple-400">${bukaBulanIni} Slop</td>
           <td class="p-3 text-red-400">${terjualPerslopBulanIni} Slop</td>
           <td class="p-3 font-bold text-blue-400">${sisaSlopSaatIni} Slop</td>
@@ -1138,7 +1142,7 @@
             <td class="p-3 text-slate-100">${u.situs || '-'}</td>
             <td class="p-3 text-slate-100">${u.rokok}</td>
             <td class="p-3 font-bold text-blue-400">${u.jumlahTxt}</td>
-            <td class="p-3 text-emerald-400 font-semibold">៛ ${fmt(u.harga)}</td>
+            <td class="p-3 text-blue-400 font-semibold">៛ ${fmt(u.harga)}</td>
             <td class="p-3"><span class="badge ${getBadgeClass(u.statusBayar)}">${u.statusBayar}</span></td>
             <td class="p-3 text-center">${actionButtons}</td>
           </tr>`; 
@@ -1154,7 +1158,7 @@
             <select onchange='updateJualStatus(${u.row}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
               <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM CAIR</option>
               <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
-              <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDOH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
+              <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDAH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
             </select>
             <button onclick='deleteJualData(${u.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
           </div>
@@ -1165,7 +1169,7 @@
           <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
           <td class="p-3 text-slate-100">${u.rokok}</td>
           <td class="p-3 font-bold text-blue-400">${u.jumlahTxt}</td>
-          <td class="p-3 text-emerald-400 font-semibold">៛ ${fmt(u.harga)}</td>
+          <td class="p-3 text-blue-400 font-semibold">៛ ${fmt(u.harga)}</td>
           <td class="p-3"><span class="badge ${getBadgeClass(u.statusBayar)}">${u.statusBayar}</span></td>
           <td class="p-3 text-center">${actionButtons}</td>
         </tr>`; 
@@ -1200,8 +1204,8 @@
       chartGradient.addColorStop(1, 'rgba(15, 23, 42, 0.1)'); 
 
       const hoverGradient = ctx.createLinearGradient(0, 0, 0, 350);
-      hoverGradient.addColorStop(0, 'rgba(16, 185, 129, 1)');
-      hoverGradient.addColorStop(1, 'rgba(5, 150, 105, 0.5)');
+      hoverGradient.addColorStop(0, 'rgba(59, 130, 246, 1)'); // Biru saat hover
+      hoverGradient.addColorStop(1, 'rgba(37, 99, 235, 0.5)');
 
       if(salesChart) salesChart.destroy();
       salesChart = new Chart(ctx, {
@@ -1240,7 +1244,7 @@
               enabled: true,
               backgroundColor: 'rgba(15, 23, 42, 0.95)',
               titleColor: '#fff',
-              bodyColor: '#10b981',
+              bodyColor: '#3b82f6', // Warna biru
               borderColor: 'rgba(139, 92, 246, 0.5)',
               borderWidth: 2,
               padding: 12,
@@ -1326,7 +1330,7 @@
       }
       
       if(!namaVal) { showToast("Nama pembeli wajib diisi!", "error"); return; }
-      if(currentJualTipe === "Perslop" && !situsVal) { showToast("Nama situs wajib diisi!", "error"); return; }
+      if(currentJualTipe === "Perslop" and !situsVal) { showToast("Nama situs wajib diisi!", "error"); return; }
       
       const data = { 
         tipe: currentJualTipe, 
