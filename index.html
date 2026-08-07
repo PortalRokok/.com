@@ -327,7 +327,7 @@
             <h4 class="font-bold bg-blue-500/10 text-blue-400 p-4 border-b border-slate-800 text-sm">Riwayat Pengambilan & Mutasi Stok Bulan Ini</h4>
             <table class="text-center w-full">
               <thead>
-                <tr><th class="p-3 text-left">Tanggal</th><th class="p-3">Rokok</th><th class="p-3">Tipe</th><th class="p-3">Jumlah</th><th class="p-3">Modal Per Slop</th></tr>
+                <tr><th class="p-3 text-left">Tanggal</th><th class="p-3">Rokok</th><th class="p-3">Tipe</th><th class="p-3">Jumlah</th><th class="p-3">Modal Per Slop</th><th class="p-3">Aksi</th></tr>
               </thead>
               <tbody id="table-pengambilan-recap" class="divide-y divide-slate-800"></tbody>
             </table>
@@ -505,7 +505,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbz4sgdQVlh_ri6tL7ZytLKNRuawbOgGqWeq53VA3VYf9gYVA2dZraKE0QDeyLLlzTqi/exec'; 
+    const API_URL = 'https://script.google.com/macros/s/AKfycbx5J4jRfFDR1rUcRa9NX4OeY0ZHhOHl7FSTpBTCphRVdIAhS8oPvI7_SvMXS8su1s0-/exec'; 
     
     let masterData = {};
     let dashboardState = null; 
@@ -796,7 +796,6 @@
     async function deleteMaster(namaRokok) {
       if(!confirm(`Yakin hapus rokok ${namaRokok}?`)) return;
       
-      // OPTIMISTIC UI
       const originalMaster = {...masterData};
       delete masterData[namaRokok];
       populateDropdowns();
@@ -959,7 +958,6 @@
       document.getElementById('um-total-sudah-cair').innerText = "៛ " + fmt(totalUMSudahCair);
       document.getElementById('um-total-belum-cair').innerText = "៛ " + fmt(totalUMBelumCair);
 
-      // STOK TABLES & MATH
       const tbStok = document.getElementById('table-stok'); tbStok.innerHTML = "";
       const tbStokEceran = document.getElementById('table-stok-eceran'); tbStokEceran.innerHTML = "";
       const tbStokMini = document.getElementById('table-stok-mini'); tbStokMini.innerHTML = "";
@@ -970,7 +968,6 @@
         let prevJualEceran = 0;
         let masukBulanIni = 0, bukaBulanIni = 0, terjualPerslopBulanIni = 0, terjualEceranBulanIni = 0;
 
-        // Ambil data bulan lalu
         res.allPengambilan.forEach(p => {
           if(p.rokok === namaRokok && getMonthFromDate(p.tanggal) < selectedMonth) {
             if(p.tipe === 'Masuk') prevMasuk += p.jumlah;
@@ -984,7 +981,6 @@
           }
         });
 
-        // Ambil data bulan ini
         filteredAmbil.forEach(p => {
           if(p.rokok === namaRokok) {
             if(p.tipe === 'Masuk') masukBulanIni += p.jumlah;
@@ -998,11 +994,9 @@
           }
         });
 
-        // Hitung Sisa Slop
         let sisaSlopBulanLalu = prevMasuk - prevBuka - prevJualPerslop;
         let sisaSlopSaatIni = sisaSlopBulanLalu + masukBulanIni - bukaBulanIni - terjualPerslopBulanIni;
         
-        // Hitung Sisa Eceran (1 Slop = 10 Bungkus)
         let sisaEceranBulanLalu = (prevBuka * 10) - prevJualEceran;
         let bukaEceranBulanIni = bukaBulanIni * 10;
         let sisaEceranSaatIni = sisaEceranBulanLalu + bukaEceranBulanIni - terjualEceranBulanIni;
@@ -1041,17 +1035,23 @@
       if(filteredAmbil.length > 0) {
         filteredAmbil.reverse().forEach(p => {
           const badgeClass = p.tipe === 'Buka Slop' ? 'badge-purple' : 'badge-success';
+          const dataStr = JSON.stringify(p).replace(/'/g, "&#39;");
           tbAmbil.innerHTML += `<tr class="hover:bg-slate-800/50">
             <td class="p-3 text-slate-100 text-left">${formatFullDate(p.tanggal, false)}</td>
             <td class="p-3 text-white">${p.rokok}</td>
             <td class="p-3"><span class="badge ${badgeClass}">${p.tipe}</span></td>
             <td class="p-3 text-white">${p.jumlah} Slop</td>
             <td class="p-3 text-white">៛ ${fmt(p.modal)}</td>
+            <td class="p-3 text-center">
+              <div class="flex gap-2 justify-center">
+                <button onclick='editPengambilanData(${dataStr})' class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded-lg text-xs font-bold">EDIT</button>
+                <button onclick='deletePengambilanData(${dataStr})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold">HAPUS</button>
+              </div>
+            </td>
           </tr>`;
         });
-      } else tbAmbil.innerHTML = `<tr><td colspan="5" class="p-4 text-slate-400 text-center">Belum ada mutasi stok bulan ini</td></tr>`;
+      } else tbAmbil.innerHTML = `<tr><td colspan="6" class="p-4 text-slate-400 text-center">Belum ada mutasi stok bulan ini</td></tr>`;
 
-      // Crosscheck Table
       const tbStokCC = document.getElementById('table-stok-cc'); tbStokCC.innerHTML = "";
       if(stokArr.length > 0) stokArr.forEach(s => {
         let v1, v2, v3;
@@ -1268,7 +1268,7 @@
       const res = await apiCall('deletePenjualan', { payload: data });
       if(res.error) { 
         showToast("Gagal hapus, mengembalikan data...", "error"); 
-        dashboardState.allSales.push(data); 
+        dashboardState.allSales.push(data);
         renderDashboard(dashboardState);
         return; 
       }
@@ -1321,7 +1321,6 @@
         statusBayar: statusVal
       };
       
-      // OPTIMISTIC UI
       const newSale = {
           tanggal: new Date().toISOString(),
           tipe: data.tipe,
@@ -1407,6 +1406,66 @@
         renderDashboard(dashboardState); 
         localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       }
+    }
+
+    async function deletePengambilanData(data) {
+      if(!confirm('Yakin hapus data pengambilan ini?')) return;
+      
+      dashboardState.allPengambilan = dashboardState.allPengambilan.filter(p => {
+        return !(p.tanggal === data.tanggal && p.rokok === data.rokok && Number(p.jumlah) === Number(data.jumlah) && Number(p.modal) === Number(data.modal));
+      });
+      renderDashboard(dashboardState);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      showToast("Menghapus pengambilan...", "success");
+
+      const res = await apiCall('deletePengambilan', { payload: data });
+      if(res.error) { 
+        showToast("Gagal hapus, mengembalikan data...", "error"); 
+        dashboardState.allPengambilan.push(data);
+        renderDashboard(dashboardState);
+        return; 
+      }
+      
+      dashboardState = res.dashboard;
+      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
+      renderDashboard(dashboardState);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+    }
+
+    function editPengambilanData(data) {
+      const newJumlah = prompt(`Edit Jumlah Slop untuk ${data.rokok}:`, data.jumlah);
+      if (newJumlah === null) return;
+      
+      const newModalStr = prompt(`Edit Modal Per Slop (៛) untuk ${data.rokok}:`, data.modal);
+      if (newModalStr === null) return;
+      
+      const newJumlahNum = parseFloat(newJumlah) || 0;
+      const newModalNum = parseFloat(newModalStr.replace(/\D/g, '')) || 0;
+
+      if(newJumlahNum === data.jumlah && newModalNum === data.modal) {
+        showToast("Tidak ada perubahan.", "success");
+        return;
+      }
+
+      dashboardState.allPengambilan.forEach(p => {
+        if (p.tanggal === data.tanggal && p.rokok === data.rokok && Number(p.jumlah) === Number(data.jumlah) && Number(p.modal) === Number(data.modal)) {
+          p.jumlah = newJumlahNum;
+          p.modal = newModalNum;
+        }
+      });
+      renderDashboard(dashboardState);
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      showToast("Mengupdate pengambilan...", "success");
+
+      apiCall('updatePengambilan', { payload: { ...data, jumlah: newJumlahNum, modal: newModalNum, oldJumlah: data.jumlah, oldModal: data.modal } })
+      .then(res => {
+        if(res.error) { showToast("Gagal update, memuat ulang...", "error"); return; }
+        
+        dashboardState = res.dashboard;
+        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
+        renderDashboard(dashboardState);
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      });
     }
 
     async function saveCrosscheck() {
