@@ -61,7 +61,7 @@
     td.text-left { text-align: left; }
     th.text-left { text-align: left; }
     
-    /* PERBAIKAN BADGE: WARNA LEBIH SOLID & TULANGAN LEBIH KONTRAS (TIDAK TERTUTUP) */
+    /* BADGE LEBIH KONTRAS */
     .badge { padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 800; display: inline-block; text-align: center; }
     .badge-success { background: #10b981; color: #ffffff; border: 1px solid #34d399; }
     .badge-danger { background: #ef4444; color: #ffffff; border: 1px solid #f87171; }
@@ -115,8 +115,9 @@
   <!-- APP DASHBOARD -->
   <div id="app-view" class="hidden min-h-screen">
     <aside id="sidebar" class="fixed top-0 left-0 z-40 h-screen w-72 bg-slate-950 text-white flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 border-r border-slate-800">
-      <div class="p-4 flex items-center justify-center border-b border-slate-800 h-20">
-        <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="max-h-full max-w-full object-contain" alt="Logo">
+      <!-- LOGO DIPERLEBAR SESUAI BENTUK ASLI -->
+      <div class="p-4 flex items-center justify-center border-b border-slate-800 h-24">
+        <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-h-20 object-contain" alt="Logo">
         <button onclick="toggleSidebar()" class="lg:hidden ml-auto text-slate-300 absolute right-4 top-4"><i class="fas fa-times text-xl"></i></button>
       </div>
       <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -1042,16 +1043,16 @@
 
         tbStokEceran.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-3 text-slate-100">${sisaEceranBulanLalu} Bks</td>
-          <td class="p-3 text-purple-400">${bukaEceranBulanIni} Bks</td>
-          <td class="p-3 text-red-400">${terjualEceranBulanIni} Bks</td>
-          <td class="p-3 font-bold text-cyan-400">${sisaEceranSaatIni} Bks</td>
+          <td class="p-3 text-slate-100">${sisaEceranBulanLalu} Bungkus</td>
+          <td class="p-3 text-purple-400">${bukaEceranBulanIni} Bungkus</td>
+          <td class="p-3 text-red-400">${terjualEceranBulanIni} Bungkus</td>
+          <td class="p-3 font-bold text-cyan-400">${sisaEceranSaatIni} Bungkus</td>
         </tr>`;
 
         tbStokMini.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
           <td class="p-3 font-bold text-blue-400">${sisaSlopSaatIni} Slop</td>
-          <td class="p-3 font-bold text-cyan-400">${sisaEceranSaatIni} Bks</td>
+          <td class="p-3 font-bold text-cyan-400">${sisaEceranSaatIni} Bungkus</td>
         </tr>`;
       }
 
@@ -1083,9 +1084,9 @@
           v2 = `<span class="text-red-400">${s.terjualPerslopBulanIni} Slop</span>`; 
           v3 = `<span class="text-blue-400 font-bold">${s.sisaSlopSaatIni} Slop</span>`;
         } else {
-          v1 = `<span class="text-slate-100">${s.sisaEceranBulanLalu} Bks</span>`; 
-          v2 = `<span class="text-red-400">${s.terjualEceranBulanIni} Bks</span>`; 
-          v3 = `<span class="text-cyan-400 font-bold">${s.sisaEceranSaatIni} Bks</span>`;
+          v1 = `<span class="text-slate-100">${s.sisaEceranBulanLalu} Bungkus</span>`; 
+          v2 = `<span class="text-red-400">${s.terjualEceranBulanIni} Bungkus</span>`; 
+          v3 = `<span class="text-cyan-400 font-bold">${s.sisaEceranSaatIni} Bungkus</span>`;
         }
         tbStokCC.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-4 text-left font-semibold text-white">${s.rokok}</td>
@@ -1153,7 +1154,7 @@
             <select onchange='updateJualStatus(${u.row}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
               <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM CAIR</option>
               <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
-              <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDAH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
+              <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDOH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
             </select>
             <button onclick='deleteJualData(${u.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
           </div>
@@ -1226,11 +1227,11 @@
             y: {
               beginAtZero: true,
               grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-              ticks: { color: '#94a3b8', font: { family: 'Inter', size: 11 }, callback: function(value) { return '៛ ' + (value/1000) + 'k'; } }
+              ticks: { color: '#ffffff', font: { family: 'Inter', size: 14, weight: 'bold' }, callback: function(value) { return '៛ ' + (value/1000) + 'k'; } }
             },
             x: {
               grid: { display: false, drawBorder: false },
-              ticks: { color: '#cbd5e1', font: { family: 'Inter', size: 12, weight: '600' } }
+              ticks: { color: '#ffffff', font: { family: 'Inter', size: 14, weight: 'bold' } }
             }
           },
           plugins: {
