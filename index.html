@@ -31,7 +31,6 @@
     
     .nav-active { background: linear-gradient(90deg, #3b82f6, #2563eb); color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
     
-    /* KARTU SOLID AGAR BACKGROUND TIDAK TEMBUS KE DALAM */
     .premium-card { 
       background: #1e293b; 
       border: 1px solid rgba(255,255,255,0.1); 
@@ -61,7 +60,6 @@
     td.text-left { text-align: left; }
     th.text-left { text-align: left; }
     
-    /* BADGE WARNA BIRU/CYAN (NO HIJAU) */
     .badge { padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 800; display: inline-block; text-align: center; }
     .badge-success { background: #3b82f6; color: #ffffff; border: 1px solid #60a5fa; }
     .badge-danger { background: #ef4444; color: #ffffff; border: 1px solid #f87171; }
@@ -115,7 +113,6 @@
   <!-- APP DASHBOARD -->
   <div id="app-view" class="hidden min-h-screen">
     <aside id="sidebar" class="fixed top-0 left-0 z-40 h-screen w-72 bg-slate-950 text-white flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 border-r border-slate-800">
-      <!-- LOGO DIPERLEBAR (PERSEGI PANJANG) -->
       <div class="p-4 flex items-center justify-center border-b border-slate-800">
         <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-h-24 object-fill" alt="Logo">
         <button onclick="toggleSidebar()" class="lg:hidden ml-auto text-slate-300 absolute right-4 top-4"><i class="fas fa-times text-xl"></i></button>
@@ -490,14 +487,10 @@
   </div>
 
   <script>
-    // =======================================================
-    // LINK KAMU SUDAH DITEMPEL DI SINI
-    // =======================================================
     const API_URL = 'https://script.google.com/macros/s/AKfycbzQ1ualbx0PIHfp-CrGIuCH4oBsbqrAcvHfyJTxk78vfd42LrpshWRw8oeK_hVq4L0/exec'; 
     const LOGO_LINK = 'https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf';
     const BG_LINK = 'https://lh3.googleusercontent.com/d/1zoGFZJ_fpKsMOf29YqGXxjl3K1RMo4zW';
     const BARCODE_LINK = 'https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN'; // GANTI DENGAN LINK .JPG/.PNG
-    // =======================================================
 
     let masterData = {};
     let dashboardState = null; 
@@ -505,12 +498,10 @@
     let currentJualFilter = "Cash";
     let currentCCTipe = "Eceran";
     let editMode = null;
-    // PERBAIKAN FILTER BULAN: Pakai waktu lokal biar data gak hilang
     let today = new Date();
     let selectedMonth = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
     let salesChart = null;
 
-    // Apply Barcode Link & Error Handler
     const imgBarcode = document.getElementById('barcode-img');
     imgBarcode.src = BARCODE_LINK;
     document.getElementById('barcode-link').href = BARCODE_LINK;
@@ -596,7 +587,6 @@
       else { input.value = ''; }
     }
 
-    // PERBAIKAN: Cek bulan berdasarkan lokal (biar data pengambilan muncul)
     function getMonthFromDate(dateStr) {
       if(!dateStr) return "";
       let d = new Date(dateStr);
@@ -835,7 +825,6 @@
       const titles = { 'dashboard': 'Dashboard Analytics', 'stok': 'Stok & Pengambilan', 'crosscheck': 'Crosscheck Stok', 'rokok': 'List Harga Rokok', 'rekap': 'Rekapan Pembayaran UM', 'kas': 'Kas & Setoran Bulanan' };
       if(titles[page]) document.getElementById('page-title').innerText = titles[page];
       
-      // Reset semua nav
       ['nav-dashboard', 'nav-jual-cash', 'nav-jual-um', 'nav-jual-eceran', 'nav-stok', 'nav-crosscheck-perslop', 'nav-crosscheck-eceran', 'nav-rokok', 'nav-rekap', 'nav-kas'].forEach(id => {
         const nav = document.getElementById(id);
         if(nav) {
@@ -844,7 +833,6 @@
         }
       });
 
-      // Set active nav
       let activeId = 'nav-' + page;
       if(page === 'jual' && customArg === 'Perslop Cash') activeId = 'nav-jual-cash';
       else if(page === 'jual' && customArg === 'Perslop UM') activeId = 'nav-jual-um';
@@ -1158,7 +1146,7 @@
             <select onchange='updateJualStatus(${u.row}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
               <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM CAIR</option>
               <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
-              <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDAH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
+              <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDOH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
             </select>
             <button onclick='deleteJualData(${u.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
           </div>
@@ -1204,7 +1192,7 @@
       chartGradient.addColorStop(1, 'rgba(15, 23, 42, 0.1)'); 
 
       const hoverGradient = ctx.createLinearGradient(0, 0, 0, 350);
-      hoverGradient.addColorStop(0, 'rgba(59, 130, 246, 1)'); // Biru saat hover
+      hoverGradient.addColorStop(0, 'rgba(59, 130, 246, 1)'); 
       hoverGradient.addColorStop(1, 'rgba(37, 99, 235, 0.5)');
 
       if(salesChart) salesChart.destroy();
@@ -1244,7 +1232,7 @@
               enabled: true,
               backgroundColor: 'rgba(15, 23, 42, 0.95)',
               titleColor: '#fff',
-              bodyColor: '#3b82f6', // Warna biru
+              bodyColor: '#3b82f6',
               borderColor: 'rgba(139, 92, 246, 0.5)',
               borderWidth: 2,
               padding: 12,
@@ -1330,7 +1318,8 @@
       }
       
       if(!namaVal) { showToast("Nama pembeli wajib diisi!", "error"); return; }
-      if(currentJualTipe === "Perslop" and !situsVal) { showToast("Nama situs wajib diisi!", "error"); return; }
+      // PERBAIKAN: Mengganti "and" dengan "&&" agar tidak crash scriptnya
+      if(currentJualTipe === "Perslop" && !situsVal) { showToast("Nama situs wajib diisi!", "error"); return; }
       
       const data = { 
         tipe: currentJualTipe, 
@@ -1516,7 +1505,6 @@
       }
     }
 
-    // FUNGSI COPY GAMBAR BARCODE ABA (BISA DI PASTE LANGSUNG DI WA/TELEGRAM)
     async function copyBarcodeImage() {
       if(!BARCODE_LINK || BARCODE_LINK === 'PASTE_LINK_GAMBAR_BARCODE_DISINI') { 
         showToast("Link barcode belum diisi di script!", "error"); 
