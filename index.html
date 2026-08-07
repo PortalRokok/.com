@@ -327,7 +327,14 @@
             <h4 class="font-bold bg-blue-500/10 text-blue-400 p-4 border-b border-slate-800 text-sm">Riwayat Pengambilan & Mutasi Stok Bulan Ini</h4>
             <table class="text-center w-full">
               <thead>
-                <tr><th class="p-3 text-left">Tanggal</th><th class="p-3">Rokok</th><th class="p-3">Tipe</th><th class="p-3">Jumlah</th><th class="p-3">Modal Per Slop</th><th class="p-3">Aksi</th></tr>
+                <tr>
+                  <th class="p-3 text-left">Tanggal</th>
+                  <th class="p-3">Rokok</th>
+                  <th class="p-3">Tipe</th>
+                  <th class="p-3">Jumlah</th>
+                  <th class="p-3">Modal Per Slop</th>
+                  <th class="p-3">Aksi</th>
+                </tr>
               </thead>
               <tbody id="table-pengambilan-recap" class="divide-y divide-slate-800"></tbody>
             </table>
@@ -505,7 +512,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbx5J4jRfFDR1rUcRa9NX4OeY0ZHhOHl7FSTpBTCphRVdIAhS8oPvI7_SvMXS8su1s0-/exec'; 
+    const API_URL = 'https://script.google.com/macros/s/AKfycbw19la-wUUZ-g2ytF9ltrn8PjTKjYPD3B4gMqppI40ucSJPCghMIilkyYQg4Kg1q97I/exec'; 
     
     let masterData = {};
     let dashboardState = null; 
@@ -1035,7 +1042,6 @@
       if(filteredAmbil.length > 0) {
         filteredAmbil.reverse().forEach(p => {
           const badgeClass = p.tipe === 'Buka Slop' ? 'badge-purple' : 'badge-success';
-          const dataStr = JSON.stringify(p).replace(/'/g, "&#39;");
           tbAmbil.innerHTML += `<tr class="hover:bg-slate-800/50">
             <td class="p-3 text-slate-100 text-left">${formatFullDate(p.tanggal, false)}</td>
             <td class="p-3 text-white">${p.rokok}</td>
@@ -1044,8 +1050,8 @@
             <td class="p-3 text-white">៛ ${fmt(p.modal)}</td>
             <td class="p-3 text-center">
               <div class="flex gap-2 justify-center">
-                <button onclick='editPengambilanData(${dataStr})' class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded-lg text-xs font-bold">EDIT</button>
-                <button onclick='deletePengambilanData(${dataStr})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold">HAPUS</button>
+                <button onclick='editPengambilanData(${p.row})' class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded-lg text-xs font-bold">EDIT</button>
+                <button onclick='deletePengambilanData(${p.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold">HAPUS</button>
               </div>
             </td>
           </tr>`;
@@ -1099,12 +1105,12 @@
         jualFiltered.forEach(u => { 
           let actionButtons = `
             <div class="flex flex-col gap-1 items-center">
-              <select onchange='updateJualStatus(${JSON.stringify(u)}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
+              <select onchange='updateJualStatus(${u.row}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
                 <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>SUDAH BAYAR CASH</option>
                 <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDAH BAYAR ABA' ? 'selected' : ''}>SUDAH BAYAR ABA</option>
                 <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM BAYAR</option>
               </select>
-              <button onclick='deleteJualData(${JSON.stringify(u)})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
+              <button onclick='deleteJualData(${u.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
             </div>
           `;
           
@@ -1127,12 +1133,12 @@
       umSales.forEach(u => { 
         let actionButtons = `
           <div class="flex flex-col gap-1 items-center">
-            <select onchange='updateJualStatus(${JSON.stringify(u)}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
+            <select onchange='updateJualStatus(${u.row}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
               <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM CAIR</option>
               <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
               <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDAH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
             </select>
-            <button onclick='deleteJualData(${JSON.stringify(u)})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
+            <button onclick='deleteJualData(${u.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
           </div>
         `;
         
@@ -1236,17 +1242,15 @@
       });
     }
 
-    async function updateJualStatus(data, newStatus) {
-      dashboardState.allSales.forEach(u => {
-        if (u.tanggal === data.tanggal && u.nama === data.nama && u.rokok === data.rokok && Number(u.jumlah) === Number(data.jumlah) && Number(u.harga) === Number(data.harga)) {
-          u.statusBayar = newStatus;
-        }
-      });
+    async function updateJualStatus(row, newStatus) {
+      let u = dashboardState.allSales.find(x => x.row === row);
+      if(u) u.statusBayar = newStatus;
+      
       renderDashboard(dashboardState);
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       showToast("Status diperbarui...", "success");
 
-      const res = await apiCall('updateStatusPenjualan', { payload: { ...data, newStatus: newStatus } });
+      const res = await apiCall('updateStatusPenjualan', { payload: { row: row, newStatus: newStatus } });
       if(res.error) { showToast("Gagal update status.", "error"); return; }
       
       dashboardState = res.dashboard;
@@ -1255,21 +1259,17 @@
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
     }
 
-    async function deleteJualData(data) {
+    async function deleteJualData(row) {
       if(!confirm('Yakin hapus transaksi ini?')) return;
       
-      dashboardState.allSales = dashboardState.allSales.filter(u => {
-        return !(u.tanggal === data.tanggal && u.nama === data.nama && u.rokok === data.rokok && Number(u.jumlah) === Number(data.jumlah) && Number(u.harga) === Number(data.harga));
-      });
+      dashboardState.allSales = dashboardState.allSales.filter(u => u.row !== row);
       renderDashboard(dashboardState);
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       showToast("Menghapus transaksi...", "success");
 
-      const res = await apiCall('deletePenjualan', { payload: data });
+      const res = await apiCall('deletePenjualan', { payload: { row: row } });
       if(res.error) { 
-        showToast("Gagal hapus, mengembalikan data...", "error"); 
-        dashboardState.allSales.push(data);
-        renderDashboard(dashboardState);
+        showToast("Gagal hapus, memuat ulang data...", "error"); 
         return; 
       }
       
@@ -1408,21 +1408,17 @@
       }
     }
 
-    async function deletePengambilanData(data) {
+    async function deletePengambilanData(row) {
       if(!confirm('Yakin hapus data pengambilan ini?')) return;
       
-      dashboardState.allPengambilan = dashboardState.allPengambilan.filter(p => {
-        return !(p.tanggal === data.tanggal && p.rokok === data.rokok && Number(p.jumlah) === Number(data.jumlah) && Number(p.modal) === Number(data.modal));
-      });
+      dashboardState.allPengambilan = dashboardState.allPengambilan.filter(p => p.row !== row);
       renderDashboard(dashboardState);
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       showToast("Menghapus pengambilan...", "success");
 
-      const res = await apiCall('deletePengambilan', { payload: data });
+      const res = await apiCall('deletePengambilan', { payload: { row: row } });
       if(res.error) { 
-        showToast("Gagal hapus, mengembalikan data...", "error"); 
-        dashboardState.allPengambilan.push(data);
-        renderDashboard(dashboardState);
+        showToast("Gagal hapus, memuat ulang data...", "error"); 
         return; 
       }
       
@@ -1432,7 +1428,10 @@
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
     }
 
-    function editPengambilanData(data) {
+    function editPengambilanData(row) {
+      let data = dashboardState.allPengambilan.find(p => p.row === row);
+      if(!data) return;
+      
       const newJumlah = prompt(`Edit Jumlah Slop untuk ${data.rokok}:`, data.jumlah);
       if (newJumlah === null) return;
       
@@ -1447,17 +1446,13 @@
         return;
       }
 
-      dashboardState.allPengambilan.forEach(p => {
-        if (p.tanggal === data.tanggal && p.rokok === data.rokok && Number(p.jumlah) === Number(data.jumlah) && Number(p.modal) === Number(data.modal)) {
-          p.jumlah = newJumlahNum;
-          p.modal = newModalNum;
-        }
-      });
+      data.jumlah = newJumlahNum;
+      data.modal = newModalNum;
       renderDashboard(dashboardState);
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       showToast("Mengupdate pengambilan...", "success");
 
-      apiCall('updatePengambilan', { payload: { ...data, jumlah: newJumlahNum, modal: newModalNum, oldJumlah: data.jumlah, oldModal: data.modal } })
+      apiCall('updatePengambilan', { payload: { row: row, jumlah: newJumlahNum, modal: newModalNum } })
       .then(res => {
         if(res.error) { showToast("Gagal update, memuat ulang...", "error"); return; }
         
