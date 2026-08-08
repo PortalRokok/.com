@@ -584,6 +584,7 @@
       else { input.value = ''; }
     }
 
+    // PERBAIKAN UTAMA: Parser tanggal anti-timezone
     function getMonthFromDate(dateStr) {
       if (!dateStr) return "";
       let d;
@@ -591,13 +592,17 @@
         d = dateStr;
       } else if (typeof dateStr === 'string') {
         if (dateStr.includes('T')) {
+          // ISO format, safe to parse directly
           d = new Date(dateStr);
         } else {
+          // Mungkin format DD/MM/YYYY atau YYYY-MM-DD
           const parts = dateStr.split(/[-/]/);
           if (parts.length === 3) {
             if (parts[0].length === 4) {
+              // YYYY-MM-DD
               d = new Date(parts[0], parts[1] - 1, parts[2]);
             } else {
+              // DD/MM/YYYY (Indonesia)
               d = new Date(parts[2], parts[1] - 1, parts[0]);
             }
           } else {
@@ -1267,6 +1272,7 @@
       });
     }
 
+    // PERBAIKAN: Hindari re-render yang bikin flicker
     async function updateJualStatus(row, newStatus) {
       let u = dashboardState.allSales.find(x => x.row === row);
       if(u) u.statusBayar = newStatus;
@@ -1280,8 +1286,7 @@
       
       dashboardState = res.dashboard;
       if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-      renderDashboard(dashboardState);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState)); // No renderDashboard
     }
 
     async function deleteJualData(row) {
@@ -1300,8 +1305,7 @@
       
       dashboardState = res.dashboard;
       if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-      renderDashboard(dashboardState);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState)); // No renderDashboard
     }
 
     function hitungHargaOtomatis() {
@@ -1498,8 +1502,7 @@
       
       dashboardState = res.dashboard;
       if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-      renderDashboard(dashboardState);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState)); // No renderDashboard
     }
 
     function editPengambilanData(row) {
@@ -1536,8 +1539,7 @@
         
         dashboardState = res.dashboard;
         if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        renderDashboard(dashboardState);
-        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState)); // No renderDashboard
       });
     }
 
