@@ -185,11 +185,11 @@
         <!-- DASHBOARD -->
         <div id="page-dashboard" class="fade-in">
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Pendapatan</p><i class="fas fa-arrow-trend-up text-blue-400 text-sm bg-blue-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-white" id="kas-total-pendapatan">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Pendapatan</p><i class="fas fa-arrow-trend-up text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-white" id="kas-total-pendapatan">៛ 0</p></div>
             <div class="premium-card p-5 border border-yellow-500/20"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Untung (Gabungan)</p><i class="fas fa-sack-dollar text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-yellow-400" id="kas-untung">៛ 0</p></div>
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Perslop</p><i class="fas fa-box text-blue-400 text-sm bg-blue-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-blue-400" id="kas-untung-perslop">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Perslop</p><i class="fas fa-box text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-yellow-400" id="kas-untung-perslop">៛ 0</p></div>
             <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Eceran</p><i class="fas fa-shopping-basket text-purple-400 text-sm bg-purple-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-purple-400" id="kas-untung-eceran">៛ 0</p></div>
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Cash Riel</p><i class="fas fa-money-bill-wave text-blue-400 text-sm bg-blue-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-blue-400" id="kas-cash-riel">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Cash Riel</p><i class="fas fa-money-bill-wave text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-yellow-400" id="kas-cash-riel">៛ 0</p></div>
             <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">ABA</p><i class="fas fa-clock text-purple-400 text-sm bg-purple-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-purple-400" id="kas-aba">៛ 0</p></div>
             <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Uang Makan (Belum Cair)</p><i class="fas fa-utensils text-amber-400 text-sm bg-amber-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-amber-400" id="kas-um">៛ 0</p></div>
             <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Slop Terjual</p><i class="fas fa-box-open text-cyan-400 text-sm bg-cyan-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-cyan-400" id="kas-total-slop-terjual">0 Slop</p></div>
@@ -213,7 +213,7 @@
                 <div id="wrapper-status"><label class="block label-dark mb-2 ml-1">STATUS BAYAR</label><select id="jual-status" class="w-full p-3 input-dark transition-all"><option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option></select></div>
               </div>
               <div class="bg-gradient-to-r from-blue-900/40 to-cyan-900/20 p-5 rounded-xl border border-blue-500/20 mb-6 flex justify-between items-center">
-                <span class="text-sm font-bold text-blue-300 uppercase tracking-wider">Total Harga</span><p class="text-2xl md:text-3xl font-extrabold text-blue-400" id="jual-harga">៛ 0</p>
+                <span class="text-sm font-bold text-blue-300 uppercase tracking-wider">Total Harga</span><p class="text-2xl md:text-3xl font-extrabold text-yellow-400" id="jual-harga">៛ 0</p>
               </div>
               <button onclick="saveJual()" id="btn-save-jual" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-blue-500/30 active:scale-95 transition-all">SIMPAN TRANSAKSI</button>
             </div>
@@ -288,10 +288,8 @@
               <thead>
                 <tr>
                   <th class="p-3 text-left">Jenis Rokok</th>
-                  <th class="p-3">Sisa Slop Bulan Lalu</th>
-                  <th class="p-3">Masuk Slop</th>
-                  <th class="p-3">Dibuka Slop</th>
-                  <th class="p-3">Terjual Slop</th>
+                  <th class="p-3">Total Masuk Slop</th>
+                  <th class="p-3">Total Terjual Slop</th>
                   <th class="p-3">Sisa Slop Saat Ini</th>
                 </tr>
               </thead>
@@ -305,9 +303,8 @@
               <thead>
                 <tr>
                   <th class="p-3 text-left">Jenis Rokok</th>
-                  <th class="p-3">Sisa Eceran Bulan Lalu</th>
-                  <th class="p-3">Dibuka Dari Slop</th>
-                  <th class="p-3">Terjual Eceran</th>
+                  <th class="p-3">Total Dibuka Dari Slop</th>
+                  <th class="p-3">Total Terjual Eceran</th>
                   <th class="p-3">Sisa Eceran Saat Ini</th>
                 </tr>
               </thead>
@@ -359,9 +356,8 @@
                 <thead>
                   <tr>
                     <th class="p-4 text-left">Jenis Rokok</th>
-                    <th id="th-cc-1" class="p-4">Sisa Bulan Lalu</th>
-                    <th id="th-cc-2" class="p-4">Terjual Bulan Ini</th>
-                    <th id="th-cc-3" class="p-4">Sisa Saat Ini</th>
+                    <th id="th-cc-1" class="p-4">Total Terjual</th>
+                    <th id="th-cc-2" class="p-4">Sisa Saat Ini</th>
                   </tr>
                 </thead>
                 <tbody id="table-stok-cc" class="divide-y divide-slate-800"></tbody>
@@ -419,7 +415,7 @@
         <div id="page-rekap" class="hidden fade-in">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div class="premium-card p-5 border border-amber-500/30"><p class="text-sm text-slate-300 font-semibold mb-2">Total UM Keseluruhan</p><p class="text-2xl font-extrabold text-amber-400" id="um-total-keseluruhan">៛ 0</p></div>
-            <div class="premium-card p-5"><p class="text-sm text-slate-300 font-semibold mb-2">Total Sudah Cair</p><p class="text-2xl font-extrabold text-blue-400" id="um-total-sudah-cair">៛ 0</p></div>
+            <div class="premium-card p-5"><p class="text-sm text-slate-300 font-semibold mb-2">Total Sudah Cair</p><p class="text-2xl font-extrabold text-yellow-400" id="um-total-sudah-cair">៛ 0</p></div>
             <div class="premium-card p-5"><p class="text-sm text-slate-300 font-semibold mb-2">Total Belum Cair</p><p class="text-2xl font-extrabold text-red-400" id="um-total-belum-cair">៛ 0</p></div>
           </div>
           <div class="premium-card rounded-2xl overflow-hidden scroll-x">
@@ -449,7 +445,7 @@
               <div class="space-y-4">
                 <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Penjualan (Laku):</span><span class="font-bold text-lg text-white" id="kas-month-pendapatan">៛ 0</span></div>
                 <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Modal Rokok:</span><span class="font-bold text-lg text-red-400" id="kas-month-modal">៛ 0</span></div>
-                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Untung Bersih:</span><span class="font-bold text-lg text-blue-400" id="kas-month-untung">៛ 0</span></div>
+                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Untung Bersih:</span><span class="font-bold text-lg text-yellow-400" id="kas-month-untung">៛ 0</span></div>
                 <div class="bg-amber-500/10 p-4 rounded-xl mt-4">
                   <p class="text-sm text-amber-300 text-center font-bold">Pastikan setoran modal diselesaikan sebelum tanggal tutup buku.</p>
                 </div>
@@ -459,7 +455,7 @@
               <h3 class="font-bold text-white mb-5">Detail Kas Bulan Ini</h3>
               <div class="space-y-4">
                 <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Total Pendapatan:</span><span class="font-bold text-lg text-white" id="kas-uang-ada">៛ 0</span></div>
-                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Cash Riel:</span><span class="font-bold text-blue-400" id="kas-riel-detail">៛ 0</span></div>
+                <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Cash Riel:</span><span class="font-bold text-yellow-400" id="kas-riel-detail">៛ 0</span></div>
                 <div class="flex justify-between items-center pb-3 border-b border-slate-800"><span class="text-slate-300 text-sm">Uang di ABA:</span><span class="font-bold text-purple-400" id="kas-aba-detail">៛ 0</span></div>
                 <div class="flex justify-between items-center"><span class="text-slate-300 text-sm">UM Belum Cair:</span><span class="font-bold text-amber-400" id="kas-um-detail">៛ 0</span></div>
               </div>
@@ -704,7 +700,7 @@
         tbRokok.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-4 text-left font-semibold text-white">${r}</td>
           <td class="p-4 text-slate-100">៛ ${modal.toLocaleString('id-ID')}</td>
-          <td class="p-4 text-blue-400">៛ ${cashRiel.toLocaleString('id-ID')}</td>
+          <td class="p-4 text-yellow-400">៛ ${cashRiel.toLocaleString('id-ID')}</td>
           <td class="p-4 text-amber-400">៛ ${um.toLocaleString('id-ID')}</td>
           <td class="p-4 text-purple-400">៛ ${eceran.toLocaleString('id-ID')}</td>
           <td class="p-4 flex gap-2 justify-center">
@@ -886,16 +882,13 @@
         
         const th1 = document.getElementById('th-cc-1');
         const th2 = document.getElementById('th-cc-2');
-        const th3 = document.getElementById('th-cc-3');
         
         if(currentCCTipe === 'Perslop') {
-          th1.innerText = "Sisa Slop Bulan Lalu";
-          th2.innerText = "Terjual Slop Bulan Ini";
-          th3.innerText = "Sisa Slop Saat Ini";
+          th1.innerText = "Total Terjual Slop";
+          th2.innerText = "Sisa Slop Saat Ini";
         } else {
-          th1.innerText = "Sisa Eceran Bulan Lalu";
-          th2.innerText = "Terjual Eceran Bulan Ini";
-          th3.innerText = "Sisa Eceran Saat Ini";
+          th1.innerText = "Total Terjual Eceran";
+          th2.innerText = "Sisa Eceran Saat Ini";
         }
       }
       
@@ -987,7 +980,7 @@
 
         res.allPengambilan.forEach(p => {
           if(p.rokok === namaRokok && getMonthFromDate(p.tanggal) < selectedMonth) {
-            if(p.tipe === 'Masuk') prevMasuk += p.jumlah;
+            if(p.tipe === 'Masuk' || p.tipe === 'Meauk') prevMasuk += p.jumlah;
             if(p.tipe === 'Buka Slop') prevBuka += p.jumlah;
           }
         });
@@ -1000,7 +993,7 @@
 
         filteredAmbil.forEach(p => {
           if(p.rokok === namaRokok) {
-            if(p.tipe === 'Masuk') masukBulanIni += p.jumlah;
+            if(p.tipe === 'Masuk' || p.tipe === 'Meauk') masukBulanIni += p.jumlah;
             if(p.tipe === 'Buka Slop') bukaBulanIni += p.jumlah;
           }
         });
@@ -1020,42 +1013,40 @@
         
         stokArr.push({ 
           rokok: namaRokok, 
-          sisaSlopBulanLalu, masukBulanIni, bukaBulanIni, terjualPerslopBulanIni, sisaSlopSaatIni, 
-          sisaEceranBulanLalu, bukaEceranBulanIni, terjualEceranBulanIni, sisaEceranSaatIni 
+          masukBulanIni, terjualPerslopBulanIni, sisaSlopSaatIni, 
+          bukaEceranBulanIni, terjualEceranBulanIni, sisaEceranSaatIni 
         });
         
         tbStok.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-3 text-slate-100">${sisaSlopBulanLalu} Slop</td>
-          <td class="p-3 text-blue-400">${masukBulanIni} Slop</td>
-          <td class="p-3 text-purple-400">${bukaBulanIni} Slop</td>
+          <td class="p-3 text-yellow-400">${masukBulanIni} Slop</td>
           <td class="p-3 text-red-400">${terjualPerslopBulanIni} Slop</td>
-          <td class="p-3 font-bold text-blue-400">${sisaSlopSaatIni} Slop</td>
+          <td class="p-3 font-bold text-yellow-400">${sisaSlopSaatIni} Slop</td>
         </tr>`;
 
         tbStokEceran.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-3 text-slate-100">${sisaEceranBulanLalu} Bungkus</td>
           <td class="p-3 text-purple-400">${bukaEceranBulanIni} Bungkus</td>
           <td class="p-3 text-red-400">${terjualEceranBulanIni} Bungkus</td>
-          <td class="p-3 font-bold text-cyan-400">${sisaEceranSaatIni} Bungkus</td>
+          <td class="p-3 font-bold text-yellow-400">${sisaEceranSaatIni} Bungkus</td>
         </tr>`;
 
         tbStokMini.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-3 font-bold text-blue-400">${sisaSlopSaatIni} Slop</td>
-          <td class="p-3 font-bold text-cyan-400">${sisaEceranSaatIni} Bungkus</td>
+          <td class="p-3 font-bold text-yellow-400">${sisaSlopSaatIni} Slop</td>
+          <td class="p-3 font-bold text-yellow-400">${sisaEceranSaatIni} Bungkus</td>
         </tr>`;
       }
 
       const tbAmbil = document.getElementById('table-pengambilan-recap'); tbAmbil.innerHTML = "";
       if(filteredAmbil.length > 0) {
         filteredAmbil.reverse().forEach(p => {
-          const badgeClass = p.tipe === 'Buka Slop' ? 'badge-purple' : 'badge-success';
+          const displayTipe = (p.tipe === 'Masuk' || p.tipe === 'Meauk') ? 'Masuk' : p.tipe;
+          const badgeClass = displayTipe === 'Buka Slop' ? 'badge-purple' : 'badge-success';
           tbAmbil.innerHTML += `<tr class="hover:bg-slate-800/50">
             <td class="p-3 text-slate-100 text-left">${formatFullDate(p.tanggal, false)}</td>
             <td class="p-3 text-white">${p.rokok}</td>
-            <td class="p-3"><span class="badge ${badgeClass}">${p.tipe}</span></td>
+            <td class="p-3"><span class="badge ${badgeClass}">${displayTipe}</span></td>
             <td class="p-3 text-white">${p.jumlah} Slop</td>
             <td class="p-3 text-white">៛ ${fmt(p.modal)}</td>
             <td class="p-3 text-center">
@@ -1070,21 +1061,18 @@
 
       const tbStokCC = document.getElementById('table-stok-cc'); tbStokCC.innerHTML = "";
       if(stokArr.length > 0) stokArr.forEach(s => {
-        let v1, v2, v3;
+        let v1, v2;
         if(currentCCTipe === 'Perslop') {
-          v1 = `<span class="text-slate-100">${s.sisaSlopBulanLalu} Slop</span>`; 
-          v2 = `<span class="text-red-400">${s.terjualPerslopBulanIni} Slop</span>`; 
-          v3 = `<span class="text-blue-400 font-bold">${s.sisaSlopSaatIni} Slop</span>`;
+          v1 = `<span class="text-red-400">${s.terjualPerslopBulanIni} Slop</span>`; 
+          v2 = `<span class="text-yellow-400 font-bold">${s.sisaSlopSaatIni} Slop</span>`;
         } else {
-          v1 = `<span class="text-slate-100">${s.sisaEceranBulanLalu} Bungkus</span>`; 
-          v2 = `<span class="text-red-400">${s.terjualEceranBulanIni} Bungkus</span>`; 
-          v3 = `<span class="text-cyan-400 font-bold">${s.sisaEceranSaatIni} Bungkus</span>`;
+          v1 = `<span class="text-red-400">${s.terjualEceranBulanIni} Bungkus</span>`; 
+          v2 = `<span class="text-yellow-400 font-bold">${s.sisaEceranSaatIni} Bungkus</span>`;
         }
         tbStokCC.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-4 text-left font-semibold text-white">${s.rokok}</td>
           <td class="p-4">${v1}</td>
           <td class="p-4">${v2}</td>
-          <td class="p-4">${v3}</td>
         </tr>`;
       });
 
@@ -1129,8 +1117,8 @@
             <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
             <td class="p-3 text-slate-100">${u.situs || '-'}</td>
             <td class="p-3 text-slate-100">${u.rokok}</td>
-            <td class="p-3 font-bold text-blue-400">${u.jumlahTxt}</td>
-            <td class="p-3 text-blue-400 font-semibold">៛ ${fmt(u.harga)}</td>
+            <td class="p-3 font-bold text-yellow-400">${u.jumlahTxt}</td>
+            <td class="p-3 text-yellow-400 font-semibold">៛ ${fmt(u.harga)}</td>
             <td class="p-3"><span class="badge ${getBadgeClass(u.statusBayar)}">${u.statusBayar}</span></td>
             <td class="p-3 text-center">${actionButtons}</td>
           </tr>`; 
@@ -1156,8 +1144,8 @@
           <td class="p-3 text-slate-100 text-left whitespace-normal">${formatFullDate(u.tanggal, true)}</td>
           <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
           <td class="p-3 text-slate-100">${u.rokok}</td>
-          <td class="p-3 font-bold text-blue-400">${u.jumlahTxt}</td>
-          <td class="p-3 text-blue-400 font-semibold">៛ ${fmt(u.harga)}</td>
+          <td class="p-3 font-bold text-yellow-400">${u.jumlahTxt}</td>
+          <td class="p-3 text-yellow-400 font-semibold">៛ ${fmt(u.harga)}</td>
           <td class="p-3"><span class="badge ${getBadgeClass(u.statusBayar)}">${u.statusBayar}</span></td>
           <td class="p-3 text-center">${actionButtons}</td>
         </tr>`; 
@@ -1333,7 +1321,7 @@
       
       const newTanggal = new Date().toISOString();
       const newSale = {
-          row: Date.now(), // temporary row ID
+          row: Date.now(), 
           tanggal: newTanggal,
           tipe: data.tipe,
           nama: data.nama,
@@ -1346,7 +1334,6 @@
           statusBayar: data.tipeBayar === "Uang Makan" ? "BELUM BAYAR" : data.statusBayar
       };
       
-      // Auto-snap filter bulan ke bulan data baru
       selectedMonth = getMonthFromDate(newTanggal);
       document.getElementById('month-filter').value = selectedMonth;
 
@@ -1372,11 +1359,9 @@
 
     async function saveAmbilStok() {
       const tglVal = document.getElementById('stok-tanggal').value;
-      // Pisahkan tanggal agar tidak terjadi pergeseran timezone (mundur ke bulan sebelumnya)
       let tglIso;
       if (tglVal) {
           let parts = tglVal.split('-');
-          // Buat sebagai tanggal lokal tengah malam, lalu konversi ke ISO
           tglIso = new Date(parts[0], parts[1] - 1, parts[2]).toISOString();
       } else {
           tglIso = new Date().toISOString();
@@ -1391,12 +1376,11 @@
       };
       if(!data.rokok || !data.jumlah) { showToast("Lengkapi data rokok & jumlah!", "error"); return; }
       
-      // Auto-snap filter bulan ke bulan data baru
       selectedMonth = getMonthFromDate(data.tanggal);
       document.getElementById('month-filter').value = selectedMonth;
 
       const newPengambilan = {
-          row: Date.now(), // temporary row ID
+          row: Date.now(), 
           tanggal: data.tanggal,
           rokok: data.rokok,
           jumlah: data.jumlah,
@@ -1432,12 +1416,11 @@
       };
       if(!data.rokok || !data.jumlah) { showToast("Lengkapi data buka slop!", "error"); return; }
       
-      // Auto-snap filter bulan
       selectedMonth = getMonthFromDate(newTanggal);
       document.getElementById('month-filter').value = selectedMonth;
 
       const newPengambilan = {
-          row: Date.now(), // temporary row ID
+          row: Date.now(), 
           tanggal: newTanggal,
           rokok: data.rokok,
           jumlah: data.jumlah,
@@ -1532,7 +1515,6 @@
       const newTanggal = new Date().toISOString();
       const data = { jam: jam, status: status, catatan: catatan, tipe: currentCCTipe, jmlSelisih: jmlSelisih, ketSelisih: ketSelisih };
 
-      // Auto-snap filter bulan
       selectedMonth = getMonthFromDate(newTanggal);
       document.getElementById('month-filter').value = selectedMonth;
 
@@ -1557,7 +1539,6 @@
       }
     }
 
-    // FUNGSI COPY GAMBAR BARCODE ABA (BISA DI PASTE LANGSUNG DI WA/TELEGRAM)
     async function copyBarcodeImage() {
       if(!BARCODE_LINK || BARCODE_LINK === 'PASTE_LINK_GAMBAR_BARCODE_DISINI') { 
         showToast("Link barcode belum diisi di script!", "error"); 
