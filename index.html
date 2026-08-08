@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Dashboard Rokok Premium</title>
+  <title>Dashboard Gana Store</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -81,7 +81,7 @@
     <div class="relative z-10 premium-card p-8 rounded-3xl w-full max-w-sm fade-in">
       <div class="flex flex-col items-center mb-8">
         <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-w-[200px] h-auto object-fill mb-4" alt="Logo">
-        <h1 class="text-2xl font-extrabold tracking-tight text-white">Dashboard Rokok Pro</h1>
+        <h1 class="text-2xl font-extrabold tracking-tight text-white">Dashboard Gana Store</h1>
         <p class="text-sm text-slate-300 mt-1 font-medium">Masuk untuk mengelola data</p>
       </div>
       <form onsubmit="doLogin(event)">
@@ -584,7 +584,6 @@
       else { input.value = ''; }
     }
 
-    // PERBAIKAN: Parser tanggal yang jauh lebih kuat anti-error timezone
     function getMonthFromDate(dateStr) {
       if (!dateStr) return "";
       let d;
@@ -592,21 +591,17 @@
         d = dateStr;
       } else if (typeof dateStr === 'string') {
         if (dateStr.includes('T')) {
-          // Format ISO (e.g., "2026-08-09T17:00:00.000Z")
           d = new Date(dateStr);
         } else {
-          // Format tanggal lokal (e.g., "8/9/2026" or "2026-08-09")
           const parts = dateStr.split(/[-/]/);
           if (parts.length === 3) {
             if (parts[0].length === 4) {
-              // YYYY-MM-DD
               d = new Date(parts[0], parts[1] - 1, parts[2]);
             } else {
-              // Asumsi DD/MM/YYYY (Indonesia)
               d = new Date(parts[2], parts[1] - 1, parts[0]);
             }
           } else {
-            d = new Date(dateStr); // Fallback
+            d = new Date(dateStr);
           }
         }
       } else {
@@ -620,7 +615,7 @@
     function formatFullDate(dateStr, withTime = true) {
       if(!dateStr) return "-";
       const d = new Date(dateStr);
-      if (isNaN(d.getTime())) return dateStr; // Return as is if invalid
+      if (isNaN(d.getTime())) return dateStr; 
       const date = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
       if(withTime) {
         const time = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
@@ -1165,8 +1160,8 @@
           <div class="flex flex-col gap-1 items-center">
             <select onchange='updateJualStatus(${u.row}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
               <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM CAIR</option>
-              <option value="SUDOH BAYAR CASH" ${u.statusBayar === 'SUDOH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
-              <option value="SUDOH BAYAR ABA" ${u.statusBayar === 'SUDOH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
+              <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
+              <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDAH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
             </select>
             <button onclick='deleteJualData(${u.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
           </div>
@@ -1199,7 +1194,7 @@
         
         let total = 0;
         allSales.forEach(u => {
-          if(getMonthFromDate(u.tanggal) === monthStr && (u.statusBayar === 'SUDOH BAYAR CASH' || u.statusBayar === 'SUDOH BAYAR ABA')) {
+          if(getMonthFromDate(u.tanggal) === monthStr && (u.statusBayar === 'SUDAH BAYAR CASH' || u.statusBayar === 'SUDAH BAYAR ABA')) {
             total += u.harga;
           }
         });
@@ -1609,4 +1604,9 @@
         });
       } catch (err) {
         console.error('Canvas draw error:', err);
-        showToast("Gagal copy gambar
+        showToast("Gagal copy gambar. Link mungkin bermasalah.", "error");
+      }
+    }
+  </script>
+</body>
+</html>
