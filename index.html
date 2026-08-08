@@ -22,7 +22,8 @@
     .hidden { display: none !important; }
     input, select, button { outline: none; }
     .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { min-width: 100%; white-space: nowrap; border-collapse: collapse; font-size: 14px; }
+    /* PERBAIKAN: Font tabel diperbesar jadi 16px agar angka jelas */
+    table { min-width: 100%; white-space: nowrap; border-collapse: collapse; font-size: 16px; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #1e293b; }
     ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
@@ -60,7 +61,7 @@
     td.text-left { text-align: left; }
     th.text-left { text-align: left; }
     
-    .badge { padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 800; display: inline-block; text-align: center; }
+    .badge { padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 800; display: inline-block; text-align: center; }
     .badge-success { background: #3b82f6; color: #ffffff; border: 1px solid #60a5fa; }
     .badge-danger { background: #ef4444; color: #ffffff; border: 1px solid #f87171; }
     .badge-purple { background: #a855f7; color: #ffffff; border: 1px solid #c084fc; }
@@ -184,15 +185,16 @@
 
         <!-- DASHBOARD -->
         <div id="page-dashboard" class="fade-in">
+          <!-- PERBAIKAN: Angka diperbesar (text-3xl) -->
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Pendapatan</p><i class="fas fa-arrow-trend-up text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-white" id="kas-total-pendapatan">៛ 0</p></div>
-            <div class="premium-card p-5 border border-yellow-500/20"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Untung (Gabungan)</p><i class="fas fa-sack-dollar text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-yellow-400" id="kas-untung">៛ 0</p></div>
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Perslop</p><i class="fas fa-box text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-yellow-400" id="kas-untung-perslop">៛ 0</p></div>
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Eceran</p><i class="fas fa-shopping-basket text-purple-400 text-sm bg-purple-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-purple-400" id="kas-untung-eceran">៛ 0</p></div>
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Cash Riel</p><i class="fas fa-money-bill-wave text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-yellow-400" id="kas-cash-riel">៛ 0</p></div>
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">ABA</p><i class="fas fa-clock text-purple-400 text-sm bg-purple-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-purple-400" id="kas-aba">៛ 0</p></div>
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Uang Makan (Belum Cair)</p><i class="fas fa-utensils text-amber-400 text-sm bg-amber-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-amber-400" id="kas-um">៛ 0</p></div>
-            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Slop Terjual</p><i class="fas fa-box-open text-cyan-400 text-sm bg-cyan-500/10 p-2 rounded-lg"></i></div><p class="text-xl md:text-2xl font-extrabold text-cyan-400" id="kas-total-slop-terjual">0 Slop</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Pendapatan</p><i class="fas fa-arrow-trend-up text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-2xl md:text-3xl font-extrabold text-white" id="kas-total-pendapatan">៛ 0</p></div>
+            <div class="premium-card p-5 border border-yellow-500/20"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Untung (Gabungan)</p><i class="fas fa-sack-dollar text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-2xl md:text-3xl font-extrabold text-yellow-400" id="kas-untung">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Perslop</p><i class="fas fa-box text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-2xl md:text-3xl font-extrabold text-yellow-400" id="kas-untung-perslop">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Untung Eceran</p><i class="fas fa-shopping-basket text-purple-400 text-sm bg-purple-500/10 p-2 rounded-lg"></i></div><p class="text-2xl md:text-3xl font-extrabold text-purple-400" id="kas-untung-eceran">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Cash Riel</p><i class="fas fa-money-bill-wave text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-2xl md:text-3xl font-extrabold text-yellow-400" id="kas-cash-riel">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">ABA</p><i class="fas fa-clock text-purple-400 text-sm bg-purple-500/10 p-2 rounded-lg"></i></div><p class="text-2xl md:text-3xl font-extrabold text-purple-400" id="kas-aba">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Uang Makan (Belum Cair)</p><i class="fas fa-utensils text-amber-400 text-sm bg-amber-500/10 p-2 rounded-lg"></i></div><p class="text-2xl md:text-3xl font-extrabold text-amber-400" id="kas-um">៛ 0</p></div>
+            <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Slop Terjual</p><i class="fas fa-box-open text-cyan-400 text-sm bg-cyan-500/10 p-2 rounded-lg"></i></div><p class="text-2xl md:text-3xl font-extrabold text-cyan-400" id="kas-total-slop-terjual">0 Slop</p></div>
           </div>
           <div class="premium-card p-6 mt-6 border border-indigo-500/20">
             <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-chart-bar text-indigo-400"></i> Grafik Penjualan 6 Bulan Terakhir</h3>
@@ -206,11 +208,12 @@
             <div class="premium-card p-6 md:p-8">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                 <div><label class="block label-dark mb-2 ml-1">NAMA PEMBELI (WAJIB)</label><input type="text" id="jual-nama" class="w-full p-3 input-dark transition-all" placeholder="Masukkan nama"></div>
-                <div id="wrapper-situs"><label class="block label-dark mb-2 ml-1">NAMA SITUS (WAJIB)</label><input type="text" id="jual-situs" class="w-full p-3 input-dark transition-all" placeholder="Contoh: DANA"></div>
+                <div id="wrapper-situs"><label class="block label-dark mb-2 ml-1">NAMA SITUS (WAJIB)</label><input type="text" id="jual-situs" class="w-full p-3 input-dark transition-all" placeholder="Contoh: DANA, OVO"></div>
                 <div><label class="block label-dark mb-2 ml-1">JENIS ROKOK</label><select id="jual-rokok" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark transition-all"><option value="">Pilih Rokok</option></select></div>
                 <div><label id="label-jumlah" class="block label-dark mb-2 ml-1">JUMLAH SLOP</label><input type="number" id="jual-jumlah" oninput="hitungHargaOtomatis()" class="w-full p-3 input-dark transition-all" placeholder="1 Slop, 2 Slop..."></div>
                 <div id="wrapper-tipe-bayar"><label class="block label-dark mb-2 ml-1">TIPE BAYAR</label><select id="jual-tipebayar" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark transition-all"><option value="Cash Riel">Cash Riel</option><option value="ABA">ABA</option><option value="Uang Makan">Uang Makan</option></select></div>
-                <div id="wrapper-status"><label class="block label-dark mb-2 ml-1">STATUS BAYAR</label><select id="jual-status" class="w-full p-3 input-dark transition-all"><option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option></select></div>
+                <!-- PERBAIKAN: Tambahan pilihan BELUM BAYAR -->
+                <div id="wrapper-status"><label class="block label-dark mb-2 ml-1">STATUS BAYAR</label><select id="jual-status" class="w-full p-3 input-dark transition-all"><option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option><option value="BELUM BAYAR">BELUM BAYAR</option></select></div>
               </div>
               <div class="bg-gradient-to-r from-blue-900/40 to-cyan-900/20 p-5 rounded-xl border border-blue-500/20 mb-6 flex justify-between items-center">
                 <span class="text-sm font-bold text-blue-300 uppercase tracking-wider">Total Harga</span><p class="text-2xl md:text-3xl font-extrabold text-yellow-400" id="jual-harga">៛ 0</p>
@@ -255,7 +258,6 @@
               <button onclick="saveAmbilStok()" id="btn-save-stok" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-xl font-bold active:scale-95 transition-all border border-slate-700">CATAT PENGAMBILAN</button>
             </div>
 
-            <!-- FORM BUKA SLOP KE ECERAN -->
             <div class="premium-card p-6 md:col-span-1">
               <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-box-open text-purple-400"></i> Buka Slop ke Eceran</h3>
               <label class="block label-dark mb-2 ml-1">JENIS ROKOK</label>
@@ -1017,24 +1019,25 @@
           bukaEceranBulanIni, terjualEceranBulanIni, sisaEceranSaatIni 
         });
         
+        // PERBAIKAN: Angka tabel diperbesar (text-xl)
         tbStok.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-3 text-yellow-400">${masukBulanIni} Slop</td>
-          <td class="p-3 text-red-400">${terjualPerslopBulanIni} Slop</td>
-          <td class="p-3 font-bold text-yellow-400">${sisaSlopSaatIni} Slop</td>
+          <td class="p-3 text-xl text-yellow-400">${masukBulanIni} Slop</td>
+          <td class="p-3 text-xl text-red-400">${terjualPerslopBulanIni} Slop</td>
+          <td class="p-3 text-xl font-bold text-yellow-400">${sisaSlopSaatIni} Slop</td>
         </tr>`;
 
         tbStokEceran.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-3 text-purple-400">${bukaEceranBulanIni} Bungkus</td>
-          <td class="p-3 text-red-400">${terjualEceranBulanIni} Bungkus</td>
-          <td class="p-3 font-bold text-yellow-400">${sisaEceranSaatIni} Bungkus</td>
+          <td class="p-3 text-xl text-purple-400">${bukaEceranBulanIni} Bungkus</td>
+          <td class="p-3 text-xl text-red-400">${terjualEceranBulanIni} Bungkus</td>
+          <td class="p-3 text-xl font-bold text-yellow-400">${sisaEceranSaatIni} Bungkus</td>
         </tr>`;
 
         tbStokMini.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-3 font-bold text-yellow-400">${sisaSlopSaatIni} Slop</td>
-          <td class="p-3 font-bold text-yellow-400">${sisaEceranSaatIni} Bungkus</td>
+          <td class="p-3 text-xl font-bold text-yellow-400">${sisaSlopSaatIni} Slop</td>
+          <td class="p-3 text-xl font-bold text-yellow-400">${sisaEceranSaatIni} Bungkus</td>
         </tr>`;
       }
 
@@ -1063,11 +1066,11 @@
       if(stokArr.length > 0) stokArr.forEach(s => {
         let v1, v2;
         if(currentCCTipe === 'Perslop') {
-          v1 = `<span class="text-red-400">${s.terjualPerslopBulanIni} Slop</span>`; 
-          v2 = `<span class="text-yellow-400 font-bold">${s.sisaSlopSaatIni} Slop</span>`;
+          v1 = `<span class="text-xl text-red-400">${s.terjualPerslopBulanIni} Slop</span>`; 
+          v2 = `<span class="text-xl font-bold text-yellow-400">${s.sisaSlopSaatIni} Slop</span>`;
         } else {
-          v1 = `<span class="text-red-400">${s.terjualEceranBulanIni} Bungkus</span>`; 
-          v2 = `<span class="text-yellow-400 font-bold">${s.sisaEceranSaatIni} Bungkus</span>`;
+          v1 = `<span class="text-xl text-red-400">${s.terjualEceranBulanIni} Bungkus</span>`; 
+          v2 = `<span class="text-xl font-bold text-yellow-400">${s.sisaEceranSaatIni} Bungkus</span>`;
         }
         tbStokCC.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-4 text-left font-semibold text-white">${s.rokok}</td>
@@ -1117,8 +1120,8 @@
             <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
             <td class="p-3 text-slate-100">${u.situs || '-'}</td>
             <td class="p-3 text-slate-100">${u.rokok}</td>
-            <td class="p-3 font-bold text-yellow-400">${u.jumlahTxt}</td>
-            <td class="p-3 text-yellow-400 font-semibold">៛ ${fmt(u.harga)}</td>
+            <td class="p-3 font-bold text-xl text-yellow-400">${u.jumlahTxt}</td>
+            <td class="p-3 text-xl text-yellow-400 font-semibold">៛ ${fmt(u.harga)}</td>
             <td class="p-3"><span class="badge ${getBadgeClass(u.statusBayar)}">${u.statusBayar}</span></td>
             <td class="p-3 text-center">${actionButtons}</td>
           </tr>`; 
@@ -1144,8 +1147,8 @@
           <td class="p-3 text-slate-100 text-left whitespace-normal">${formatFullDate(u.tanggal, true)}</td>
           <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
           <td class="p-3 text-slate-100">${u.rokok}</td>
-          <td class="p-3 font-bold text-yellow-400">${u.jumlahTxt}</td>
-          <td class="p-3 text-yellow-400 font-semibold">៛ ${fmt(u.harga)}</td>
+          <td class="p-3 font-bold text-xl text-yellow-400">${u.jumlahTxt}</td>
+          <td class="p-3 text-xl text-yellow-400 font-semibold">៛ ${fmt(u.harga)}</td>
           <td class="p-3"><span class="badge ${getBadgeClass(u.statusBayar)}">${u.statusBayar}</span></td>
           <td class="p-3 text-center">${actionButtons}</td>
         </tr>`; 
@@ -1207,11 +1210,11 @@
             y: {
               beginAtZero: true,
               grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-              ticks: { color: '#ffffff', font: { family: 'Inter', size: 14, weight: 'bold' }, callback: function(value) { return '៛ ' + (value/1000) + 'k'; } }
+              ticks: { color: '#ffffff', font: { family: 'Inter', size: 16, weight: 'bold' }, callback: function(value) { return '៛ ' + (value/1000) + 'k'; } }
             },
             x: {
               grid: { display: false, drawBorder: false },
-              ticks: { color: '#ffffff', font: { family: 'Inter', size: 14, weight: 'bold' } }
+              ticks: { color: '#ffffff', font: { family: 'Inter', size: 16, weight: 'bold' } }
             }
           },
           plugins: {
@@ -1225,8 +1228,8 @@
               borderWidth: 2,
               padding: 12,
               cornerRadius: 8,
-              titleFont: { family: 'Inter', size: 13, weight: 'bold' },
-              bodyFont: { family: 'Inter', size: 15, weight: 'bold' },
+              titleFont: { family: 'Inter', size: 14, weight: 'bold' },
+              bodyFont: { family: 'Inter', size: 16, weight: 'bold' },
               displayColors: false,
               callbacks: {
                 label: function(context) {
@@ -1303,6 +1306,8 @@
       let statusVal = "";
       if(tipeBayar !== "Uang Makan") {
         statusVal = document.getElementById('jual-status').value;
+      } else {
+        statusVal = "BELUM BAYAR";
       }
       
       if(!namaVal) { showToast("Nama pembeli wajib diisi!", "error"); return; }
@@ -1331,7 +1336,7 @@
           jumlahTxt: data.jumlah + (data.tipe === 'Eceran' ? ' Bungkus' : ' Slop'),
           tipeBayar: data.tipeBayar,
           harga: data.harga,
-          statusBayar: data.tipeBayar === "Uang Makan" ? "BELUM BAYAR" : data.statusBayar
+          statusBayar: statusVal
       };
       
       selectedMonth = getMonthFromDate(newTanggal);
