@@ -56,8 +56,8 @@
     .toast { animation: toastIn 0.3s ease-out; }
     @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
     
-    th { color: #94a3b8; font-weight: 600; vertical-align: middle; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem; }
-    td { color: #f1f5f9; font-weight: 500; vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1rem; -webkit-user-select: text; user-select: text; }
+    th { color: #94a3b8; font-weight: 600; vertical-align: middle; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem; font-size: 14px; }
+    td { color: #f1f5f9; font-weight: 500; vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1rem; -webkit-user-select: text; user-select: text; font-size: 15px; }
     td.text-left { text-align: left; }
     th.text-left { text-align: left; }
     
@@ -208,7 +208,7 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                 <div><label class="label-dark">TANGGAL TRANSAKSI</label><input type="date" id="jual-tanggal" class="p-3 input-dark transition-all"></div>
                 <div><label class="label-dark">NAMA PEMBELI (WAJIB)</label><input type="text" id="jual-nama" class="p-3 input-dark transition-all" placeholder="Masukkan nama"></div>
-                <div id="wrapper-situs"><label class="label-dark">NAMA SITUS (WAJIB)</label><input type="text" id="jual-situs" class="p-3 input-dark transition-all" placeholder="Contoh: DANATOTO"></div>
+                <div id="wrapper-situs"><label class="label-dark">NAMA SITUS</label><input type="text" id="jual-situs" class="p-3 input-dark transition-all" placeholder="Opsional (Jika kosong = -)"></div>
                 <div><label class="label-dark">JENIS ROKOK</label><select id="jual-rokok" onchange="hitungHargaOtomatis()" class="p-3 input-dark transition-all"><option value="">Pilih Rokok</option></select></div>
                 <div><label id="label-jumlah" class="label-dark">JUMLAH SLOP</label><input type="number" id="jual-jumlah" oninput="hitungHargaOtomatis()" class="p-3 input-dark transition-all" placeholder="1 Slop, 2 Slop..."></div>
                 <div id="wrapper-tipe-bayar"><label class="label-dark">TIPE BAYAR</label><select id="jual-tipebayar" onchange="hitungHargaOtomatis()" class="p-3 input-dark transition-all"><option value="Cash Riel">Cash Riel</option><option value="ABA">ABA</option><option value="Uang Makan">Uang Makan</option></select></div>
@@ -369,7 +369,7 @@
             <h4 class="font-bold bg-purple-500/10 text-purple-400 p-4 border-b border-slate-800 text-sm">Riwayat Crosscheck Bulan Ini</h4>
             <table class="text-center w-full">
               <thead>
-                <tr><th class="p-3">Tanggal</th><th class="p-3">Jam</th><th class="p-3">Status</th><th class="p-3">Jml Selisih</th><th class="p-3">Ket</th><th class="p-3">Catatan</th></tr>
+                <tr><th class="p-3">Tanggal</th><th class="p-3">Jam</th><th class="p-3">Status</th><th class="p-3">Jml Selisih</th><th class="p-3">Ket</th><th class="p-3">Catatan</th><th class="p-3">Aksi</th></tr>
               </thead>
               <tbody id="table-crosscheck" class="divide-y divide-slate-800"></tbody>
             </table>
@@ -397,7 +397,7 @@
             <div class="premium-card p-6 flex flex-col">
               <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-share-alt text-blue-400"></i> Format List Buat Share</h3>
               <div id="text-share" class="bg-slate-950 p-4 rounded-xl mb-4 text-sm text-slate-200 whitespace-pre-wrap flex-1 overflow-auto max-h-96"></div>
-              <button onclick="copyText()" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-xl font-bold transition-all active:scale-95"><i class="fas fa-copy mr-2"></i> COPY TEXT</button>
+              <button onclick="copyText('text-share')" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-xl font-bold transition-all active:scale-95"><i class="fas fa-copy mr-2"></i> COPY TEXT</button>
             </div>
           </div>
           <div class="premium-card rounded-2xl overflow-hidden scroll-x">
@@ -425,7 +425,7 @@
               <thead>
                 <tr>
                   <th class="p-3 text-left">Tanggal & Waktu</th>
-                  <th class="p-3">Nama Pembeli</th>
+                  <th class="p-3 text-left">Nama Pembeli</th>
                   <th class="p-3">Rokok</th>
                   <th class="p-3">Jumlah</th>
                   <th class="p-3">Harga</th>
@@ -487,7 +487,7 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbzQ1ualbx0PIHfp-CrGIuCH4oBsbqrAcvHfyJTxk78vfd42LrpshWRw8oeK_hVq4L0/exec'; 
     const LOGO_LINK = 'https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf';
     const BG_LINK = 'https://lh3.googleusercontent.com/d/1zoGFZJ_fpKsMOf29YqGXxjl3K1RMo4zW';
-    const BARCODE_LINK = 'https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN'; // GANTI DENGAN LINK .JPG/.PNG
+    const BARCODE_LINK = 'https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN'; 
 
     let masterData = {};
     let dashboardState = null; 
@@ -584,7 +584,28 @@
       else { input.value = ''; }
     }
 
-    // PERBAIKAN UTAMA: Parser tanggal anti-timezone
+    function copyText(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => showToast("Text berhasil disalin!", "success"));
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => showToast(`Nama "${text}" berhasil disalin!`, "success"));
+    }
+
+    async function copyBarcodeImage() {
+      try {
+        const response = await fetch(BARCODE_LINK);
+        const blob = await response.blob();
+        await navigator.clipboard.write([
+          new ClipboardItem({ [blob.type]: blob })
+        ]);
+        showToast("Gambar barcode berhasil disalin!", "success");
+      } catch (e) {
+        showToast("Gagal copy gambar, browser tidak support.", "error");
+      }
+    }
+
     function getMonthFromDate(dateStr) {
       if (!dateStr) return "";
       let d;
@@ -592,17 +613,13 @@
         d = dateStr;
       } else if (typeof dateStr === 'string') {
         if (dateStr.includes('T')) {
-          // ISO format, safe to parse directly
           d = new Date(dateStr);
         } else {
-          // Mungkin format DD/MM/YYYY atau YYYY-MM-DD
           const parts = dateStr.split(/[-/]/);
           if (parts.length === 3) {
             if (parts[0].length === 4) {
-              // YYYY-MM-DD
               d = new Date(parts[0], parts[1] - 1, parts[2]);
             } else {
-              // DD/MM/YYYY (Indonesia)
               d = new Date(parts[2], parts[1] - 1, parts[0]);
             }
           } else {
@@ -688,18 +705,6 @@
         populateDropdowns();
         renderListRokok();
       }
-    }
-
-    async function loadDashboardSilent() {
-      const res = await apiCall('getDashboard');
-      if(!res || res.error) return;
-      dashboardState = res;
-      if(dashboardState.masterMap) {
-        masterData = dashboardState.masterMap;
-        populateDropdowns();
-        renderListRokok();
-      }
-      renderDashboard(dashboardState);
     }
 
     function populateDropdowns() {
@@ -834,386 +839,444 @@
       }
       
       dashboardState = res.dashboard; 
-      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-      renderDashboard(dashboardState); 
+      if(dashboardState.masterMap) { 
+        masterData = dashboardState.masterMap; 
+        populateDropdowns(); 
+        renderListRokok(); 
+        localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); 
+      }
+      renderDashboard(dashboardState);
       localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
     }
 
-    function copyText() {
-      navigator.clipboard.writeText(document.getElementById('text-share').innerText).then(() => showToast("List harga berhasil di-copy!", "success"));
-    }
+    function switchPage(page, sub = null) {
+      document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`page-${page}`).classList.remove('hidden');
+      
+      // Reset active nav
+      document.querySelectorAll('aside nav button').forEach(b => b.classList.remove('nav-active'));
+      const navId = sub ? `nav-${page}-${sub.toLowerCase().replace(' ', '-')}` : `nav-${page}`;
+      const navBtn = document.getElementById(navId);
+      if(navBtn) navBtn.classList.add('nav-active');
 
-    function switchPage(page, customArg = null) {
-      ['dashboard', 'jual', 'stok', 'crosscheck', 'rokok', 'rekap', 'kas'].forEach(p => document.getElementById('page-' + p).classList.add('hidden'));
-      document.getElementById('page-' + page).classList.remove('hidden');
-      
-      const titles = { 'dashboard': 'Dashboard Analytics', 'stok': 'Stok & Pengambilan', 'crosscheck': 'Crosscheck Stok', 'rokok': 'List Harga Rokok', 'rekap': 'Rekapan Pembayaran UM', 'kas': 'Kas & Setoran Bulanan' };
-      if(titles[page]) document.getElementById('page-title').innerText = titles[page];
-      
-      ['nav-dashboard', 'nav-jual-cash', 'nav-jual-um', 'nav-jual-eceran', 'nav-stok', 'nav-crosscheck-perslop', 'nav-crosscheck-eceran', 'nav-rokok', 'nav-rekap', 'nav-kas'].forEach(id => {
-        const nav = document.getElementById(id);
-        if(nav) {
-          nav.classList.remove('nav-active');
-          nav.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+      if (page === 'jual') {
+        currentJualTipe = sub === 'Perslop UM' ? 'Perslop' : sub;
+        currentJualFilter = sub === 'Perslop UM' ? 'UM' : sub;
+        
+        document.getElementById('wrapper-situs').classList.toggle('hidden', sub === 'Eceran');
+        document.getElementById('wrapper-tipe-bayar').classList.toggle('hidden', sub !== 'Perslop Cash');
+        document.getElementById('wrapper-status').classList.toggle('hidden', sub !== 'Perslop Cash');
+        
+        document.getElementById('label-jumlah').innerText = sub === 'Eceran' ? 'JUMLAH BUNGKUS' : 'JUMLAH SLOP';
+        document.getElementById('title-rekap-jual').innerText = `Riwayat Penjualan ${sub === 'Perslop UM' ? 'Cash' : sub}`;
+        document.getElementById('page-title').innerText = `Penjualan ${sub}`;
+        
+        const statusSel = document.getElementById('jual-status');
+        if (sub === 'Perslop UM') {
+            statusSel.innerHTML = '<option value="BELUM BAYAR UM">BELUM BAYAR UM</option><option value="SUDAH BAYAR UM">SUDAH BAYAR UM</option>';
+            document.getElementById('jual-tipebayar').value = 'Uang Makan';
+        } else if (sub === 'Perslop Cash') {
+            statusSel.innerHTML = '<option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option><option value="BELUM BAYAR">BELUM BAYAR</option>';
+        } else {
+            statusSel.innerHTML = '<option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option>';
         }
-      });
-
-      let activeId = 'nav-' + page;
-      if(page === 'jual' && customArg === 'Perslop Cash') activeId = 'nav-jual-cash';
-      else if(page === 'jual' && customArg === 'Perslop UM') activeId = 'nav-jual-um';
-      else if(page === 'jual' && customArg === 'Eceran') activeId = 'nav-jual-eceran';
-      else if(page === 'crosscheck' && customArg === 'Perslop') activeId = 'nav-crosscheck-perslop';
-      else if(page === 'crosscheck' && customArg === 'Eceran') activeId = 'nav-crosscheck-eceran';
-      
-      const activeBtn = document.getElementById(activeId);
-      if(activeBtn) {
-        activeBtn.classList.add('nav-active');
-        activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+      } else if (page === 'crosscheck') {
+        currentCCTipe = sub;
+        document.getElementById('page-title').innerText = `Crosscheck Stok ${sub}`;
+        document.getElementById('th-cc-1').innerText = sub === 'Eceran' ? 'Total Terjual Eceran' : 'Total Terjual Slop';
+        document.getElementById('th-cc-2').innerText = sub === 'Eceran' ? 'Sisa Eceran' : 'Sisa Slop';
+      } else {
+        const titleMap = { dashboard: 'Dashboard Analytics', stok: 'Stok & Pengambilan', rokok: 'List Harga Rokok', rekap: 'Rekapan Pembayaran UM', kas: 'Kas & Setoran Bulanan' };
+        document.getElementById('page-title').innerText = titleMap[page] || 'Dashboard';
       }
 
-      if(page === 'jual' && customArg) {
-        const lblJumlah = document.getElementById('label-jumlah');
-        const inputJumlah = document.getElementById('jual-jumlah');
-        const wrapperBayar = document.getElementById('wrapper-tipe-bayar');
-        const wrapperSitus = document.getElementById('wrapper-situs');
-        const wrapperStatus = document.getElementById('wrapper-status');
-        const selBayar = document.getElementById('jual-tipebayar');
-        const titleRekap = document.getElementById('title-rekap-jual');
-        
-        if(customArg === 'Perslop Cash') { 
-          currentJualTipe = 'Perslop'; currentJualFilter = 'Cash';
-          lblJumlah.innerText = "JUMLAH SLOP"; inputJumlah.placeholder = "1 Slop, 2 Slop..."; 
-          wrapperBayar.classList.remove('hidden'); wrapperSitus.classList.remove('hidden'); wrapperStatus.classList.remove('hidden');
-          selBayar.innerHTML = '<option value="Cash Riel">Cash Riel</option><option value="ABA">ABA</option>';
-          selBayar.value = 'Cash Riel'; titleRekap.innerText = "Riwayat Penjualan Cash / ABA";
-          document.getElementById('page-title').innerText = 'Penjualan Perslop Cash'; 
-        } 
-        else if(customArg === 'Perslop UM') { 
-          currentJualTipe = 'Perslop'; currentJualFilter = 'UM';
-          lblJumlah.innerText = "JUMLAH SLOP"; inputJumlah.placeholder = "1 Slop, 2 Slop..."; 
-          wrapperBayar.classList.add('hidden'); wrapperSitus.classList.remove('hidden'); wrapperStatus.classList.add('hidden'); 
-          selBayar.innerHTML = '<option value="Uang Makan">Uang Makan</option>';
-          selBayar.value = 'Uang Makan'; titleRekap.innerText = "Riwayat Penjualan UM";
-          document.getElementById('page-title').innerText = 'Penjualan Perslop Uang Makan'; 
-        } 
-        else if(customArg === 'Eceran') { 
-          currentJualTipe = 'Eceran'; currentJualFilter = 'Eceran';
-          lblJumlah.innerText = "JUMLAH BUNGKUS"; inputJumlah.placeholder = "1 Bungkus, 2 Bungkus..."; 
-          wrapperBayar.classList.remove('hidden'); wrapperSitus.classList.add('hidden'); wrapperStatus.classList.remove('hidden');
-          selBayar.innerHTML = '<option value="Cash Riel">Cash Riel</option>';
-          selBayar.value = 'Cash Riel'; titleRekap.innerText = "Riwayat Penjualan Eceran";
-          document.getElementById('page-title').innerText = 'Penjualan Rokok Eceran'; 
+      if (dashboardState) renderDashboard(dashboardState);
+    }
+
+    function hitungHargaOtomatis() {
+      const rokok = document.getElementById('jual-rokok').value;
+      const jml = parseInt(document.getElementById('jual-jumlah').value) || 0;
+      if (!rokok || !jml) { document.getElementById('jual-harga').innerText = '៛ 0'; return; }
+      const m = masterData[rokok];
+      if (!m) return;
+      let harga = 0;
+      if (currentJualTipe === 'Eceran') {
+        harga = (m.eceran || 0) * jml;
+      } else {
+        const tipe = document.getElementById('jual-tipebayar').value;
+        if (tipe === 'Uang Makan') harga = (m.um || 0) * jml;
+        else harga = (m.cashRiel || m.cash || 0) * jml;
+      }
+      document.getElementById('jual-harga').innerText = `៛ ${harga.toLocaleString('id-ID')}`;
+    }
+
+    async function saveJual() {
+      const tanggal = document.getElementById('jual-tanggal').value;
+      const nama = document.getElementById('jual-nama').value;
+      let situs = document.getElementById('jual-situs').value.trim() || '-';
+      const rokok = document.getElementById('jual-rokok').value;
+      const jml = parseInt(document.getElementById('jual-jumlah').value) || 0;
+      const status = document.getElementById('jual-status').value;
+      const tipeBayar = document.getElementById('jual-tipebayar') ? document.getElementById('jual-tipebayar').value : (currentJualFilter === 'UM' ? 'Uang Makan' : 'Cash Riel');
+      
+      if (!nama || !rokok || !jml) { showToast("Nama, Rokok, dan Jumlah wajib diisi!", "error"); return; }
+
+      const data = { 
+        tanggal, nama, situs, rokok, jumlah: jml, statusBayar: status, tipeBayar, tipeJual: currentJualTipe, 
+        harga: parseInt(document.getElementById('jual-harga').innerText.replace(/[^\d]/g, '')) || 0 
+      };
+      
+      toggleLoadingButton('btn-save-jual', true, 'SIMPAN TRANSAKSI');
+      const res = await apiCall('saveJual', { payload: data });
+      toggleLoadingButton('btn-save-jual', false, 'SIMPAN TRANSAKSI');
+      
+      if (res.error) showToast("Gagal simpan, cek internet.", "error");
+      else {
+        showToast("Transaksi tersimpan!", "success");
+        if(res.dashboard) {
+            dashboardState = res.dashboard;
+            renderDashboard(dashboardState);
+            localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
         }
+        document.getElementById('jual-nama').value = '';
+        document.getElementById('jual-situs').value = '';
+        document.getElementById('jual-jumlah').value = '';
         hitungHargaOtomatis();
       }
-      
-      if(page === 'crosscheck' && customArg) {
-        currentCCTipe = customArg;
-        document.getElementById('title-cc-form').innerText = `Form Crosscheck ${currentCCTipe}`;
-        document.getElementById('page-title').innerText = `Crosscheck Stok ${currentCCTipe}`;
-        
-        const th1 = document.getElementById('th-cc-1');
-        const th2 = document.getElementById('th-cc-2');
-        
-        if(currentCCTipe === 'Perslop') {
-          th1.innerText = "Total Terjual Slop";
-          th2.innerText = "Sisa Slop Saat Ini";
-        } else {
-          th1.innerText = "Total Terjual Eceran";
-          th2.innerText = "Sisa Eceran Saat Ini";
-        }
-      }
-      
-      if(window.innerWidth < 1024) toggleSidebar();
-      if(dashboardState) renderDashboard(dashboardState);
-      loadDashboardSilent();
     }
 
-    function getBadgeClass(status) {
-      if(status.includes('CASH')) return 'badge-success';
-      if(status.includes('ABA')) return 'badge-purple';
-      if(status.includes('BELUM')) return 'badge-danger';
-      return 'badge-warning';
+    async function deleteJual(id) {
+      if(!confirm("Yakin hapus transaksi ini?")) return;
+      showToast("Menghapus data...", "success");
+      const res = await apiCall('deleteJual', { payload: { id: id } });
+      if (res.error) showToast("Gagal hapus.", "error");
+      else {
+        showToast("Transaksi dihapus.", "success");
+        if(res.dashboard) {
+            dashboardState = res.dashboard;
+            renderDashboard(dashboardState);
+            localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+        }
+      }
     }
 
-    function renderDashboard(res) {
-      if(!res || !res.allSales) return;
-      const fmt = (val) => (val || 0).toLocaleString('id-ID');
+    // RENDER DASHBOARD OPTIMASI ANTI-LAG
+    function renderDashboard(state) {
+      const monthData = state.jual ? state.jual.filter(t => getMonthFromDate(t.tanggal) === selectedMonth) : [];
+      let totalPendapatan = 0, untungPerslop = 0, untungEceran = 0, cashRiel = 0, aba = 0, umBelumCair = 0, totalSlop = 0;
       
-      const filteredSales = res.allSales.filter(u => getMonthFromDate(u.tanggal) === selectedMonth);
-      const filteredAmbil = res.allPengambilan.filter(p => getMonthFromDate(p.tanggal) === selectedMonth);
-      const filteredCC = res.allCrosscheck.filter(c => c.tipe === currentCCTipe && getMonthFromDate(c.tanggal) === selectedMonth);
-      
-      let totalPendapatan = 0, untungPerslop = 0, untungEceran = 0;
-      let cashRiel = 0, abaRiel = 0, umBelumBayar = 0, monthModal = 0;
-      let totalUMKeseluruhan = 0, totalUMSudahCair = 0, totalUMBelumCair = 0;
-      let totalSlopTerjual = 0; 
-
-      filteredSales.forEach(u => {
-        let modalVal = 0;
-        if(u.tipe === "Perslop") {
-          modalVal = (res.masterMap[u.rokok] ? res.masterMap[u.rokok].modal : 0) * u.jumlah;
-          untungPerslop += (u.harga - modalVal);
-          totalSlopTerjual += u.jumlah; 
-        } else if(u.tipe === "Eceran") {
-          modalVal = (res.masterMap[u.rokok] ? res.masterMap[u.rokok].modal / 10 : 0) * u.jumlah;
-          untungEceran += (u.harga - modalVal); 
-        }
-        
-        if(u.tipeBayar === "Uang Makan") {
-          totalUMKeseluruhan += u.harga;
-          if(u.statusBayar === "BELUM BAYAR") totalUMBelumCair += u.harga;
-          else totalUMSudahCair += u.harga;
-        }
-        
-        if(u.statusBayar === "SUDAH BAYAR CASH") {
-          totalPendapatan += u.harga; cashRiel += u.harga; monthModal += modalVal;
-        } else if(u.statusBayar === "SUDAH BAYAR ABA") {
-          totalPendapatan += u.harga; abaRiel += u.harga; monthModal += modalVal;
-        } else if(u.statusBayar === "BELUM BAYAR") {
-          if(u.tipeBayar === "Uang Makan") umBelumBayar += u.harga;
-        }
-      });
-      
-      let totalUntung = untungPerslop + untungEceran;
-
-      document.getElementById('kas-total-pendapatan').innerText = "៛ " + fmt(totalPendapatan);
-      document.getElementById('kas-untung').innerText = "៛ " + fmt(totalUntung);
-      document.getElementById('kas-untung-perslop').innerText = "៛ " + fmt(untungPerslop);
-      document.getElementById('kas-untung-eceran').innerText = "៛ " + fmt(untungEceran);
-      document.getElementById('kas-cash-riel').innerText = "៛ " + fmt(cashRiel);
-      document.getElementById('kas-um').innerText = "៛ " + fmt(umBelumBayar);
-      document.getElementById('kas-aba').innerText = "៛ " + fmt(abaRiel);
-      
-      document.getElementById('kas-total-slop-terjual').innerText = totalSlopTerjual + " Slop";
-      
-      document.getElementById('kas-uang-ada').innerText = "៛ " + fmt(totalPendapatan);
-      document.getElementById('kas-riel-detail').innerText = "៛ " + fmt(cashRiel);
-      document.getElementById('kas-aba-detail').innerText = "៛ " + fmt(abaRiel);
-      document.getElementById('kas-um-detail').innerText = "៛ " + fmt(umBelumBayar);
-      
-      document.getElementById('kas-month-pendapatan').innerText = "៛ " + fmt(totalPendapatan);
-      document.getElementById('kas-month-modal').innerText = "៛ " + fmt(monthModal);
-      document.getElementById('kas-month-untung').innerText = "៛ " + fmt(totalUntung);
-
-      document.getElementById('um-total-keseluruhan').innerText = "៛ " + fmt(totalUMKeseluruhan);
-      document.getElementById('um-total-sudah-cair').innerText = "៛ " + fmt(totalUMSudahCair);
-      document.getElementById('um-total-belum-cair').innerText = "៛ " + fmt(totalUMBelumCair);
-
-      const tbStok = document.getElementById('table-stok'); tbStok.innerHTML = "";
-      const tbStokEceran = document.getElementById('table-stok-eceran'); tbStokEceran.innerHTML = "";
-      const tbStokMini = document.getElementById('table-stok-mini'); tbStokMini.innerHTML = "";
-      let stokArr = [];
-      
-      for(let namaRokok in res.masterMap) {
-        let prevMasuk = 0, prevBuka = 0, prevJualPerslop = 0;
-        let prevJualEceran = 0;
-        let masukBulanIni = 0, bukaBulanIni = 0, terjualPerslopBulanIni = 0, terjualEceranBulanIni = 0;
-
-        res.allPengambilan.forEach(p => {
-          if(p.rokok === namaRokok && getMonthFromDate(p.tanggal) < selectedMonth) {
-            if(p.tipe === 'Masuk' || p.tipe === 'Meauk') prevMasuk += p.jumlah;
-            if(p.tipe === 'Buka Slop') prevBuka += p.jumlah;
-          }
-        });
-        res.allSales.forEach(u => {
-          if(u.rokok === namaRokok && getMonthFromDate(u.tanggal) < selectedMonth) {
-            if(u.tipe === 'Perslop') prevJualPerslop += u.jumlah;
-            if(u.tipe === 'Eceran') prevJualEceran += u.jumlah;
-          }
-        });
-
-        filteredAmbil.forEach(p => {
-          if(p.rokok === namaRokok) {
-            if(p.tipe === 'Masuk' || p.tipe === 'Meauk') masukBulanIni += p.jumlah;
-            if(p.tipe === 'Buka Slop') bukaBulanIni += p.jumlah;
-          }
-        });
-        filteredSales.forEach(u => {
-          if(u.rokok === namaRokok) {
-            if(u.tipe === 'Perslop') terjualPerslopBulanIni += u.jumlah;
-            if(u.tipe === 'Eceran') terjualEceranBulanIni += u.jumlah;
-          }
-        });
-
-        let sisaSlopBulanLalu = prevMasuk - prevBuka - prevJualPerslop;
-        let sisaSlopSaatIni = sisaSlopBulanLalu + masukBulanIni - bukaBulanIni - terjualPerslopBulanIni;
-        
-        let sisaEceranBulanLalu = (prevBuka * 10) - prevJualEceran;
-        let bukaEceranBulanIni = bukaBulanIni * 10;
-        let sisaEceranSaatIni = sisaEceranBulanLalu + bukaEceranBulanIni - terjualEceranBulanIni;
-        
-        stokArr.push({ 
-          rokok: namaRokok, 
-          masukBulanIni, terjualPerslopBulanIni, sisaSlopSaatIni, 
-          bukaEceranBulanIni, terjualEceranBulanIni, sisaEceranSaatIni 
-        });
-        
-        tbStok.innerHTML += `<tr class="hover:bg-slate-800/50">
-          <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-3 text-xl text-yellow-400">${masukBulanIni} Slop</td>
-          <td class="p-3 text-xl text-red-400">${terjualPerslopBulanIni} Slop</td>
-          <td class="p-3 text-xl font-bold text-yellow-400">${sisaSlopSaatIni} Slop</td>
-        </tr>`;
-
-        tbStokEceran.innerHTML += `<tr class="hover:bg-slate-800/50">
-          <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-3 text-xl text-purple-400">${bukaEceranBulanIni} Bungkus</td>
-          <td class="p-3 text-xl text-red-400">${terjualEceranBulanIni} Bungkus</td>
-          <td class="p-3 text-xl font-bold text-yellow-400">${sisaEceranSaatIni} Bungkus</td>
-        </tr>`;
-
-        tbStokMini.innerHTML += `<tr class="hover:bg-slate-800/50">
-          <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
-          <td class="p-3 text-xl font-bold text-yellow-400">${sisaSlopSaatIni} Slop</td>
-          <td class="p-3 text-xl font-bold text-yellow-400">${sisaEceranSaatIni} Bungkus</td>
-        </tr>`;
-      }
-
-      const tbAmbil = document.getElementById('table-pengambilan-recap'); tbAmbil.innerHTML = "";
-      if(filteredAmbil.length > 0) {
-        filteredAmbil.reverse().forEach(p => {
-          const displayTipe = (p.tipe === 'Masuk' || p.tipe === 'Meauk') ? 'Masuk' : p.tipe;
-          const badgeClass = displayTipe === 'Buka Slop' ? 'badge-purple' : 'badge-success';
-          tbAmbil.innerHTML += `<tr class="hover:bg-slate-800/50">
-            <td class="p-3 text-slate-100 text-left">${formatFullDate(p.tanggal, false)}</td>
-            <td class="p-3 text-white">${p.rokok}</td>
-            <td class="p-3"><span class="badge ${badgeClass}">${displayTipe}</span></td>
-            <td class="p-3 text-white">${p.jumlah} Slop</td>
-            <td class="p-3 text-white">៛ ${fmt(p.modal)}</td>
-            <td class="p-3 text-center">
-              <div class="flex gap-2 justify-center">
-                <button onclick='editPengambilanData(${p.row})' class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded-lg text-xs font-bold">EDIT</button>
-                <button onclick='deletePengambilanData(${p.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold">HAPUS</button>
-              </div>
-            </td>
-          </tr>`;
-        });
-      } else tbAmbil.innerHTML = `<tr><td colspan="6" class="p-4 text-slate-400 text-center">Belum ada mutasi stok bulan ini</td></tr>`;
-
-      const tbStokCC = document.getElementById('table-stok-cc'); tbStokCC.innerHTML = "";
-      if(stokArr.length > 0) stokArr.forEach(s => {
-        let v1, v2;
-        if(currentCCTipe === 'Perslop') {
-          v1 = `<span class="text-xl text-red-400">${s.terjualPerslopBulanIni} Slop</span>`; 
-          v2 = `<span class="text-xl font-bold text-yellow-400">${s.sisaSlopSaatIni} Slop</span>`;
+      monthData.forEach(t => {
+        totalPendapatan += t.harga || 0;
+        const m = masterData[t.rokok] || {};
+        if(t.tipeJual === 'Eceran') {
+          untungEceran += ((t.harga||0) - ((m.eceran || 0) * (t.jumlah||0)));
         } else {
-          v1 = `<span class="text-xl text-red-400">${s.terjualEceranBulanIni} Bungkus</span>`; 
-          v2 = `<span class="text-xl font-bold text-yellow-400">${s.sisaEceranSaatIni} Bungkus</span>`;
+          untungPerslop += ((t.harga||0) - ((m.modal || 0) * (t.jumlah||0)));
+          totalSlop += t.jumlah || 0;
+          if(t.tipeBayar === 'ABA') aba += t.harga || 0;
+          else if(t.tipeBayar === 'Uang Makan' || t.statusBayar.includes('UM')) {
+            if(!t.statusBayar.includes('SUDAH')) umBelumCair += t.harga || 0;
+          } else {
+            cashRiel += t.harga || 0;
+          }
         }
-        tbStokCC.innerHTML += `<tr class="hover:bg-slate-800/50">
-          <td class="p-4 text-left font-semibold text-white">${s.rokok}</td>
-          <td class="p-4">${v1}</td>
-          <td class="p-4">${v2}</td>
-        </tr>`;
       });
 
-      const tbCC = document.getElementById('table-crosscheck'); tbCC.innerHTML = "";
-      if(filteredCC.length > 0) {
-        filteredCC.reverse().forEach(c => { 
-          const badgeClass = c.status==='KLOP' ? 'badge-success' : 'badge-danger';
-          tbCC.innerHTML += `<tr class="hover:bg-slate-800/50">
-            <td class="p-3 text-slate-100">${formatFullDate(c.tanggal, false)}</td>
-            <td class="p-3 text-white">${c.jam}</td>
-            <td class="p-3"><span class="badge ${badgeClass}">${c.status}</span></td>
-            <td class="p-3 text-white">${c.jmlSelisih || 0}</td>
-            <td class="p-3 text-slate-100">${c.ketSelisih || '-'}</td>
-            <td class="p-3 text-slate-100">${c.catatan || '-'}</td>
-          </tr>`; 
-        });
-      } else tbCC.innerHTML = `<tr><td colspan="6" class="p-4 text-slate-400 text-center">Belum ada riwayat bulan ini</td></tr>`;
+      document.getElementById('kas-total-pendapatan').innerText = `៛ ${totalPendapatan.toLocaleString('id-ID')}`;
+      document.getElementById('kas-untung').innerText = `៛ ${(untungPerslop + untungEceran).toLocaleString('id-ID')}`;
+      document.getElementById('kas-untung-perslop').innerText = `៛ ${untungPerslop.toLocaleString('id-ID')}`;
+      document.getElementById('kas-untung-eceran').innerText = `៛ ${untungEceran.toLocaleString('id-ID')}`;
+      document.getElementById('kas-cash-riel').innerText = `៛ ${cashRiel.toLocaleString('id-ID')}`;
+      document.getElementById('kas-aba').innerText = `៛ ${aba.toLocaleString('id-ID')}`;
+      document.getElementById('kas-um').innerText = `៛ ${umBelumCair.toLocaleString('id-ID')}`;
+      document.getElementById('kas-total-slop-terjual').innerText = `${totalSlop} Slop`;
 
-      const tbJual = document.getElementById('table-jual-recap'); tbJual.innerHTML = "";
-      let jualFiltered = filteredSales.filter(u => {
-        if(currentJualFilter === 'Cash') return u.tipeBayar === "Cash Riel" || u.tipeBayar === "ABA";
-        if(currentJualFilter === 'UM') return u.tipeBayar === "Uang Makan";
-        if(currentJualFilter === 'Eceran') return u.tipe === "Eceran";
-        return true;
+      document.getElementById('kas-month-pendapatan').innerText = `៛ ${totalPendapatan.toLocaleString('id-ID')}`;
+      document.getElementById('kas-month-modal').innerText = `៛ ${(totalPendapatan - (untungPerslop + untungEceran)).toLocaleString('id-ID')}`;
+      document.getElementById('kas-month-untung').innerText = `៛ ${(untungPerslop + untungEceran).toLocaleString('id-ID')}`;
+      document.getElementById('kas-uang-ada').innerText = `៛ ${(cashRiel + aba).toLocaleString('id-ID')}`;
+      document.getElementById('kas-riel-detail').innerText = `៛ ${cashRiel.toLocaleString('id-ID')}`;
+      document.getElementById('kas-aba-detail').innerText = `៛ ${aba.toLocaleString('id-ID')}`;
+      document.getElementById('kas-um-detail').innerText = `៛ ${umBelumCair.toLocaleString('id-ID')}`;
+
+      renderTableJual(state);
+      renderTableUM(state);
+      renderTableStok(state);
+      renderTableCrosscheck(state);
+      renderChart(state);
+    }
+
+    function renderTableJual(state) {
+      const tb = document.getElementById('table-jual-recap');
+      tb.innerHTML = '';
+      if(!state.jual) return;
+      
+      // FILTER: hanya yang BUKAN uang makan
+      const data = state.jual.filter(t => {
+        const isMonth = getMonthFromDate(t.tanggal) === selectedMonth;
+        const isNotUM = t.tipeBayar !== 'Uang Makan' && !t.statusBayar.includes('UM');
+        return isMonth && isNotUM;
       }).reverse();
 
-      if(jualFiltered.length > 0) {
-        jualFiltered.forEach(u => { 
-          let actionButtons = `
-            <div class="flex flex-col gap-1 items-center">
-              <select onchange='updateJualStatus(${u.row}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
-                <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>SUDAH BAYAR CASH</option>
-                <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDAH BAYAR ABA' ? 'selected' : ''}>SUDAH BAYAR ABA</option>
-                <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM BAYAR</option>
-              </select>
-              <button onclick='deleteJualData(${u.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
-            </div>
-          `;
-          
-          tbJual.innerHTML += `<tr class="hover:bg-slate-800/50">
-            <td class="p-3 text-slate-100 text-left whitespace-normal">${formatFullDate(u.tanggal, true)}</td>
-            <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
-            <td class="p-3 text-slate-100">${u.situs || '-'}</td>
-            <td class="p-3 text-slate-100">${u.rokok}</td>
-            <td class="p-3 font-bold text-xl text-yellow-400">${u.jumlahTxt}</td>
-            <td class="p-3 text-xl text-yellow-400 font-semibold">៛ ${fmt(u.harga)}</td>
-            <td class="p-3"><span class="badge ${getBadgeClass(u.statusBayar)}">${u.statusBayar}</span></td>
-            <td class="p-3 text-center">${actionButtons}</td>
-          </tr>`; 
-        });
-      } else tbJual.innerHTML = `<tr><td colspan="8" class="p-4 text-slate-400 text-center">Belum ada penjualan bulan ini</td></tr>`;
-
-      const tbUM = document.getElementById('table-um-recap'); tbUM.innerHTML = "";
-      let umSales = filteredSales.filter(u => u.tipeBayar === "Uang Makan").reverse();
-      if(umSales.length === 0) tbUM.innerHTML = `<tr><td colspan="7" class="p-4 text-slate-400 text-center">Belum ada data UM bulan ini</td></tr>`;
-      umSales.forEach(u => { 
-        let actionButtons = `
-          <div class="flex flex-col gap-1 items-center">
-            <select onchange='updateJualStatus(${u.row}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
-              <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM CAIR</option>
-              <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
-              <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDAH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
-            </select>
-            <button onclick='deleteJualData(${u.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
-          </div>
-        `;
-        
-        tbUM.innerHTML += `<tr class="hover:bg-slate-800/50">
-          <td class="p-3 text-slate-100 text-left whitespace-normal">${formatFullDate(u.tanggal, true)}</td>
-          <td class="p-3 font-medium text-white">${u.nama || '-'}</td>
-          <td class="p-3 text-slate-100">${u.rokok}</td>
-          <td class="p-3 font-bold text-xl text-yellow-400">${u.jumlahTxt}</td>
-          <td class="p-3 text-xl text-yellow-400 font-semibold">៛ ${fmt(u.harga)}</td>
-          <td class="p-3"><span class="badge ${getBadgeClass(u.statusBayar)}">${u.statusBayar}</span></td>
-          <td class="p-3 text-center">${actionButtons}</td>
-        </tr>`; 
-      });
-
-      renderChart(res.allSales);
-    }
-
-    function renderChart(allSales) {
-      const ctx = document.getElementById('salesChart').getContext('2d');
-      const labels = [];
-      const data = [];
-      
-      const now = new Date();
-      for(let i=5; i>=0; i--) {
-        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        const monthStr = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`;
-        labels.push(d.toLocaleDateString('id-ID', { month: 'short', year: '2-digit' }));
-        
-        let total = 0;
-        allSales.forEach(u => {
-          if(getMonthFromDate(u.tanggal) === monthStr && (u.statusBayar === 'SUDAH BAYAR CASH' || u.statusBayar === 'SUDAH BAYAR ABA')) {
-            total += u.harga;
-          }
-        });
-        data.push(total);
+      if(data.length === 0) {
+        tb.innerHTML = `<tr><td colspan="8" class="text-center text-slate-500 p-6">Tidak ada transaksi</td></tr>`;
+        return;
       }
 
-      const chartGradient = ctx.createLinearGradient(0, 0, 0, 350);
-      chartGradient.addColorStop(0, 'rgba(139, 92, 246, 0.9)'); 
-      chartGradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.7)'); 
-      chartGradient.addColorStop(1, 'rgba(15, 23, 42, 0.1)'); 
+      data.forEach(t => {
+        const situsText = (t.situs && t.situs.trim() !== '') ? t.situs : '-';
+        tb.innerHTML += `<tr class="hover:bg-slate-800/50">
+          <td class="p-3 text-left text-slate-400 text-sm whitespace-nowrap">${formatFullDate(t.tanggal, true)}</td>
+          <td class="p-3 font-semibold text-white text-sm">${t.nama}</td>
+          <td class="p-3 text-slate-300 text-sm">${situsText}</td>
+          <td class="p-3 text-slate-300 text-sm">${t.rokok}</td>
+          <td class="p-3 text-cyan-400 font-semibold text-sm">${t.jumlah}</td>
+          <td class="p-3 text-yellow-400 font-bold text-sm">៛ ${(t.harga || 0).toLocaleString('id-ID')}</td>
+          <td class="p-3"><span class="badge ${t.statusBayar.includes('SUDAH') ? 'badge-success' : 'badge-danger'}">${t.statusBayar}</span></td>
+          <td class="p-3"><button onclick="deleteJual('${t.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold">HAPUS</button></td>
+        </tr>`;
+      });
+    }
 
-      const hoverGradient = ctx.createLinearGradient(0, 0, 0, 350);
-      hoverGradient.addColorStop(0, 'rgba(59, 130, 246, 1)'); 
-      hoverGradient.addColorStop(1, 'rgba(37, 99, 235, 0.5)');
+    function renderTableUM(state) {
+      const tb = document.getElementById('table-um-recap');
+      tb.innerHTML = '';
+      if(!state.jual) return;
+
+      // FILTER: HANYA Uang Makan
+      const data = state.jual.filter(t => {
+        const isMonth = getMonthFromDate(t.tanggal) === selectedMonth;
+        const isUM = t.tipeBayar === 'Uang Makan' || t.statusBayar.includes('UM');
+        return isMonth && isUM;
+      }).reverse();
+
+      let totalUM = 0, sudahCair = 0, belumCair = 0;
+      data.forEach(t => {
+        totalUM += t.harga || 0;
+        if(t.statusBayar.includes('SUDAH')) sudahCair += t.harga || 0;
+        else belumCair += t.harga || 0;
+      });
+      document.getElementById('um-total-keseluruhan').innerText = `៛ ${totalUM.toLocaleString('id-ID')}`;
+      document.getElementById('um-total-sudah-cair').innerText = `៛ ${sudahCair.toLocaleString('id-ID')}`;
+      document.getElementById('um-total-belum-cair').innerText = `៛ ${belumCair.toLocaleString('id-ID')}`;
+
+      if(data.length === 0) {
+        tb.innerHTML = `<tr><td colspan="7" class="text-center text-slate-500 p-6">Belum ada transaksi Uang Makan bulan ini</td></tr>`;
+        return;
+      }
+
+      data.forEach(t => {
+        // Escape quotes for onclick
+        const safeNama = t.nama.replace(/'/g, "\\'");
+        tb.innerHTML += `<tr class="hover:bg-slate-800/50">
+          <td class="p-3 text-left text-slate-400 text-sm whitespace-nowrap">${formatFullDate(t.tanggal, true)}</td>
+          <td class="p-3 text-left font-semibold text-white text-sm flex items-center gap-2">${t.nama} <button onclick="copyToClipboard('${safeNama}')" class="text-blue-400 hover:text-blue-300 text-xs" title="Copy Nama"><i class="fas fa-clipboard"></i></button></td>
+          <td class="p-3 text-slate-300 text-sm">${t.rokok}</td>
+          <td class="p-3 text-cyan-400 font-semibold text-sm">${t.jumlah}</td>
+          <td class="p-3 text-yellow-400 font-bold text-sm">៛ ${(t.harga || 0).toLocaleString('id-ID')}</td>
+          <td class="p-3"><span class="badge ${t.statusBayar.includes('SUDAH') ? 'badge-success' : 'badge-danger'} text-xs">${t.statusBayar}</span></td>
+          <td class="p-3"><button onclick="deleteJual('${t.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold">HAPUS</button></td>
+        </tr>`;
+      });
+    }
+
+    function renderTableStok(state) {
+      const tbMini = document.getElementById('table-stok-mini');
+      const tbSlop = document.getElementById('table-stok');
+      const tbEceran = document.getElementById('table-stok-eceran');
+      const tbPengambilan = document.getElementById('table-pengambilan-recap');
+      
+      tbMini.innerHTML = ''; tbSlop.innerHTML = ''; tbEceran.innerHTML = ''; tbPengambilan.innerHTML = '';
+      
+      if(!state.stok) return;
+
+      // Logic stok summary
+      Object.keys(masterData).forEach(r => {
+        const masuk = state.stok.filter(s => s.rokok === r && s.tipe === 'Masuk' && getMonthFromDate(s.tanggal) === selectedMonth).reduce((a,b) => a + b.jumlah, 0);
+        const keluar = state.jual.filter(s => s.rokok === r && s.tipeJual !== 'Eceran' && getMonthFromDate(s.tanggal) === selectedMonth).reduce((a,b) => a + b.jumlah, 0);
+        const dibuka = state.stok.filter(s => s.rokok === r && s.tipe === 'Buka Slop' && getMonthFromDate(s.tanggal) === selectedMonth).reduce((a,b) => a + b.jumlah, 0);
+        const jualEcer = state.jual.filter(s => s.rokok === r && s.tipeJual === 'Eceran' && getMonthFromDate(s.tanggal) === selectedMonth).reduce((a,b) => a + b.jumlah, 0);
+        
+        const sisaSlop = masuk - keluar - dibuka;
+        const sisaEcer = (dibuka * 10) - jualEcer;
+
+        tbMini.innerHTML += `<tr><td class="p-3 text-left text-white text-sm">${r}</td><td class="p-3 text-cyan-400 text-sm font-bold">${sisaSlop}</td><td class="p-3 text-purple-400 text-sm font-bold">${sisaEcer}</td></tr>`;
+        tbSlop.innerHTML += `<tr><td class="p-3 text-left text-white font-semibold text-sm">${r}</td><td class="p-3 text-slate-300 text-sm">${masuk} Slop</td><td class="p-3 text-red-400 text-sm">${keluar} Slop</td><td class="p-3 text-cyan-400 font-bold text-sm">${sisaSlop} Slop</td></tr>`;
+        tbEceran.innerHTML += `<tr><td class="p-3 text-left text-white font-semibold text-sm">${r}</td><td class="p-3 text-slate-300 text-sm">${dibuka} Slop</td><td class="p-3 text-red-400 text-sm">${jualEcer} Bks</td><td class="p-3 text-purple-400 font-bold text-sm">${sisaEcer} Bks</td></tr>`;
+      });
+
+      const ambil = state.stok.filter(s => getMonthFromDate(s.tanggal) === selectedMonth).reverse();
+      if(ambil.length === 0) {
+        tbPengambilan.innerHTML = `<tr><td colspan="6" class="text-center text-slate-500 p-6">Belum ada pengambilan stok</td></tr>`;
+      } else {
+        ambil.forEach(s => {
+          tbPengambilan.innerHTML += `<tr>
+            <td class="p-3 text-left text-slate-400 text-sm">${formatFullDate(s.tanggal, false)}</td>
+            <td class="p-3 text-white text-sm">${s.rokok}</td>
+            <td class="p-3 text-sm"><span class="badge ${s.tipe === 'Masuk' ? 'badge-success' : 'badge-purple'}">${s.tipe}</span></td>
+            <td class="p-3 text-cyan-400 font-bold text-sm">${s.jumlah}</td>
+            <td class="p-3 text-yellow-400 text-sm">៛ ${(s.modal || 0).toLocaleString('id-ID')}</td>
+            <td class="p-3"><button onclick="deleteStok('${s.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold">HAPUS</button></td>
+          </tr>`;
+        });
+      }
+    }
+
+    async function saveAmbilStok() {
+      const data = {
+        tanggal: document.getElementById('stok-tanggal').value,
+        rokok: document.getElementById('stok-rokok').value,
+        jumlah: parseInt(document.getElementById('stok-jumlah').value) || 0,
+        modal: parseFloat(document.getElementById('stok-modal').value.replace(/\./g, '')) || 0,
+        tipe: 'Masuk'
+      };
+      if(!data.rokok || !data.jumlah) { showToast("Lengkapi data stok!", "error"); return; }
+
+      toggleLoadingButton('btn-save-stok', true, 'CATAT PENGAMBILAN');
+      const res = await apiCall('saveStok', { payload: data });
+      toggleLoadingButton('btn-save-stok', false, 'CATAT PENGAMBILAN');
+      if(res.error) showToast("Gagal simpan stok.", "error");
+      else {
+        showToast("Stok berhasil dicatat!", "success");
+        dashboardState = res.dashboard;
+        renderDashboard(dashboardState);
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+        document.getElementById('stok-jumlah').value = '';
+        document.getElementById('stok-modal').value = '';
+      }
+    }
+
+    async function saveBukaSlop() {
+      const data = {
+        tanggal: new Date().toISOString().slice(0, 10),
+        rokok: document.getElementById('buka-rokok').value,
+        jumlah: parseInt(document.getElementById('buka-jumlah').value) || 0,
+        tipe: 'Buka Slop'
+      };
+      if(!data.rokok || !data.jumlah) { showToast("Lengkapi data buka slop!", "error"); return; }
+
+      toggleLoadingButton('btn-buka-slop', true, 'BUKA SLOP KE ECERAN');
+      const res = await apiCall('saveStok', { payload: data });
+      toggleLoadingButton('btn-buka-slop', false, 'BUKA SLOP KE ECERAN');
+      if(res.error) showToast("Gagal buka slop.", "error");
+      else {
+        showToast("Slop berhasil dibuka!", "success");
+        dashboardState = res.dashboard;
+        renderDashboard(dashboardState);
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+        document.getElementById('buka-jumlah').value = '';
+      }
+    }
+
+    async function deleteStok(id) {
+      if(!confirm("Yakin hapus data stok ini?")) return;
+      const res = await apiCall('deleteStok', { payload: { id: id } });
+      if(res.error) showToast("Gagal hapus.", "error");
+      else {
+        showToast("Data stok dihapus.", "success");
+        dashboardState = res.dashboard;
+        renderDashboard(dashboardState);
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      }
+    }
+
+    function renderTableCrosscheck(state) {
+      const tbStok = document.getElementById('table-stok-cc');
+      const tbCC = document.getElementById('table-crosscheck');
+      tbStok.innerHTML = ''; tbCC.innerHTML = '';
+      
+      if(!state.crosscheck) return;
+
+      Object.keys(masterData).forEach(r => {
+        const masuk = state.stok.filter(s => s.rokok === r && s.tipe === 'Masuk' && getMonthFromDate(s.tanggal) === selectedMonth).reduce((a,b) => a + b.jumlah, 0);
+        const keluar = state.jual.filter(s => s.rokok === r && getMonthFromDate(s.tanggal) === selectedMonth).reduce((a,b) => a + b.jumlah, 0);
+        const dibuka = state.stok.filter(s => s.rokok === r && s.tipe === 'Buka Slop' && getMonthFromDate(s.tanggal) === selectedMonth).reduce((a,b) => a + b.jumlah, 0);
+        
+        let terjual = 0, sisa = 0;
+        if(currentCCTipe === 'Perslop') {
+          terjual = keluar;
+          sisa = masuk - keluar - dibuka;
+        } else {
+          terjual = state.jual.filter(s => s.rokok === r && s.tipeJual === 'Eceran' && getMonthFromDate(s.tanggal) === selectedMonth).reduce((a,b) => a + b.jumlah, 0);
+          sisa = (dibuka * 10) - terjual;
+        }
+
+        tbStok.innerHTML += `<tr><td class="p-4 text-left text-white font-semibold">${r}</td><td class="p-4 text-red-400 font-bold">${terjual}</td><td class="p-4 text-cyan-400 font-bold">${sisa}</td></tr>`;
+      });
+
+      const ccData = state.crosscheck.filter(c => getMonthFromDate(c.tanggal) === selectedMonth).reverse();
+      if(ccData.length === 0) {
+        tbCC.innerHTML = `<tr><td colspan="7" class="text-center text-slate-500 p-6">Belum ada crosscheck</td></tr>`;
+      } else {
+        ccData.forEach(c => {
+          tbCC.innerHTML += `<tr>
+            <td class="p-3 text-slate-400 text-sm">${formatFullDate(c.tanggal, false)}</td>
+            <td class="p-3 text-white text-sm">${c.jam || '-'}</td>
+            <td class="p-3 text-sm"><span class="badge ${c.status === 'KLOP' ? 'badge-success' : 'badge-danger'}">${c.status}</span></td>
+            <td class="p-3 text-cyan-400 font-bold text-sm">${c.jmlSelisih || 0}</td>
+            <td class="p-3 text-slate-300 text-sm">${c.ketSelisih || '-'}</td>
+            <td class="p-3 text-slate-300 text-sm">${c.catatan || '-'}</td>
+            <td class="p-3"><button onclick="deleteCrosscheck('${c.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold">HAPUS</button></td>
+          </tr>`;
+        });
+      }
+    }
+
+    async function saveCrosscheck() {
+      const data = {
+        tanggal: new Date().toISOString().slice(0, 10),
+        catatan: document.getElementById('cc-catatan').value,
+        jam: document.getElementById('cc-jam').value,
+        status: document.getElementById('cc-status').value,
+        jmlSelisih: parseInt(document.getElementById('cc-jml-selisih').value) || 0,
+        ketSelisih: document.getElementById('cc-ket-selisih').value,
+        tipe: currentCCTipe
+      };
+      if(!data.jam) { showToast("Jam wajib diisi!", "error"); return; }
+
+      toggleLoadingButton('btn-save-cc', true, 'SIMPAN CROSSCHECK');
+      const res = await apiCall('saveCrosscheck', { payload: data });
+      toggleLoadingButton('btn-save-cc', false, 'SIMPAN CROSSCHECK');
+      if(res.error) showToast("Gagal simpan crosscheck.", "error");
+      else {
+        showToast("Crosscheck disimpan!", "success");
+        dashboardState = res.dashboard;
+        renderDashboard(dashboardState);
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+        document.getElementById('cc-catatan').value = '';
+        document.getElementById('cc-jml-selisih').value = '';
+      }
+    }
+
+    async function deleteCrosscheck(id) {
+      if(!confirm("Yakin hapus data crosscheck?")) return;
+      const res = await apiCall('deleteCrosscheck', { payload: { id: id } });
+      if(res.error) showToast("Gagal hapus.", "error");
+      else {
+        showToast("Crosscheck dihapus.", "success");
+        dashboardState = res.dashboard;
+        renderDashboard(dashboardState);
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      }
+    }
+
+    function renderChart(state) {
+      const ctx = document.getElementById('salesChart');
+      if(!ctx) return;
+
+      const labels = [];
+      const dataPendapatan = [];
+      const today = new Date();
+      
+      for(let i = 5; i >= 0; i--) {
+        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        const m = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+        labels.push(d.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }));
+        
+        const monthData = state.jual ? state.jual.filter(t => getMonthFromDate(t.tanggal) === m) : [];
+        const total = monthData.reduce((a, b) => a + (b.harga || 0), 0);
+        dataPendapatan.push(total);
+      }
 
       if(salesChart) salesChart.destroy();
       salesChart = new Chart(ctx, {
@@ -1221,394 +1284,26 @@
         data: {
           labels: labels,
           datasets: [{
-            label: 'Total Penjualan (៛)',
-            data: data,
-            backgroundColor: chartGradient,
-            hoverBackgroundColor: hoverGradient,
-            borderColor: 'rgba(255, 255, 255, 0.1)',
-            borderWidth: 1,
-            borderRadius: 10, 
-            borderSkipped: false,
+            label: 'Pendapatan (៛)',
+            data: dataPendapatan,
+            backgroundColor: 'rgba(59, 130, 246, 0.5)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 2,
+            borderRadius: 5
           }]
         },
-        options: {
-          responsive: true,
+        options: { 
+          responsive: true, 
           maintainAspectRatio: false,
-          layout: { padding: { top: 20, right: 10, bottom: 0, left: 0 } },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-              ticks: { color: '#ffffff', font: { family: 'Inter', size: 16, weight: 'bold' }, callback: function(value) { return '៛ ' + (value/1000) + 'k'; } }
-            },
-            x: {
-              grid: { display: false, drawBorder: false },
-              ticks: { color: '#ffffff', font: { family: 'Inter', size: 16, weight: 'bold' } }
-            }
+          scales: { 
+            y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8' } }, 
+            x: { grid: { display: false }, ticks: { color: '#94a3b8' } } 
           },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              enabled: true,
-              backgroundColor: 'rgba(15, 23, 42, 0.95)',
-              titleColor: '#fff',
-              bodyColor: '#3b82f6',
-              borderColor: 'rgba(139, 92, 246, 0.5)',
-              borderWidth: 2,
-              padding: 12,
-              cornerRadius: 8,
-              titleFont: { family: 'Inter', size: 14, weight: 'bold' },
-              bodyFont: { family: 'Inter', size: 16, weight: 'bold' },
-              displayColors: false,
-              callbacks: {
-                label: function(context) {
-                  return ' ៛ ' + context.parsed.y.toLocaleString('id-ID');
-                }
-              }
-            }
-          },
-          animation: { duration: 1500, easing: 'easeInOutQuart' }
+          plugins: { legend: { labels: { color: '#f8fafc' } } }
         }
       });
     }
 
-    // PERBAIKAN: Hindari re-render yang bikin flicker
-    async function updateJualStatus(row, newStatus) {
-      let u = dashboardState.allSales.find(x => x.row === row);
-      if(u) u.statusBayar = newStatus;
-      
-      renderDashboard(dashboardState);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      showToast("Status diperbarui...", "success");
-
-      const res = await apiCall('updateStatusPenjualan', { payload: { row: row, newStatus: newStatus } });
-      if(res.error) { showToast("Gagal update status.", "error"); return; }
-      
-      dashboardState = res.dashboard;
-      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState)); // No renderDashboard
-    }
-
-    async function deleteJualData(row) {
-      if(!confirm('Yakin hapus transaksi ini?')) return;
-      
-      dashboardState.allSales = dashboardState.allSales.filter(u => u.row !== row);
-      renderDashboard(dashboardState);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      showToast("Menghapus transaksi...", "success");
-
-      const res = await apiCall('deletePenjualan', { payload: { row: row } });
-      if(res.error) { 
-        showToast("Gagal hapus, memuat ulang data...", "error"); 
-        return; 
-      }
-      
-      dashboardState = res.dashboard;
-      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState)); // No renderDashboard
-    }
-
-    function hitungHargaOtomatis() {
-      const rokok = document.getElementById('jual-rokok').value;
-      const jumlahVal = document.getElementById('jual-jumlah').value;
-      const jumlah = parseFloat(jumlahVal) || 0;
-      const tipeBayar = document.getElementById('jual-tipebayar').value;
-      let harga = 0; 
-      if(rokok && masterData[rokok]) {
-        const d = masterData[rokok];
-        if(currentJualTipe === "Perslop") {
-          if(tipeBayar === "Uang Makan") { harga = (d.um || 0) * jumlah; } 
-          else { harga = (d.cashRiel || 0) * jumlah; }
-        } else { harga = (d.eceran || 0) * jumlah; }
-      }
-      document.getElementById('jual-harga').innerText = "៛ " + harga.toLocaleString('id-ID');
-    }
-
-    async function saveJual() {
-      const tglVal = document.getElementById('jual-tanggal').value;
-      let tglIso;
-      if (tglVal) {
-          let parts = tglVal.split('-');
-          tglIso = new Date(parts[0], parts[1] - 1, parts[2]).toISOString();
-      } else {
-          tglIso = new Date().toISOString();
-      }
-
-      const tipeBayar = document.getElementById('jual-tipebayar').value;
-      const hargaText = document.getElementById('jual-harga').innerText;
-      const hargaNum = parseInt(hargaText.replace(/\D/g, '')) || 0;
-      const namaVal = document.getElementById('jual-nama').value;
-      const situsVal = document.getElementById('jual-situs').value;
-      
-      let statusVal = "";
-      if(tipeBayar === "Uang Makan") {
-          statusVal = "BELUM BAYAR";
-      } else {
-          statusVal = document.getElementById('jual-status').value;
-      }
-      
-      if(!namaVal) { showToast("Nama pembeli wajib diisi!", "error"); return; }
-      if(currentJualTipe === "Perslop" && !situsVal) { showToast("Nama situs wajib diisi!", "error"); return; }
-      
-      const data = { 
-        tanggal: tglIso,
-        tipe: currentJualTipe, 
-        nama: namaVal, 
-        situs: currentJualTipe === "Eceran" ? "" : situsVal, 
-        rokok: document.getElementById('jual-rokok').value, 
-        jumlah: parseFloat(document.getElementById('jual-jumlah').value), 
-        tipeBayar: tipeBayar, 
-        harga: hargaNum,
-        statusBayar: statusVal
-      };
-      
-      const newSale = {
-          row: Date.now(), 
-          tanggal: data.tanggal,
-          tipe: data.tipe,
-          nama: data.nama,
-          situs: data.situs,
-          rokok: data.rokok,
-          jumlah: data.jumlah,
-          jumlahTxt: data.jumlah + (data.tipe === 'Eceran' ? ' Bungkus' : ' Slop'),
-          tipeBayar: data.tipeBayar,
-          harga: data.harga,
-          statusBayar: data.statusBayar
-      };
-      
-      selectedMonth = getMonthFromDate(data.tanggal);
-      document.getElementById('month-filter').value = selectedMonth;
-
-      dashboardState.allSales.push(newSale);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      renderDashboard(dashboardState);
-
-      document.getElementById('jual-nama').value = ""; 
-      document.getElementById('jual-situs').value = ""; 
-      document.getElementById('jual-jumlah').value = "";
-      document.getElementById('jual-harga').innerText = "៛ 0";
-      showToast("Transaksi tersimpan!", "success");
-
-      const res = await apiCall('savePenjualan', { payload: data });
-      if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
-      
-      // PERBAIKAN: Update state di background tapi TIDAK re-render untuk mencegah data hilang (flicker)
-      if(res.dashboard) { 
-        dashboardState = res.dashboard; 
-        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      }
-    }
-
-    async function saveAmbilStok() {
-      const tglVal = document.getElementById('stok-tanggal').value;
-      let tglIso;
-      if (tglVal) {
-          let parts = tglVal.split('-');
-          tglIso = new Date(parts[0], parts[1] - 1, parts[2]).toISOString();
-      } else {
-          tglIso = new Date().toISOString();
-      }
-
-      const data = { 
-        tanggal: tglIso,
-        rokok: document.getElementById('stok-rokok').value, 
-        jumlah: parseFloat(document.getElementById('stok-jumlah').value), 
-        modal: parseFloat(document.getElementById('stok-modal').value.replace(/\./g, '')) || 0,
-        tipe: "Masuk"
-      };
-      if(!data.rokok || !data.jumlah) { showToast("Lengkapi data rokok & jumlah!", "error"); return; }
-      
-      selectedMonth = getMonthFromDate(data.tanggal);
-      document.getElementById('month-filter').value = selectedMonth;
-
-      const newPengambilan = {
-          row: Date.now(), 
-          tanggal: data.tanggal,
-          rokok: data.rokok,
-          jumlah: data.jumlah,
-          modal: data.modal,
-          tipe: data.tipe
-      };
-
-      dashboardState.allPengambilan.push(newPengambilan);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      renderDashboard(dashboardState);
-
-      document.getElementById('stok-jumlah').value = ""; document.getElementById('stok-modal').value = "";
-      showToast("Pengambilan stok dicatat!", "success");
-
-      const res = await apiCall('savePengambilan', { payload: data });
-      if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
-      if(res.dashboard) { 
-        dashboardState = res.dashboard; 
-        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      }
-    }
-
-    async function saveBukaSlop() {
-      const newTanggal = new Date().toISOString();
-      const data = { 
-        tanggal: newTanggal,
-        rokok: document.getElementById('buka-rokok').value, 
-        jumlah: parseFloat(document.getElementById('buka-jumlah').value), 
-        modal: 0,
-        tipe: "Buka Slop"
-      };
-      if(!data.rokok || !data.jumlah) { showToast("Lengkapi data buka slop!", "error"); return; }
-      
-      selectedMonth = getMonthFromDate(newTanggal);
-      document.getElementById('month-filter').value = selectedMonth;
-
-      const newPengambilan = {
-          row: Date.now(), 
-          tanggal: newTanggal,
-          rokok: data.rokok,
-          jumlah: data.jumlah,
-          modal: 0,
-          tipe: "Buka Slop"
-      };
-
-      dashboardState.allPengambilan.push(newPengambilan);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      renderDashboard(dashboardState);
-
-      document.getElementById('buka-jumlah').value = "";
-      showToast("Slop dibuka ke eceran!", "success");
-
-      const res = await apiCall('savePengambilan', { payload: data });
-      if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
-      if(res.dashboard) { 
-        dashboardState = res.dashboard; 
-        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      }
-    }
-
-    async function deletePengambilanData(row) {
-      if(!confirm('Yakin hapus data pengambilan ini?')) return;
-      
-      dashboardState.allPengambilan = dashboardState.allPengambilan.filter(p => p.row !== row);
-      renderDashboard(dashboardState);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      showToast("Menghapus pengambilan...", "success");
-
-      const res = await apiCall('deletePengambilan', { payload: { row: row } });
-      if(res.error) { 
-        showToast("Gagal hapus, memuat ulang data...", "error"); 
-        return; 
-      }
-      
-      dashboardState = res.dashboard;
-      if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState)); // No renderDashboard
-    }
-
-    function editPengambilanData(row) {
-      let data = dashboardState.allPengambilan.find(p => p.row === row);
-      if(!data) {
-          showToast("Data tidak ditemukan, memuat ulang halaman...", "error");
-          loadDashboardSilent();
-          return;
-      }
-      
-      const newJumlah = prompt(`Edit Jumlah Slop untuk ${data.rokok}:`, data.jumlah);
-      if (newJumlah === null) return;
-      
-      const newModalStr = prompt(`Edit Modal Per Slop (៛) untuk ${data.rokok}:`, data.modal);
-      if (newModalStr === null) return;
-      
-      const newJumlahNum = parseFloat(newJumlah) || 0;
-      const newModalNum = parseFloat(newModalStr.replace(/\D/g, '')) || 0;
-
-      if(newJumlahNum === data.jumlah && newModalNum === data.modal) {
-        showToast("Tidak ada perubahan.", "success");
-        return;
-      }
-
-      data.jumlah = newJumlahNum;
-      data.modal = newModalNum;
-      renderDashboard(dashboardState);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      showToast("Mengupdate pengambilan...", "success");
-
-      apiCall('updatePengambilan', { payload: { row: row, jumlah: newJumlahNum, modal: newModalNum } })
-      .then(res => {
-        if(res.error) { showToast("Gagal update, memuat ulang...", "error"); return; }
-        
-        dashboardState = res.dashboard;
-        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState)); // No renderDashboard
-      });
-    }
-
-    async function saveCrosscheck() {
-      const catatan = document.getElementById('cc-catatan').value;
-      const jam = document.getElementById('cc-jam').value;
-      const status = document.getElementById('cc-status').value;
-      const jmlSelisih = document.getElementById('cc-jml-selisih').value || 0;
-      const ketSelisih = document.getElementById('cc-ket-selisih').value;
-      if(!jam) { showToast("Jam wajib diisi!", "error"); return; }
-      
-      const newTanggal = new Date().toISOString();
-      const data = { jam: jam, status: status, catatan: catatan, tipe: currentCCTipe, jmlSelisih: jmlSelisih, ketSelisih: ketSelisih };
-
-      selectedMonth = getMonthFromDate(newTanggal);
-      document.getElementById('month-filter').value = selectedMonth;
-
-      const newCC = { tanggal: newTanggal, ...data };
-      dashboardState.allCrosscheck.push(newCC);
-      localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      renderDashboard(dashboardState);
-
-      document.getElementById('cc-jam').value = "";
-      document.getElementById('cc-catatan').value = "";
-      document.getElementById('cc-jml-selisih').value = "";
-      document.getElementById('cc-ket-selisih').value = "-";
-      showToast("Crosscheck disimpan!", "success");
-
-      const res = await apiCall('saveCrosscheck', { payload: data });
-      if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
-      if(res.dashboard) { 
-        dashboardState = res.dashboard; 
-        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
-      }
-    }
-
-    async function copyBarcodeImage() {
-      if(!BARCODE_LINK || BARCODE_LINK === 'PASTE_LINK_GAMBAR_BARCODE_DISINI') { 
-        showToast("Link barcode belum diisi di script!", "error"); 
-        return; 
-      }
-      try {
-        const img = document.getElementById('barcode-img');
-        if(!img.complete || img.naturalWidth === 0) {
-          showToast("Gambar belum selesai dimuat.", "error");
-          return;
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        canvas.toBlob(async (blob) => {
-          try {
-            await navigator.clipboard.write([
-              new ClipboardItem({ 'image/png': blob })
-            ]);
-            showToast("Gambar barcode berhasil di-copy!", "success");
-          } catch (err) {
-            console.error('Clipboard write error:', err);
-            showToast("Browser memblokir copy gambar. Coba klik kanan gambar -> Copy Image.", "error");
-          }
-        });
-      } catch (err) {
-        console.error('Canvas draw error:', err);
-        showToast("Gagal copy gambar. Link mungkin bermasalah.", "error");
-      }
-    }
   </script>
 </body>
 </html>
