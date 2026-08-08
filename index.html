@@ -587,7 +587,6 @@
       else { input.value = ''; }
     }
 
-    // PERBAIKAN: Cek bulan berdasarkan waktu lokal agar sesuai input kalender
     function getMonthFromDate(dateStr) {
       if(!dateStr) return "";
       let d = new Date(dateStr);
@@ -1373,7 +1372,7 @@
 
     async function saveAmbilStok() {
       const tglVal = document.getElementById('stok-tanggal').value;
-      // PERBAIKAN: Pisahkan tanggal agar tidak terjadi pergeseran timezone (mundur ke bulan sebelumnya)
+      // Pisahkan tanggal agar tidak terjadi pergeseran timezone (mundur ke bulan sebelumnya)
       let tglIso;
       if (tglVal) {
           let parts = tglVal.split('-');
@@ -1544,4 +1543,53 @@
 
       document.getElementById('cc-jam').value = "";
       document.getElementById('cc-catatan').value = "";
-      document.getElementById('cc-jml-selis
+      document.getElementById('cc-jml-selisih').value = "";
+      document.getElementById('cc-ket-selisih').value = "-";
+      showToast("Crosscheck disimpan!", "success");
+
+      const res = await apiCall('saveCrosscheck', { payload: data });
+      if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
+      if(res.dashboard) { 
+        dashboardState = res.dashboard; 
+        if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
+        renderDashboard(dashboardState); 
+        localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
+      }
+    }
+
+    // FUNGSI COPY GAMBAR BARCODE ABA (BISA DI PASTE LANGSUNG DI WA/TELEGRAM)
+    async function copyBarcodeImage() {
+      if(!BARCODE_LINK || BARCODE_LINK === 'PASTE_LINK_GAMBAR_BARCODE_DISINI') { 
+        showToast("Link barcode belum diisi di script!", "error"); 
+        return; 
+      }
+      try {
+        const img = document.getElementById('barcode-img');
+        if(!img.complete || img.naturalWidth === 0) {
+          showToast("Gambar belum selesai dimuat.", "error");
+          return;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob(async (blob) => {
+          try {
+            await navigator.clipboard.write([
+              new ClipboardItem({ 'image/png': blob })
+            ]);
+            showToast("Gambar barcode berhasil di-copy!", "success");
+          } catch (err) {
+            console.error('Clipboard write error:', err);
+            showToast("Browser memblokir copy gambar. Coba klik kanan gambar -> Copy Image.", "error");
+          }
+        });
+      } catch (err) {
+        console.error('Canvas draw error:', err);
+        showToast("Gagal copy gambar. Link mungkin bermasalah.", "error");
+      }
+    }
+  </script>
+</body>
+</html>
