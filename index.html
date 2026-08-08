@@ -57,7 +57,6 @@
     @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
     
     th { color: #94a3b8; font-weight: 600; vertical-align: middle; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem; }
-    /* PERBAIKAN: Bisa di-copy di HP */
     td { color: #f1f5f9; font-weight: 500; vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1rem; -webkit-user-select: text; user-select: text; }
     td.text-left { text-align: left; }
     th.text-left { text-align: left; }
@@ -207,7 +206,6 @@
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="premium-card p-6 md:p-8">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                <!-- PERBAIKAN: Input Tanggal Ditambahkan -->
                 <div><label class="label-dark">TANGGAL TRANSAKSI</label><input type="date" id="jual-tanggal" class="p-3 input-dark transition-all"></div>
                 <div><label class="label-dark">NAMA PEMBELI (WAJIB)</label><input type="text" id="jual-nama" class="p-3 input-dark transition-all" placeholder="Masukkan nama"></div>
                 <div id="wrapper-situs"><label class="label-dark">NAMA SITUS (WAJIB)</label><input type="text" id="jual-situs" class="p-3 input-dark transition-all" placeholder="Contoh: DANATOTO"></div>
@@ -586,9 +584,35 @@
       else { input.value = ''; }
     }
 
+    // PERBAIKAN: Parser tanggal yang jauh lebih kuat anti-error timezone
     function getMonthFromDate(dateStr) {
-      if(!dateStr) return "";
-      let d = new Date(dateStr);
+      if (!dateStr) return "";
+      let d;
+      if (dateStr instanceof Date) {
+        d = dateStr;
+      } else if (typeof dateStr === 'string') {
+        if (dateStr.includes('T')) {
+          // Format ISO (e.g., "2026-08-09T17:00:00.000Z")
+          d = new Date(dateStr);
+        } else {
+          // Format tanggal lokal (e.g., "8/9/2026" or "2026-08-09")
+          const parts = dateStr.split(/[-/]/);
+          if (parts.length === 3) {
+            if (parts[0].length === 4) {
+              // YYYY-MM-DD
+              d = new Date(parts[0], parts[1] - 1, parts[2]);
+            } else {
+              // Asumsi DD/MM/YYYY (Indonesia)
+              d = new Date(parts[2], parts[1] - 1, parts[0]);
+            }
+          } else {
+            d = new Date(dateStr); // Fallback
+          }
+        }
+      } else {
+        d = new Date(dateStr);
+      }
+      
       if (isNaN(d.getTime())) return "";
       return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
     }
@@ -596,6 +620,7 @@
     function formatFullDate(dateStr, withTime = true) {
       if(!dateStr) return "-";
       const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr; // Return as is if invalid
       const date = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
       if(withTime) {
         const time = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
@@ -855,7 +880,6 @@
         const selBayar = document.getElementById('jual-tipebayar');
         const titleRekap = document.getElementById('title-rekap-jual');
         
-        // PERBAIKAN: Filter Tipe Bayar biar UM ngga muncul di Cash/Eceran
         if(customArg === 'Perslop Cash') { 
           currentJualTipe = 'Perslop'; currentJualFilter = 'Cash';
           lblJumlah.innerText = "JUMLAH SLOP"; inputJumlah.placeholder = "1 Slop, 2 Slop..."; 
@@ -1141,7 +1165,7 @@
           <div class="flex flex-col gap-1 items-center">
             <select onchange='updateJualStatus(${u.row}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
               <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM CAIR</option>
-              <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDOH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
+              <option value="SUDOH BAYAR CASH" ${u.statusBayar === 'SUDOH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
               <option value="SUDOH BAYAR ABA" ${u.statusBayar === 'SUDOH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
             </select>
             <button onclick='deleteJualData(${u.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
@@ -1175,7 +1199,7 @@
         
         let total = 0;
         allSales.forEach(u => {
-          if(getMonthFromDate(u.tanggal) === monthStr && (u.statusBayar === 'SUDAH BAYAR CASH' || u.statusBayar === 'SUDOH BAYAR ABA')) {
+          if(getMonthFromDate(u.tanggal) === monthStr && (u.statusBayar === 'SUDOH BAYAR CASH' || u.statusBayar === 'SUDOH BAYAR ABA')) {
             total += u.harga;
           }
         });
@@ -1368,10 +1392,11 @@
 
       const res = await apiCall('savePenjualan', { payload: data });
       if(res.error) { showToast("Gagal simpan ke server.", "error"); return; }
+      
+      // PERBAIKAN: Update state di background tapi TIDAK re-render untuk mencegah data hilang (flicker)
       if(res.dashboard) { 
         dashboardState = res.dashboard; 
         if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        renderDashboard(dashboardState); 
         localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       }
     }
@@ -1419,7 +1444,6 @@
       if(res.dashboard) { 
         dashboardState = res.dashboard; 
         if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        renderDashboard(dashboardState); 
         localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       }
     }
@@ -1459,7 +1483,6 @@
       if(res.dashboard) { 
         dashboardState = res.dashboard; 
         if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        renderDashboard(dashboardState); 
         localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       }
     }
@@ -1553,7 +1576,6 @@
       if(res.dashboard) { 
         dashboardState = res.dashboard; 
         if(dashboardState.masterMap) { masterData = dashboardState.masterMap; populateDropdowns(); renderListRokok(); localStorage.setItem('rokok_master_cache', JSON.stringify(masterData)); }
-        renderDashboard(dashboardState); 
         localStorage.setItem('rokok_dashboard_cache', JSON.stringify(dashboardState));
       }
     }
@@ -1587,9 +1609,4 @@
         });
       } catch (err) {
         console.error('Canvas draw error:', err);
-        showToast("Gagal copy gambar. Link mungkin bermasalah.", "error");
-      }
-    }
-  </script>
-</body>
-</html>
+        showToast("Gagal copy gambar
