@@ -22,7 +22,6 @@
     .hidden { display: none !important; }
     input, select, button { outline: none; }
     .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    /* PERBAIKAN: Font tabel diperbesar jadi 16px agar angka jelas */
     table { min-width: 100%; white-space: nowrap; border-collapse: collapse; font-size: 16px; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #1e293b; }
@@ -45,6 +44,7 @@
       color: #f8fafc; 
       border-radius: 10px;
       transition: all 0.2s ease;
+      width: 100%;
     }
     .input-dark:focus { 
       border-color: #3b82f6; 
@@ -52,12 +52,13 @@
       background: #0f172a;
     }
     
-    .label-dark { color: #94a3b8; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .label-dark { color: #94a3b8; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; display: block; }
     .toast { animation: toastIn 0.3s ease-out; }
     @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
     
-    th { color: #94a3b8; font-weight: 600; vertical-align: middle; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    td { color: #f1f5f9; font-weight: 500; vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    th { color: #94a3b8; font-weight: 600; vertical-align: middle; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem; }
+    /* PERBAIKAN: Bisa di-copy di HP */
+    td { color: #f1f5f9; font-weight: 500; vertical-align: middle; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1rem; -webkit-user-select: text; user-select: text; }
     td.text-left { text-align: left; }
     th.text-left { text-align: left; }
     
@@ -67,7 +68,7 @@
     .badge-purple { background: #a855f7; color: #ffffff; border: 1px solid #c084fc; }
     .badge-warning { background: #f59e0b; color: #000000; border: 1px solid #fbbf24; }
     
-    .filter-light { background: #f8fafc; color: #0f172a; border: 1px solid #cbd5e1; font-weight: 700; border-radius: 8px; }
+    .filter-light { background: #f8fafc; color: #0f172a; border: 1px solid #cbd5e1; font-weight: 700; border-radius: 8px; padding: 0.5rem; }
   </style>
 </head>
 <body class="text-slate-100">
@@ -86,14 +87,14 @@
       </div>
       <form onsubmit="doLogin(event)">
         <div class="mb-4">
-          <label class="block label-dark mb-2 ml-1">USERNAME</label>
+          <label class="label-dark">USERNAME</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fas fa-user"></i></span>
             <input type="text" id="username" class="w-full pl-11 pr-4 py-3.5 input-dark transition-all" placeholder="Masukkan username" required>
           </div>
         </div>
         <div class="mb-6">
-          <label class="block label-dark mb-2 ml-1">PASSWORD</label>
+          <label class="label-dark">PASSWORD</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fas fa-lock"></i></span>
             <input type="password" id="password" class="w-full pl-11 pr-12 py-3.5 input-dark transition-all" placeholder="Masukkan password" required>
@@ -178,14 +179,13 @@
         </div>
         <div class="flex items-center gap-2">
           <label class="text-xs text-slate-300 font-bold hidden md:block">FILTER BULAN:</label>
-          <input type="month" id="month-filter" onchange="applyMonthFilter()" class="p-2 filter-light text-sm">
+          <input type="month" id="month-filter" onchange="applyMonthFilter()" class="filter-light text-sm">
         </div>
       </header>
       <main class="flex-1 p-4 md:p-8">
 
         <!-- DASHBOARD -->
         <div id="page-dashboard" class="fade-in">
-          <!-- PERBAIKAN: Angka diperbesar (text-3xl) -->
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             <div class="premium-card p-5"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Pendapatan</p><i class="fas fa-arrow-trend-up text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-2xl md:text-3xl font-extrabold text-white" id="kas-total-pendapatan">៛ 0</p></div>
             <div class="premium-card p-5 border border-yellow-500/20"><div class="flex justify-between items-center mb-3"><p class="text-sm text-slate-300 font-semibold">Total Untung (Gabungan)</p><i class="fas fa-sack-dollar text-yellow-400 text-sm bg-yellow-500/10 p-2 rounded-lg"></i></div><p class="text-2xl md:text-3xl font-extrabold text-yellow-400" id="kas-untung">៛ 0</p></div>
@@ -207,13 +207,14 @@
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="premium-card p-6 md:p-8">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                <div><label class="block label-dark mb-2 ml-1">NAMA PEMBELI (WAJIB)</label><input type="text" id="jual-nama" class="w-full p-3 input-dark transition-all" placeholder="Masukkan nama"></div>
-                <div id="wrapper-situs"><label class="block label-dark mb-2 ml-1">NAMA SITUS (WAJIB)</label><input type="text" id="jual-situs" class="w-full p-3 input-dark transition-all" placeholder="Contoh: DANATOTO"></div>
-                <div><label class="block label-dark mb-2 ml-1">JENIS ROKOK</label><select id="jual-rokok" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark transition-all"><option value="">Pilih Rokok</option></select></div>
-                <div><label id="label-jumlah" class="block label-dark mb-2 ml-1">JUMLAH SLOP</label><input type="number" id="jual-jumlah" oninput="hitungHargaOtomatis()" class="w-full p-3 input-dark transition-all" placeholder="1 Slop, 2 Slop..."></div>
-                <div id="wrapper-tipe-bayar"><label class="block label-dark mb-2 ml-1">TIPE BAYAR</label><select id="jual-tipebayar" onchange="hitungHargaOtomatis()" class="w-full p-3 input-dark transition-all"><option value="Cash Riel">Cash Riel</option><option value="ABA">ABA</option><option value="Uang Makan">Uang Makan</option></select></div>
-                <!-- PERBAIKAN: Tambahan pilihan BELUM BAYAR -->
-                <div id="wrapper-status"><label class="block label-dark mb-2 ml-1">STATUS BAYAR</label><select id="jual-status" class="w-full p-3 input-dark transition-all"><option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option><option value="BELUM BAYAR">BELUM BAYAR</option></select></div>
+                <!-- PERBAIKAN: Input Tanggal Ditambahkan -->
+                <div><label class="label-dark">TANGGAL TRANSAKSI</label><input type="date" id="jual-tanggal" class="p-3 input-dark transition-all"></div>
+                <div><label class="label-dark">NAMA PEMBELI (WAJIB)</label><input type="text" id="jual-nama" class="p-3 input-dark transition-all" placeholder="Masukkan nama"></div>
+                <div id="wrapper-situs"><label class="label-dark">NAMA SITUS (WAJIB)</label><input type="text" id="jual-situs" class="p-3 input-dark transition-all" placeholder="Contoh: DANATOTO"></div>
+                <div><label class="label-dark">JENIS ROKOK</label><select id="jual-rokok" onchange="hitungHargaOtomatis()" class="p-3 input-dark transition-all"><option value="">Pilih Rokok</option></select></div>
+                <div><label id="label-jumlah" class="label-dark">JUMLAH SLOP</label><input type="number" id="jual-jumlah" oninput="hitungHargaOtomatis()" class="p-3 input-dark transition-all" placeholder="1 Slop, 2 Slop..."></div>
+                <div id="wrapper-tipe-bayar"><label class="label-dark">TIPE BAYAR</label><select id="jual-tipebayar" onchange="hitungHargaOtomatis()" class="p-3 input-dark transition-all"><option value="Cash Riel">Cash Riel</option><option value="ABA">ABA</option><option value="Uang Makan">Uang Makan</option></select></div>
+                <div id="wrapper-status"><label class="label-dark">STATUS BAYAR</label><select id="jual-status" class="p-3 input-dark transition-all"><option value="SUDAH BAYAR CASH">SUDAH BAYAR CASH</option><option value="SUDAH BAYAR ABA">SUDAH BAYAR ABA</option><option value="BELUM BAYAR">BELUM BAYAR</option></select></div>
               </div>
               <div class="bg-gradient-to-r from-blue-900/40 to-cyan-900/20 p-5 rounded-xl border border-blue-500/20 mb-6 flex justify-between items-center">
                 <span class="text-sm font-bold text-blue-300 uppercase tracking-wider">Total Harga</span><p class="text-2xl md:text-3xl font-extrabold text-yellow-400" id="jual-harga">៛ 0</p>
@@ -247,23 +248,23 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="premium-card p-6 md:col-span-1">
               <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-plus-circle text-blue-400"></i> Catat Pengambilan Stok</h3>
-              <label class="block label-dark mb-2 ml-1">TANGGAL PENGAMBILAN</label>
-              <input type="date" id="stok-tanggal" class="w-full p-3 mb-3 input-dark transition-all">
-              <label class="block label-dark mb-2 ml-1">JENIS ROKOK</label>
-              <select id="stok-rokok" class="w-full p-3 mb-3 input-dark transition-all"></select>
-              <label class="block label-dark mb-2 ml-1">JUMLAH SLOP DIAMBIL</label>
-              <input type="number" id="stok-jumlah" class="w-full p-3 mb-3 input-dark transition-all" placeholder="Jumlah Slop Diambil">
-              <label class="block label-dark mb-2 ml-1">MODAL HARGA BELI PER SLOP (៛)</label>
-              <input type="text" inputmode="numeric" id="stok-modal" oninput="formatNumber(this)" class="w-full p-3 mb-4 input-dark transition-all" placeholder="Modal Harga Beli Per Slop (៛)">
+              <label class="label-dark">TANGGAL PENGAMBILAN</label>
+              <input type="date" id="stok-tanggal" class="p-3 mb-3 input-dark transition-all">
+              <label class="label-dark">JENIS ROKOK</label>
+              <select id="stok-rokok" class="p-3 mb-3 input-dark transition-all"></select>
+              <label class="label-dark">JUMLAH SLOP DIAMBIL</label>
+              <input type="number" id="stok-jumlah" class="p-3 mb-3 input-dark transition-all" placeholder="Jumlah Slop Diambil">
+              <label class="label-dark">MODAL HARGA BELI PER SLOP (៛)</label>
+              <input type="text" inputmode="numeric" id="stok-modal" oninput="formatNumber(this)" class="p-3 mb-4 input-dark transition-all" placeholder="Modal Harga Beli Per Slop (៛)">
               <button onclick="saveAmbilStok()" id="btn-save-stok" class="w-full bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-xl font-bold active:scale-95 transition-all border border-slate-700">CATAT PENGAMBILAN</button>
             </div>
 
             <div class="premium-card p-6 md:col-span-1">
               <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-box-open text-purple-400"></i> Buka Slop ke Eceran</h3>
-              <label class="block label-dark mb-2 ml-1">JENIS ROKOK</label>
-              <select id="buka-rokok" class="w-full p-3 mb-3 input-dark transition-all"></select>
-              <label class="block label-dark mb-2 ml-1">JUMLAH SLOP DIBUKA</label>
-              <input type="number" id="buka-jumlah" class="w-full p-3 mb-3 input-dark transition-all" placeholder="Contoh: 1 (akan jadi 10 Bungkus)">
+              <label class="label-dark">JENIS ROKOK</label>
+              <select id="buka-rokok" class="p-3 mb-3 input-dark transition-all"></select>
+              <label class="label-dark">JUMLAH SLOP DIBUKA</label>
+              <input type="number" id="buka-jumlah" class="p-3 mb-3 input-dark transition-all" placeholder="Contoh: 1 (akan jadi 10 Bungkus)">
               <div class="bg-purple-500/10 p-3 rounded-xl mb-4 text-center text-sm text-purple-300">
                 Stok Perslop akan berkurang, Stok Eceran akan bertambah otomatis.
               </div>
@@ -337,19 +338,19 @@
            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="premium-card p-6">
               <h3 id="title-cc-form" class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-clock text-blue-400"></i> Form Crosscheck</h3>
-              <input type="text" id="cc-catatan" class="w-full p-3 mb-3 input-dark transition-all" placeholder="Nama / Karyawan (Opsional)">
-              <input type="time" id="cc-jam" class="w-full p-3 mb-3 input-dark transition-all" required>
+              <input type="text" id="cc-catatan" class="p-3 mb-3 input-dark transition-all" placeholder="Nama / Karyawan (Opsional)">
+              <input type="time" id="cc-jam" class="p-3 mb-3 input-dark transition-all" required>
               <div class="mb-3">
-                <label class="block label-dark mb-2 ml-1">STATUS CEK</label>
-                <select id="cc-status" class="w-full p-3 input-dark transition-all"><option value="KLOP">KLOP (Sesuai Sistem)</option><option value="SELISIH">SELISIH (Beda)</option></select>
+                <label class="label-dark">STATUS CEK</label>
+                <select id="cc-status" class="p-3 input-dark transition-all"><option value="KLOP">KLOP (Sesuai Sistem)</option><option value="SELISIH">SELISIH (Beda)</option></select>
               </div>
               <div class="mb-3">
-                <label class="block label-dark mb-2 ml-1">JUMLAH SELISIH</label>
-                <input type="number" id="cc-jml-selisih" class="w-full p-3 input-dark transition-all" placeholder="0">
+                <label class="label-dark">JUMLAH SELISIH</label>
+                <input type="number" id="cc-jml-selisih" class="p-3 input-dark transition-all" placeholder="0">
               </div>
               <div class="mb-3">
-                <label class="block label-dark mb-2 ml-1">KETERANGAN SELISIH</label>
-                <select id="cc-ket-selisih" class="w-full p-3 input-dark transition-all"><option value="-">-</option><option value="Kurang">Kurang</option><option value="Lebih">Lebih</option></select>
+                <label class="label-dark">KETERANGAN SELISIH</label>
+                <select id="cc-ket-selisih" class="p-3 input-dark transition-all"><option value="-">-</option><option value="Kurang">Kurang</option><option value="Lebih">Lebih</option></select>
               </div>
               <button onclick="saveCrosscheck()" id="btn-save-cc" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-bold transition-all active:scale-95">SIMPAN CROSSCHECK</button>
             </div>
@@ -384,11 +385,11 @@
               <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-plus text-blue-400"></i> Kelola Rokok</h3>
               <div class="grid grid-cols-1 gap-3 mb-4">
                 <input type="hidden" id="m-id">
-                <input type="text" id="m-nama" class="w-full p-3 input-dark rounded-xl" placeholder="Nama Rokok">
-                <input type="text" inputmode="numeric" id="m-modal" oninput="formatNumber(this)" class="w-full p-3 input-dark rounded-xl" placeholder="Modal / Slop (៛)">
-                <input type="text" inputmode="numeric" id="m-cash" oninput="formatNumber(this)" class="w-full p-3 input-dark rounded-xl" placeholder="Harga Cash Riel / Slop (៛)">
-                <input type="text" inputmode="numeric" id="m-um" oninput="formatNumber(this)" class="w-full p-3 input-dark rounded-xl" placeholder="Harga Uang Makan / Slop (៛)">
-                <input type="text" inputmode="numeric" id="m-eceran" oninput="formatNumber(this)" class="w-full p-3 input-dark rounded-xl" placeholder="Harga Eceran / Bungkus (៛)">
+                <input type="text" id="m-nama" class="p-3 input-dark rounded-xl" placeholder="Nama Rokok">
+                <input type="text" inputmode="numeric" id="m-modal" oninput="formatNumber(this)" class="p-3 input-dark rounded-xl" placeholder="Modal / Slop (៛)">
+                <input type="text" inputmode="numeric" id="m-cash" oninput="formatNumber(this)" class="p-3 input-dark rounded-xl" placeholder="Harga Cash Riel / Slop (៛)">
+                <input type="text" inputmode="numeric" id="m-um" oninput="formatNumber(this)" class="p-3 input-dark rounded-xl" placeholder="Harga Uang Makan / Slop (៛)">
+                <input type="text" inputmode="numeric" id="m-eceran" oninput="formatNumber(this)" class="p-3 input-dark rounded-xl" placeholder="Harga Eceran / Bungkus (៛)">
               </div>
               <div class="flex gap-2">
                 <button onclick="saveMaster()" id="btn-save-master" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-bold transition-all">SIMPAN ROKOK BARU</button>
@@ -625,6 +626,7 @@
 
     async function initApp() {
       document.getElementById('stok-tanggal').value = new Date().toISOString().slice(0, 10);
+      document.getElementById('jual-tanggal').value = new Date().toISOString().slice(0, 10);
 
       const cachedMaster = localStorage.getItem('rokok_master_cache');
       const cachedDashboard = localStorage.getItem('rokok_dashboard_cache');
@@ -853,10 +855,12 @@
         const selBayar = document.getElementById('jual-tipebayar');
         const titleRekap = document.getElementById('title-rekap-jual');
         
+        // PERBAIKAN: Filter Tipe Bayar biar UM ngga muncul di Cash/Eceran
         if(customArg === 'Perslop Cash') { 
           currentJualTipe = 'Perslop'; currentJualFilter = 'Cash';
           lblJumlah.innerText = "JUMLAH SLOP"; inputJumlah.placeholder = "1 Slop, 2 Slop..."; 
           wrapperBayar.classList.remove('hidden'); wrapperSitus.classList.remove('hidden'); wrapperStatus.classList.remove('hidden');
+          selBayar.innerHTML = '<option value="Cash Riel">Cash Riel</option><option value="ABA">ABA</option>';
           selBayar.value = 'Cash Riel'; titleRekap.innerText = "Riwayat Penjualan Cash / ABA";
           document.getElementById('page-title').innerText = 'Penjualan Perslop Cash'; 
         } 
@@ -864,6 +868,7 @@
           currentJualTipe = 'Perslop'; currentJualFilter = 'UM';
           lblJumlah.innerText = "JUMLAH SLOP"; inputJumlah.placeholder = "1 Slop, 2 Slop..."; 
           wrapperBayar.classList.add('hidden'); wrapperSitus.classList.remove('hidden'); wrapperStatus.classList.add('hidden'); 
+          selBayar.innerHTML = '<option value="Uang Makan">Uang Makan</option>';
           selBayar.value = 'Uang Makan'; titleRekap.innerText = "Riwayat Penjualan UM";
           document.getElementById('page-title').innerText = 'Penjualan Perslop Uang Makan'; 
         } 
@@ -871,6 +876,7 @@
           currentJualTipe = 'Eceran'; currentJualFilter = 'Eceran';
           lblJumlah.innerText = "JUMLAH BUNGKUS"; inputJumlah.placeholder = "1 Bungkus, 2 Bungkus..."; 
           wrapperBayar.classList.remove('hidden'); wrapperSitus.classList.add('hidden'); wrapperStatus.classList.remove('hidden');
+          selBayar.innerHTML = '<option value="Cash Riel">Cash Riel</option>';
           selBayar.value = 'Cash Riel'; titleRekap.innerText = "Riwayat Penjualan Eceran";
           document.getElementById('page-title').innerText = 'Penjualan Rokok Eceran'; 
         }
@@ -1019,7 +1025,6 @@
           bukaEceranBulanIni, terjualEceranBulanIni, sisaEceranSaatIni 
         });
         
-        // PERBAIKAN: Angka tabel diperbesar (text-xl)
         tbStok.innerHTML += `<tr class="hover:bg-slate-800/50">
           <td class="p-3 text-left font-semibold text-white">${namaRokok}</td>
           <td class="p-3 text-xl text-yellow-400">${masukBulanIni} Slop</td>
@@ -1136,8 +1141,8 @@
           <div class="flex flex-col gap-1 items-center">
             <select onchange='updateJualStatus(${u.row}, this.value)' class="p-2 input-dark rounded-lg text-xs font-bold w-full mb-1">
               <option value="BELUM BAYAR" ${u.statusBayar === 'BELUM BAYAR' ? 'selected' : ''}>BELUM CAIR</option>
-              <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDAH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
-              <option value="SUDAH BAYAR ABA" ${u.statusBayar === 'SUDOH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
+              <option value="SUDAH BAYAR CASH" ${u.statusBayar === 'SUDOH BAYAR CASH' ? 'selected' : ''}>CAIR CASH</option>
+              <option value="SUDOH BAYAR ABA" ${u.statusBayar === 'SUDOH BAYAR ABA' ? 'selected' : ''}>CAIR ABA</option>
             </select>
             <button onclick='deleteJualData(${u.row})' class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold w-full">HAPUS</button>
           </div>
@@ -1170,7 +1175,7 @@
         
         let total = 0;
         allSales.forEach(u => {
-          if(getMonthFromDate(u.tanggal) === monthStr && (u.statusBayar === 'SUDAH BAYAR CASH' || u.statusBayar === 'SUDAH BAYAR ABA')) {
+          if(getMonthFromDate(u.tanggal) === monthStr && (u.statusBayar === 'SUDAH BAYAR CASH' || u.statusBayar === 'SUDOH BAYAR ABA')) {
             total += u.harga;
           }
         });
@@ -1297,6 +1302,15 @@
     }
 
     async function saveJual() {
+      const tglVal = document.getElementById('jual-tanggal').value;
+      let tglIso;
+      if (tglVal) {
+          let parts = tglVal.split('-');
+          tglIso = new Date(parts[0], parts[1] - 1, parts[2]).toISOString();
+      } else {
+          tglIso = new Date().toISOString();
+      }
+
       const tipeBayar = document.getElementById('jual-tipebayar').value;
       const hargaText = document.getElementById('jual-harga').innerText;
       const hargaNum = parseInt(hargaText.replace(/\D/g, '')) || 0;
@@ -1304,16 +1318,17 @@
       const situsVal = document.getElementById('jual-situs').value;
       
       let statusVal = "";
-      if(tipeBayar !== "Uang Makan") {
-        statusVal = document.getElementById('jual-status').value;
+      if(tipeBayar === "Uang Makan") {
+          statusVal = "BELUM BAYAR";
       } else {
-        statusVal = "BELUM BAYAR";
+          statusVal = document.getElementById('jual-status').value;
       }
       
       if(!namaVal) { showToast("Nama pembeli wajib diisi!", "error"); return; }
       if(currentJualTipe === "Perslop" && !situsVal) { showToast("Nama situs wajib diisi!", "error"); return; }
       
       const data = { 
+        tanggal: tglIso,
         tipe: currentJualTipe, 
         nama: namaVal, 
         situs: currentJualTipe === "Eceran" ? "" : situsVal, 
@@ -1324,10 +1339,9 @@
         statusBayar: statusVal
       };
       
-      const newTanggal = new Date().toISOString();
       const newSale = {
           row: Date.now(), 
-          tanggal: newTanggal,
+          tanggal: data.tanggal,
           tipe: data.tipe,
           nama: data.nama,
           situs: data.situs,
@@ -1336,10 +1350,10 @@
           jumlahTxt: data.jumlah + (data.tipe === 'Eceran' ? ' Bungkus' : ' Slop'),
           tipeBayar: data.tipeBayar,
           harga: data.harga,
-          statusBayar: statusVal
+          statusBayar: data.statusBayar
       };
       
-      selectedMonth = getMonthFromDate(newTanggal);
+      selectedMonth = getMonthFromDate(data.tanggal);
       document.getElementById('month-filter').value = selectedMonth;
 
       dashboardState.allSales.push(newSale);
