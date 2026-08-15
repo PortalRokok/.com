@@ -176,7 +176,7 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
           <div class="gc gc2 p-6"><div class="flex items-center gap-3 mb-3"><div class="si bg-cyan-500/10 text-cyan-400"><i class="fas fa-box-open"></i></div><p class="d-label">Slop Terjual</p></div><p class="d-value text-cyan-400" id="d-slop">0 Slop</p></div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="gc gb p-6"><div class="flex items-center gap-3 mb-3"><div class="si bg-blue-500/10 text-blue-400"><i class="fas fa-building-columns"></i></div><p class="d-label">Pembayaran ABA</p></div><p class="d-value text-blue-400" id="d-aba">฿0</p></div>
+          <div class="gc gb p-6"><div class="flex items-center gap-3 mb-3"><div class="si bg-blue-500/10 text-blue-400"><i class="fas fa-building-columns"></i></div><p class="d-label">Pembayaran ABA / Cash</p></div><p class="d-value text-blue-400" id="d-aba">฿0</p></div>
           <div class="gc gpk p-6"><div class="flex items-center gap-3 mb-3"><div class="si bg-pink-500/10 text-pink-400"><i class="fas fa-utensils"></i></div><p class="d-label">Uang Makan Belum Cair</p></div><p class="d-value text-pink-400" id="d-um">฿0</p></div>
         </div>
         <div class="gc gpk p-6">
@@ -195,8 +195,8 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
               <div id="wrap-situs"><label class="ls">Nama Situs</label><input type="text" id="jual-situs" class="is" placeholder="Opsional"></div>
               <div><label class="ls">Jenis Rokok</label><select id="jual-rokok" class="is"><option value="">Pilih Rokok</option></select></div>
               <div><label id="label-jml" class="ls">Jumlah Slop</label><input type="number" id="jual-jml" class="is" placeholder="0 Slop" min="1"></div>
-              <div id="wrap-tipebayar"><label class="ls">Tipe Bayar</label><select id="jual-tipebayar" class="is"><option value="CASH">CASH</option></select></div>
-              <div id="wrap-status"><label class="ls">Status Bayar</label><select id="jual-status" class="is"><option value="DONE BAYAR CASH">Done Bayar CASH</option><option value="BELUM BAYAR">Belum Bayar</option></select></div>
+              <div id="wrap-tipebayar"><label class="ls">Tipe Bayar</label><select id="jual-tipebayar" class="is"><option value="ABA">ABA</option></select></div>
+              <div id="wrap-status"><label class="ls">Status Bayar</label><select id="jual-status" class="is"><option value="DONE BAYAR ABA">Done Bayar ABA</option><option value="BELUM BAYAR">Belum Bayar</option></select></div>
             </div>
             <div class="bg-gradient-to-r from-cyan-900/30 to-cyan-600/10 p-5 rounded-2xl border border-cyan-500/20 mb-6 flex justify-between items-center">
               <span class="text-xs font-bold text-cyan-300 uppercase tracking-widest">Total Harga</span>
@@ -316,7 +316,7 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
             <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-wallet text-blue-400"></i> Detail Kas</h3>
             <div class="space-y-3">
               <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Total Pendapatan</span><span class="font-bold text-lg text-white" id="kas-total">฿0</span></div>
-              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Pembayaran ABA</span><span class="font-bold text-lg text-blue-400" id="kas-aba">฿0</span></div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Pembayaran ABA / Cash</span><span class="font-bold text-lg text-blue-400" id="kas-aba">฿0</span></div>
               <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Uang Makan Belum Cair</span><span class="font-bold text-lg text-pink-400" id="kas-um">฿0</span></div>
             </div>
           </div>
@@ -493,7 +493,7 @@ function renderDashboard(){
     totalP+=harga;
     if(j.tipe==='Eceran'){untungEceran+=harga-(mp/10*j.jumlah);}
     else{untungSlop+=harga-(mp*j.jumlah);totalSlop+=j.jumlah;}
-    if(j.tipeBayar==='ABA')abaTotal+=harga;
+    if(j.tipeBayar==='ABA' || j.tipeBayar==='CASH')abaTotal+=harga;
     else if(j.tipeBayar==='Uang Makan'){if(!j.statusBayar||!j.statusBayar.includes('CAIR'))umBelumCair+=harga;}
   });
   document.getElementById('d-pendapatan').innerText=Bt(totalP);
@@ -512,7 +512,7 @@ function renderChart(){
   const months=[];const now=new Date();
   for(let i=5;i>=0;i--){const dt=new Date(now.getFullYear(),now.getMonth()-i,1);months.push(dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0'));}
   const labels=months.map(m=>{const p=m.split('-');const b=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];return b[parseInt(p[1])-1]+' '+p[0].slice(2);});
-  const dataABA=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&j.tipeBayar==='ABA').reduce((s,j)=>s+(j.harga||0),0));
+  const dataABA=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&(j.tipeBayar==='ABA'||j.tipeBayar==='CASH')).reduce((s,j)=>s+(j.harga||0),0));
   const dataUM=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&j.tipeBayar==='Uang Makan').reduce((s,j)=>s+(j.harga||0),0));
   const dataEceran=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&j.tipe==='Eceran').reduce((s,j)=>s+(j.harga||0),0));
   const ctx=document.getElementById('salesChart').getContext('2d');
@@ -523,7 +523,7 @@ function renderChart(){
   salesChart=new Chart(ctx,{
     type:'bar',
     data:{labels:labels,datasets:[
-      {label:'ABA',data:dataABA,backgroundColor:gradABA,borderColor:'#3b82f6',borderWidth:2,borderRadius:8,hoverBackgroundColor:'#3b82f6'},
+      {label:'ABA / Cash',data:dataABA,backgroundColor:gradABA,borderColor:'#3b82f6',borderWidth:2,borderRadius:8,hoverBackgroundColor:'#3b82f6'},
       {label:'Uang Makan',data:dataUM,backgroundColor:gradUM,borderColor:'#ec4899',borderWidth:2,borderRadius:8,hoverBackgroundColor:'#ec4899'},
       {label:'Eceran',data:dataEceran,backgroundColor:gradEceran,borderColor:'#a855f7',borderWidth:2,borderRadius:8,hoverBackgroundColor:'#a855f7'}
     ]},
@@ -542,8 +542,8 @@ function setupJualForm(){
 
   if(curJualTipe==='Eceran'){
     wSitus.style.display='none';lJml.innerText='Jumlah Bungkus';jmlInput.placeholder='0 Bungkus';wTB.style.display='block';wSt.style.display='block';
-    document.getElementById('jual-tipebayar').innerHTML='<option value="ABA">ABA</option>';
-    document.getElementById('jual-status').innerHTML='<option value="DONE BAYAR ABA">Done Bayar ABA</option><option value="BELUM BAYAR">Belum Bayar</option>';
+    document.getElementById('jual-tipebayar').innerHTML='<option value="CASH">CASH</option><option value="ABA">ABA</option>';
+    document.getElementById('jual-status').innerHTML='<option value="DONE BAYAR CASH">Done Bayar Cash</option><option value="DONE BAYAR ABA">Done Bayar ABA</option><option value="BELUM BAYAR">Belum Bayar</option>';
     riwayatCard.classList.remove('hidden');jualGrid.classList.add('lg:grid-cols-2');
   }else if(curJualFilter==='UM'){
     wSitus.style.display='block';lJml.innerText='Jumlah Slop';jmlInput.placeholder='0 Slop';wTB.style.display='block';wSt.style.display='none';
@@ -552,8 +552,8 @@ function setupJualForm(){
     riwayatCard.classList.add('hidden');jualGrid.classList.remove('lg:grid-cols-2');jualGrid.classList.add('lg:grid-cols-1', 'max-w-2xl', 'mx-auto');
   }else{
     wSitus.style.display='block';lJml.innerText='Jumlah Slop';jmlInput.placeholder='0 Slop';wTB.style.display='block';wSt.style.display='block';
-    document.getElementById('jual-tipebayar').innerHTML='<option value="ABA">ABA</option>';
-    document.getElementById('jual-status').innerHTML='<option value="DONE BAYAR ABA">Done Bayar ABA</option><option value="BELUM BAYAR">Belum Bayar</option>';
+    document.getElementById('jual-tipebayar').innerHTML='<option value="CASH">CASH</option><option value="ABA">ABA</option>';
+    document.getElementById('jual-status').innerHTML='<option value="DONE BAYAR CASH">Done Bayar Cash</option><option value="DONE BAYAR ABA">Done Bayar ABA</option><option value="BELUM BAYAR">Belum Bayar</option>';
     riwayatCard.classList.remove('hidden');jualGrid.classList.add('lg:grid-cols-2');jualGrid.classList.remove('lg:grid-cols-1', 'max-w-2xl', 'mx-auto');
   }
   populateDropdowns(); 
@@ -568,7 +568,11 @@ function hitungOtomatis(){
   const m=masterData[rok];if(!m){document.getElementById('jual-harga').innerText='฿0';return;}
   let harga=0;
   if(curJualTipe==='Eceran'){harga=(m.eceran||0)*jml;}
-  else{if(tb==='ABA')harga=(m.cashRiel||0)*jml;else if(tb==='Uang Makan')harga=(m.um||0)*jml;else harga=(m.cashRiel||0)*jml;}
+  else{
+    if(tb==='ABA' || tb==='CASH')harga=(m.cashRiel||0)*jml;
+    else if(tb==='Uang Makan')harga=(m.um||0)*jml;
+    else harga=(m.cashRiel||0)*jml;
+  }
   document.getElementById('jual-harga').innerText=Bt(harga);
 }
 
@@ -584,7 +588,7 @@ async function saveJual(){
   const m=masterData[rok]||{};
   let harga=0;
   if(curJualTipe==='Eceran'){harga=(m.eceran||0)*jml;}
-  else{if(tb==='ABA')harga=(m.cashRiel||0)*jml;else if(tb==='Uang Makan')harga=(m.um||0)*jml;}
+  else{if(tb==='ABA'||tb==='CASH')harga=(m.cashRiel||0)*jml;else if(tb==='Uang Makan')harga=(m.um||0)*jml;}
   const payload={tipe:curJualTipe,nama:nama,situs:document.getElementById('jual-situs').value.trim(),rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st};
   setLoading('btn-save-jual',true);
   const res=await api('savePenjualan',{payload:payload});
@@ -603,7 +607,7 @@ function renderJualTable(){
   if(curJualTipe==='Eceran')list=list.filter(x=>x.tipe==='Eceran');
   else list=list.filter(x=>x.tipe==='Perslop');
   if(curJualFilter==='UM')list=list.filter(x=>x.tipeBayar==='Uang Makan');
-  else if(curJualFilter==='ABA')list=list.filter(x=>x.tipeBayar==='ABA');
+  else if(curJualFilter==='ABA')list=list.filter(x=>x.tipeBayar==='ABA'||x.tipeBayar==='CASH');
   const titleEl=document.getElementById('title-rekap-jual');
   if(curJualFilter==='UM')titleEl.innerHTML='<i class="fas fa-receipt"></i> Riwayat Penjualan Uang Makan';
   else if(curJualTipe==='Eceran')titleEl.innerHTML='<i class="fas fa-receipt"></i> Riwayat Penjualan Eceran';
@@ -860,7 +864,7 @@ function renderKas(){
     if(j.tipe==='Eceran'){hModal=mp/10*j.jumlah;} else {hModal=mp*j.jumlah;}
     modal+=hModal;
     untung+=j.harga-hModal;
-    if(j.tipeBayar==='ABA')abaTotal+=j.harga;
+    if(j.tipeBayar==='ABA' || j.tipeBayar==='CASH')abaTotal+=j.harga;
     else if(j.tipeBayar==='Uang Makan'){if(!j.statusBayar||!j.statusBayar.includes('CAIR'))umBelum+=j.harga;}
   });
   document.getElementById('kas-pendapatan').innerText=Bt(totalP);
