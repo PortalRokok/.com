@@ -277,10 +277,17 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
               <button onclick="cancelEdit()" id="btn-cancel-edit" class="hidden bs flex-1">BATAL</button>
             </div>
           </div>
+          
           <div class="gc gc2 p-6 flex flex-col">
             <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-share-nodes text-cyan-400"></i> Format List Buat Share</h3>
-            <div id="text-share" class="bg-[rgba(5,8,18,0.6)] p-4 rounded-2xl mb-4 text-sm text-slate-300 whitespace-pre-wrap flex-1 overflow-auto max-h-80 border border-white/5"></div>
-            <button onclick="copyText('text-share')" class="bp w-full"><i class="fas fa-copy mr-2"></i> COPY TEXT</button>
+            
+            <label class="ls text-cyan-400">Text 1 (Eceran)</label>
+            <div id="text-share-1" class="bg-[rgba(5,8,18,0.6)] p-4 rounded-2xl mb-3 text-sm text-slate-300 whitespace-pre-wrap flex-1 overflow-auto max-h-40 border border-white/5"></div>
+            <button onclick="copyText('text-share-1')" class="bp w-full mb-4"><i class="fas fa-copy mr-2"></i> COPY TEXT 1</button>
+            
+            <label class="ls text-purple-400">Text 2 (Perslop)</label>
+            <div id="text-share-2" class="bg-[rgba(5,8,18,0.6)] p-4 rounded-2xl mb-3 text-sm text-slate-300 whitespace-pre-wrap flex-1 overflow-auto max-h-40 border border-white/5"></div>
+            <button onclick="copyText('text-share-2')" class="bp w-full"><i class="fas fa-copy mr-2"></i> COPY TEXT 2</button>
           </div>
         </div>
         <div class="gc flex flex-col overflow-hidden"><h4 class="st"><i class="fas fa-list"></i> Daftar Harga Rokok</h4><div class="sa"><table class="text-center"><thead><tr><th class="text-left">Nama Rokok</th><th>Modal</th><th>Cash</th><th>Uang Makan</th><th>Eceran</th><th>Aksi</th></tr></thead><tbody id="tb-rokok"></tbody></table></div></div>
@@ -728,23 +735,27 @@ function renderListRokok(){
 }
 
 function generateShareText(){
-  let txt="🚬 READY ROKOK INDO PERSLOP/BUNGKUS!🚬\n";
+  let txt1 = "🚬 SEMUA ROKOK READY STOK!🚬\n\nREADY ROKOK INDO ECERAN\n\n";
+  let txt2 = "🚬 SEMUA ROKOK READY STOK!🚬\n\nREADY ROKOK INDO PERSLOP/BUNGKUS\n\n";
+  
   Object.keys(masterData).sort().forEach(n=>{
     const m=masterData[n];
     if(m.eceran > 0) {
-      txt+=`${n} - ${Bt(m.eceran)}/Bungkus\n`;
+      txt1 += `${n} - ${Bt(m.eceran)}/Bungkus\n`;
     }
   });
-  txt+="\n";
+  
   Object.keys(masterData).sort().forEach(n=>{
     const m=masterData[n];
     if(m.cashRiel > 0 || m.um > 0) {
-      txt+=`• ${n}\n`;
-      if(m.cashRiel > 0) txt+=`Cash: ${Bt(m.cashRiel)} riel /Slop\n`;
-      if(m.um > 0) txt+=`Pembayaran uang makan: ${Bt(m.um)} riel/Slop\n`;
+      txt2 += `• ${n}\n`;
+      if(m.cashRiel > 0) txt2 += `Cash: ${Bt(m.cashRiel)} riel /Slop\n`;
+      if(m.um > 0) txt2 += `Pembayaran uang makan: ${Bt(m.um)} riel/Slop\n`;
     }
   });
-  document.getElementById('text-share').innerText=txt;
+  
+  document.getElementById('text-share-1').innerText = txt1;
+  document.getElementById('text-share-2').innerText = txt2;
 }
 
 function editMaster(nama){
