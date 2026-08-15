@@ -212,7 +212,6 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 
       <!-- ===== DASHBOARD ===== -->
       <div id="page-dashboard" class="fi space-y-6">
-        <!-- Baris 1: Pendapatan & Untung -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="gc ga p-6 pg">
             <div class="flex items-center gap-3 mb-3">
@@ -229,7 +228,6 @@ tr:hover td{background:rgba(255,255,255,0.02)}
             <p class="d-value text-green-400" id="d-untung">฿0</p>
           </div>
         </div>
-        <!-- Baris 2: Detail Untung -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="gc gb p-6">
             <div class="flex items-center gap-3 mb-3">
@@ -253,7 +251,6 @@ tr:hover td{background:rgba(255,255,255,0.02)}
             <p class="d-value text-cyan-400" id="d-slop">0 Slop</p>
           </div>
         </div>
-        <!-- Baris 3: Pembayaran -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="gc gb p-6">
             <div class="flex items-center gap-3 mb-3">
@@ -270,7 +267,6 @@ tr:hover td{background:rgba(255,255,255,0.02)}
             <p class="d-value text-pink-400" id="d-um">฿0</p>
           </div>
         </div>
-        <!-- Grafik -->
         <div class="gc gpk p-6">
           <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-chart-bar text-pink-400"></i> Grafik Penjualan 6 Bulan Terakhir</h3>
           <div style="height:320px;position:relative"><canvas id="salesChart"></canvas></div>
@@ -414,8 +410,8 @@ tr:hover td{background:rgba(255,255,255,0.02)}
             <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-wallet text-blue-400"></i> Detail Kas</h3>
             <div class="space-y-3">
               <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Total Pendapatan</span><span class="font-bold text-lg text-white" id="kas-total">฿0</span></div>
-              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Pembayaran ABA</span><span class="font-bold text-blue-400" id="kas-aba">฿0</span></div>
-              <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Uang Makan Belum Cair</span><span class="font-bold text-pink-400" id="kas-um">฿0</span></div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Pembayaran ABA</span><span class="font-bold text-lg text-blue-400" id="kas-aba">฿0</span></div>
+              <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Uang Makan Belum Cair</span><span class="font-bold text-lg text-pink-400" id="kas-um">฿0</span></div>
             </div>
           </div>
         </div>
@@ -441,8 +437,6 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 /* ====== KONFIGURASI ====== */
 const API='https://script.google.com/macros/s/AKfycby3LzFpitABqzfFs0oKeFiR_UQIc9kT1obpMKO47wXmmj6huv9cPdY1c6v-_AmpgIj6/exec';
 const BARCODE_URL='https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN';
-
-/* Format mata uang Baht Thailand */
 const Bt=(n)=>'฿'+(n||0).toLocaleString('th-TH');
 
 /* ====== STATE ====== */
@@ -1009,7 +1003,7 @@ function copyRowUM(tgl,nama,rokok,jml,harga){
   navigator.clipboard.writeText(txt).then(()=>toast('Baris disalin!'));
 }
 
-kapUM(){
+function copyRekapUM(){
   const txt=document.getElementById('rekap-um-text').innerText;
   navigator.clipboard.writeText(txt).then(()=>toast('Semua rekap disalin!'));
 }
