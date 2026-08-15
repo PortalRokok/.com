@@ -91,7 +91,7 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
       <h1 class="text-3xl font-extrabold tracking-tight text-blink">Gana Store</h1>
       <p class="text-sm text-slate-400 mt-2">Masuk untuk mengelola data toko</p>
     </div>
-    <form id="login-form">
+    <form id="login-form" onsubmit="return false;">
       <div class="mb-5">
         <label class="ls">Username</label>
         <div class="relative">
@@ -109,7 +109,7 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
           </button>
         </div>
       </div>
-      <button type="submit" class="bp w-full flex justify-center items-center gap-2"><span>MASUK</span></button>
+      <button type="button" onclick="doLogin()" class="bp w-full flex justify-center items-center gap-2"><span>MASUK</span></button>
     </form>
   </div>
 </div>
@@ -277,17 +277,10 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
               <button onclick="cancelEdit()" id="btn-cancel-edit" class="hidden bs flex-1">BATAL</button>
             </div>
           </div>
-          
           <div class="gc gc2 p-6 flex flex-col">
             <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-share-nodes text-cyan-400"></i> Format List Buat Share</h3>
-            
-            <label class="ls text-cyan-400">Text 1 (Eceran)</label>
-            <div id="text-share-1" class="bg-[rgba(5,8,18,0.6)] p-4 rounded-2xl mb-3 text-sm text-slate-300 whitespace-pre-wrap flex-1 overflow-auto max-h-40 border border-white/5"></div>
-            <button onclick="copyText('text-share-1')" class="bp w-full mb-4"><i class="fas fa-copy mr-2"></i> COPY TEXT 1</button>
-            
-            <label class="ls text-purple-400">Text 2 (Perslop)</label>
-            <div id="text-share-2" class="bg-[rgba(5,8,18,0.6)] p-4 rounded-2xl mb-3 text-sm text-slate-300 whitespace-pre-wrap flex-1 overflow-auto max-h-40 border border-white/5"></div>
-            <button onclick="copyText('text-share-2')" class="bp w-full"><i class="fas fa-copy mr-2"></i> COPY TEXT 2</button>
+            <div id="text-share" class="bg-[rgba(5,8,18,0.6)] p-4 rounded-2xl mb-4 text-sm text-slate-300 whitespace-pre-wrap flex-1 overflow-auto max-h-80 border border-white/5"></div>
+            <button onclick="copyText('text-share')" class="bp w-full"><i class="fas fa-copy mr-2"></i> COPY TEXT</button>
           </div>
         </div>
         <div class="gc flex flex-col overflow-hidden"><h4 class="st"><i class="fas fa-list"></i> Daftar Harga Rokok</h4><div class="sa"><table class="text-center"><thead><tr><th class="text-left">Nama Rokok</th><th>Modal</th><th>Cash</th><th>Uang Makan</th><th>Eceran</th><th>Aksi</th></tr></thead><tbody id="tb-rokok"></tbody></table></div></div>
@@ -366,7 +359,6 @@ imgBC.src=BARCODE_URL;
 document.getElementById('barcode-link').href=BARCODE_URL;
 imgBC.onerror=()=>{imgBC.style.display='none';};
 
-document.getElementById('login-form').addEventListener('submit',function(e){doLogin(e);});
 document.getElementById('toggle-pass-btn').addEventListener('click',togglePass);
 document.getElementById('close-sidebar-btn').addEventListener('click',toggleSidebar);
 document.getElementById('open-sidebar-btn').addEventListener('click',toggleSidebar);
@@ -392,8 +384,7 @@ function checkSession(){
   }
 }
 
-function doLogin(e){
-  e.preventDefault();e.stopPropagation();
+function doLogin(){
   const u=document.getElementById('username').value.trim();
   const p=document.getElementById('password').value.trim();
   if(u==='admin'&&p==='admin123'){
@@ -402,8 +393,9 @@ function doLogin(e){
     document.getElementById('app-view').classList.remove('hidden');
     document.getElementById('month-filter').value=selMonth;
     initApp();
-  }else{toast('Username atau Password salah!','error');}
-  return false;
+  }else{
+    toast('Username atau Password salah!','error');
+  }
 }
 function doLogout(){localStorage.removeItem('gs_session');location.reload();}
 function togglePass(){
@@ -735,27 +727,27 @@ function renderListRokok(){
 }
 
 function generateShareText(){
-  let txt1 = "🚬 SEMUA ROKOK READY STOK!🚬\n\nREADY ROKOK INDO ECERAN\n\n";
-  let txt2 = "🚬 SEMUA ROKOK READY STOK!🚬\n\nREADY ROKOK INDO PERSLOP/BUNGKUS\n\n";
+  let txt="🚬 SEMUA ROKOK READY STOK!🚬\n\n";
   
   Object.keys(masterData).sort().forEach(n=>{
     const m=masterData[n];
     if(m.eceran > 0) {
-      txt1 += `${n} - ${Bt(m.eceran)}/Bungkus\n`;
+      txt+=`${n} - ${Bt(m.eceran)}/Bungkus\n`;
     }
   });
+  
+  txt+="\n";
   
   Object.keys(masterData).sort().forEach(n=>{
     const m=masterData[n];
     if(m.cashRiel > 0 || m.um > 0) {
-      txt2 += `• ${n}\n`;
-      if(m.cashRiel > 0) txt2 += `Cash: ${Bt(m.cashRiel)} riel /Slop\n`;
-      if(m.um > 0) txt2 += `Pembayaran uang makan: ${Bt(m.um)} riel/Slop\n`;
+      txt+=`• ${n}\n`;
+      if(m.cashRiel > 0) txt+=`Cash: ${Bt(m.cashRiel)} riel /Slop\n`;
+      if(m.um > 0) txt+=`Pembayaran uang makan: ${Bt(m.um)} riel/Slop\n`;
     }
   });
   
-  document.getElementById('text-share-1').innerText = txt1;
-  document.getElementById('text-share-2').innerText = txt2;
+  document.getElementById('text-share').innerText=txt;
 }
 
 function editMaster(nama){
