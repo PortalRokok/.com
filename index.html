@@ -250,8 +250,8 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
             <button onclick="saveCrosscheck()" id="btn-save-cc" class="bp w-full">SIMPAN CROSSCHECK</button>
           </div>
           <div class="gc flex flex-col overflow-hidden md:col-span-2">
-            <h4 class="st"><i class="fas fa-table"></i> Stok Sistem</h4>
-            <div class="sa flex-1"><table class="text-center"><thead><tr><th class="text-left">Rokok</th><th>Terjual</th><th>Sisa</th></tr></thead><tbody id="tb-cc-stok"></tbody></table></div>
+            <h4 class="st"><i class="fas fa-table"></i> Stok Sistem (Bulan Ini)</h4>
+            <div class="sa flex-1"><table class="text-center"><thead><tr><th class="text-left">Jenis Rokok</th><th>Total Pengambilan</th><th>Terjual</th><th>Sisa</th></tr></thead><tbody id="tb-cc-stok"></tbody></table></div>
           </div>
         </div>
         <div class="gc flex flex-col overflow-hidden"><h4 class="st" style="color:#c084fc"><i class="fas fa-history"></i> Riwayat Crosscheck</h4><div class="sa"><table class="text-center"><thead><tr><th>Tanggal</th><th>Jam</th><th>Status</th><th>Jumlah Selisih</th><th>Keterangan</th><th>Catatan</th><th>Aksi</th></tr></thead><tbody id="tb-cc"></tbody></table></div></div>
@@ -704,6 +704,22 @@ async function saveCrosscheck(){
 function renderCrosscheck(){
   if(!dashState)return;
   const d=dashState,m=selMonth;
+  const tbStok=document.getElementById('tb-cc-stok');
+  tbStok.innerHTML='';
+  
+  const ambilBulan=(d.allPengambilan||[]).filter(x=>getMonth(x.tanggal)===m && x.tipe==="Masuk");
+  const jualBulan=(d.allSales||[]).filter(x=>getMonth(x.tanggal)===m && x.tipe===curCCTipe);
+  
+  Object.keys(masterData).sort().forEach(r=>{
+    const ambil = ambilBulan.filter(x=>x.rokok===r).reduce((s,x)=>s+x.jumlah,0);
+    const jual = jualBulan.filter(x=>x.rokok===r).reduce((s,x)=>s+x.jumlah,0);
+    const sisa = ambil - jual;
+    if(ambil > 0 || jual > 0) {
+      tbStok.innerHTML+=`<tr><td class="text-left font-semibold">${r}</td><td>${ambil} Slop</td><td>${jual} Slop</td><td>${sisa} Slop</td></tr>`;
+    }
+  });
+  if(tbStok.innerHTML==='') tbStok.innerHTML='<tr><td colspan="4" class="text-center text-slate-500 py-4">Belum ada data pengambilan & penjualan</td></tr>';
+
   const ccBulan=(d.allCrosscheck||[]).filter(x=>getMonth(x.tanggal)===m && x.tipe===curCCTipe);
   const tb=document.getElementById('tb-cc');
   tb.innerHTML='';
@@ -731,7 +747,8 @@ function renderListRokok(){
 }
 
 function generateShareText(){
-  let txt="🚬 SEMUA ROKOK READY STOK!🚬\n\n";
+  let txt="READY ROKOK INDO PERSLOP/BUNGKUS\n\n";
+  txt+="🚬 SEMUA ROKOK READY STOK!🚬\n\n";
   
   Object.keys(masterData).sort().forEach(n=>{
     const m=masterData[n];
@@ -746,8 +763,8 @@ function generateShareText(){
     const m=masterData[n];
     if(m.cashRiel > 0 || m.um > 0) {
       txt+=`• ${n}\n`;
-      if(m.cashRiel > 0) txt+=`Cash: ${Bt(m.cashRiel)} riel /Slop\n`;
-      if(m.um > 0) txt+=`Pembayaran uang makan: ${Bt(m.um)} riel/Slop\n`;
+      if(m.cashRiel > 0) txt+=`Cash: ${Bt(m.cashRiel)} /Slop\n`;
+      if(m.um > 0) txt+=`Pembayaran uang makan: ${Bt(m.um)}/Slop\n`;
     }
   });
   
