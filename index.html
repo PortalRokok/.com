@@ -6,22 +6,31 @@
 <title>Gana Store Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Kanit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-:root{--bg:#0a0e1a;--card:rgba(15,23,42,0.88);--bdr:rgba(255,255,255,0.08);--acc:#f59e0b;--acc2:#3b82f6}
+:root{--bg:#070b14;--card:rgba(17,25,40,0.85);--bdr:rgba(255,255,255,0.08);--acc:#38bdf8;--acc2:#a855f7}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Kanit',sans-serif;-webkit-tap-highlight-color:transparent;background-color:var(--bg);background-image:url('https://lh3.googleusercontent.com/d/1zoGFZJ_fpKsMOf29YqGXxjl3K1RMo4zW');background-size:cover;background-position:center;background-attachment:fixed;min-height:100vh;color:#e2e8f0}
+body{font-family:'Plus Jakarta Sans',sans-serif;-webkit-tap-highlight-color:transparent;background-color:var(--bg);background-image:url('https://lh3.googleusercontent.com/d/1zoGFZJ_fpKsMOf29YqGXxjl3K1RMo4zW');background-size:cover;background-position:center;background-attachment:fixed;min-height:100vh;color:#e2e8f0}
+h1,h2,h3,h4,h5,.font-heading{font-family:'Kanit',sans-serif;}
 .hidden{display:none!important}
-input,select,button,textarea{outline:none;font-family:'Kanit',sans-serif}
+input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans',sans-serif}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(245,158,11,0.4);border-radius:20px}
+::-webkit-scrollbar-thumb{background:rgba(56,189,248,0.4);border-radius:20px}
+
+/* Lampu Hidup Background */
+.lamp-bg{position:fixed;top:0;left:0;width:100%;height:100%;overflow:hidden;z-index:0;pointer-events:none}
+.lamp-bg div{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.25;animation:floatLamp 8s ease-in-out infinite}
+.lamp-bg .l1{width:400px;height:400px;background:#38bdf8;top:-100px;left:-100px;animation-delay:0s}
+.lamp-bg .l2{width:500px;height:500px;background:#a855f7;bottom:-150px;right:-100px;animation-delay:2s}
+.lamp-bg .l3{width:300px;height:300px;background:#22d3ee;top:40%;left:40%;animation-delay:4s}
+@keyframes floatLamp{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-30px)}}
 
 /* Kartu */
-.gc{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--bdr);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.05);transition:transform .2s,box-shadow .2s}
+.gc{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--bdr);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.05);transition:transform .2s,box-shadow .2s;position:relative;z-index:1}
 .gc:hover{box-shadow:0 12px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.08)}
-.ga{box-shadow:0 0 30px rgba(245,158,11,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(245,158,11,0.2)}
+.ga{box-shadow:0 0 30px rgba(56,189,248,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(56,189,248,0.2)}
 .gb{box-shadow:0 0 30px rgba(59,130,246,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(59,130,246,0.2)}
 .gp{box-shadow:0 0 30px rgba(168,85,247,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(168,85,247,0.2)}
 .gr{box-shadow:0 0 30px rgba(239,68,68,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(239,68,68,0.2)}
@@ -30,14 +39,20 @@ input,select,button,textarea{outline:none;font-family:'Kanit',sans-serif}
 .gpk{box-shadow:0 0 30px rgba(236,72,153,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(236,72,153,0.2)}
 
 /* Input */
-.is{background:rgba(10,14,26,0.85);border:1.5px solid rgba(255,255,255,0.1);color:#f8fafc;border-radius:12px;padding:12px 16px;width:100%;font-size:15px;transition:all .15s}
-.is:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(245,158,11,0.15);background:rgba(10,14,26,0.95)}
-.is::placeholder{color:#475569}
+.is{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);color:#f8fafc;border-radius:12px;padding:12px 16px;width:100%;font-size:15px;transition:all .15s}
+.is:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(56,189,248,0.15);background:rgba(255,255,255,0.08)}
+.is::placeholder{color:#64748b}
 .ls{color:#94a3b8;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8) sepia(1) saturate(5) hue-rotate(180deg);
+    cursor: pointer;
+}
 
 /* Tombol */
-.bp{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;font-weight:700;padding:14px 24px;border-radius:14px;border:none;cursor:pointer;font-size:15px;transition:all .15s;box-shadow:0 4px 15px rgba(245,158,11,0.3)}
-.bp:hover{box-shadow:0 6px 25px rgba(245,158,11,0.5);transform:translateY(-1px)}
+.bp{background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#00121f;font-weight:700;padding:14px 24px;border-radius:14px;border:none;cursor:pointer;font-size:15px;transition:all .15s;box-shadow:0 4px 15px rgba(56,189,248,0.3)}
+.bp:hover{box-shadow:0 6px 25px rgba(56,189,248,0.5);transform:translateY(-1px)}
 .bp:active{transform:scale(.97)}
 .bp:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .bs{background:rgba(255,255,255,0.06);color:#e2e8f0;font-weight:600;padding:10px 18px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-size:13px;transition:all .15s}
@@ -56,12 +71,12 @@ input,select,button,textarea{outline:none;font-family:'Kanit',sans-serif}
 /* Navigasi */
 .ni{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:12px;color:#94a3b8;font-weight:500;font-size:13px;transition:all .15s;cursor:pointer;border:none;background:transparent;width:100%;text-align:left}
 .ni:hover{background:rgba(255,255,255,0.06);color:#e2e8f0}
-.ni.ac{background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05));color:#f59e0b;border:1px solid rgba(245,158,11,0.2);font-weight:700}
+.ni.ac{background:linear-gradient(135deg,rgba(56,189,248,0.15),rgba(56,189,248,0.05));color:#38bdf8;border:1px solid rgba(56,189,248,0.2);font-weight:700}
 .si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px}
 
 /* Tabel */
 table{width:100%;border-collapse:collapse;white-space:nowrap}
-th{color:#64748b;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:12px 14px;background:rgba(10,14,26,0.6);border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:2}
+th{color:#94a3b8;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:12px 14px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:2}
 td{color:#e2e8f0;font-weight:500;font-size:13px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);-webkit-user-select:text;user-select:text}
 tr:hover td{background:rgba(255,255,255,0.02)}
 
@@ -76,14 +91,14 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 .bpk1{background:rgba(236,72,153,0.15);color:#f472b6;border:1px solid rgba(236,72,153,0.2)}
 
 .sa{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.st{font-size:13px;font-weight:700;color:#f59e0b;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px}
+.st{font-size:13px;font-weight:700;color:#38bdf8;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px}
 
-@keyframes pg{0%,100%{box-shadow:0 0 20px rgba(245,158,11,0.1)}50%{box-shadow:0 0 40px rgba(245,158,11,0.2)}}
+@keyframes pg{0%,100%{box-shadow:0 0 20px rgba(56,189,248,0.1)}50%{box-shadow:0 0 40px rgba(56,189,248,0.2)}}
 .pg{animation:pg 3s ease-in-out infinite}
 .fl{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f8fafc;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600}
 .fl:focus{border-color:var(--acc)}
 
-@keyframes blinkGlow{0%,100%{color:#f59e0b;text-shadow:0 0 10px rgba(245,158,11,0.4),0 0 20px rgba(245,158,11,0.2)}50%{color:#fbbf24;text-shadow:0 0 20px rgba(245,158,11,0.7),0 0 40px rgba(245,158,11,0.4),0 0 60px rgba(245,158,11,0.2)}}
+@keyframes blinkGlow{0%,100%{color:#ffffff;text-shadow:0 0 10px rgba(56,189,248,0.6),0 0 20px rgba(56,189,248,0.4)}50%{color:#e0f2fe;text-shadow:0 0 20px rgba(56,189,248,0.9),0 0 40px rgba(168,85,247,0.5)}}
 .text-blink{animation:blinkGlow 2s ease-in-out infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .anim-spin{animation:spin .6s linear infinite}
@@ -103,13 +118,18 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 </head>
 <body>
 
+<!-- LAMPU HIDUP -->
+<div class="lamp-bg">
+  <div class="l1"></div>
+  <div class="l2"></div>
+  <div class="l3"></div>
+</div>
+
 <!-- TOAST -->
 <div id="toast" class="hidden fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl shadow-2xl z-[100] font-bold text-sm ta"></div>
 
 <!-- ==================== LOGIN ==================== -->
 <div id="login-view" class="min-h-screen flex items-center justify-center p-4 relative">
-  <div class="absolute top-20 left-10 w-72 h-72 bg-amber-500 rounded-full filter blur-[120px] opacity-10"></div>
-  <div class="absolute bottom-20 right-10 w-80 h-80 bg-pink-600 rounded-full filter blur-[120px] opacity-10"></div>
   <div class="relative z-10 gc ga p-10 w-full max-w-md fi">
     <div class="flex flex-col items-center mb-8">
       <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-w-[180px] h-auto object-fill mb-5 rounded-xl" alt="Logo">
@@ -129,7 +149,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500"><i class="fas fa-lock text-sm"></i></span>
           <input type="password" id="password" class="is pl-11 pr-12" placeholder="Masukkan password" required>
-          <button type="button" id="toggle-pass-btn" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-amber-400 transition-colors">
+          <button type="button" id="toggle-pass-btn" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-cyan-400 transition-colors">
             <i id="eye-icon" class="fas fa-eye"></i>
           </button>
         </div>
@@ -145,7 +165,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 <div id="app-view" class="hidden min-h-screen">
 
   <!-- SIDEBAR -->
-  <aside id="sidebar" class="fixed top-0 left-0 z-40 h-screen w-[280px] bg-[rgba(5,8,18,0.97)] backdrop-blur-xl flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 border-r border-white/5">
+  <aside id="sidebar" class="fixed top-0 left-0 z-40 h-screen w-[280px] bg-[rgba(5,8,18,0.92)] backdrop-blur-xl flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 border-r border-white/5">
     <div class="p-5 flex items-center justify-center border-b border-white/5 relative">
       <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-h-20 object-fill rounded-lg" alt="Logo">
       <button id="close-sidebar-btn" class="lg:hidden ml-auto text-slate-400 absolute right-4 top-4 hover:text-white"><i class="fas fa-times text-lg"></i></button>
@@ -154,7 +174,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
       <p class="text-slate-600 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-1">Menu Utama</p>
       <button onclick="switchPage('dashboard')" id="nav-dashboard" class="ni ac"><i class="fas fa-chart-line w-5 text-center"></i> Dashboard</button>
       <p class="text-slate-600 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-5">Penjualan</p>
-      <button onclick="switchPage('jual','Perslop ABA')" id="nav-jual-aba" class="ni"><i class="fas fa-building-columns w-5 text-center"></i> Jual Perslop ABA</button>
+      <button onclick="switchPage('jual','Perslop ABA')" id="nav-jual-aba" class="ni"><i class="fas fa-building-columns w-5 text-center"></i> Jual Perslop Cash</button>
       <button onclick="switchPage('jual','Perslop UM')" id="nav-jual-um" class="ni"><i class="fas fa-utensils w-5 text-center"></i> Jual Perslop Uang Makan</button>
       <button onclick="switchPage('jual','Eceran')" id="nav-jual-eceran" class="ni"><i class="fas fa-shopping-basket w-5 text-center"></i> Jual Rokok Eceran</button>
       <p class="text-slate-600 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-5">Stok & Inventaris</p>
@@ -168,7 +188,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
     </nav>
     <div class="p-4 border-t border-white/5">
       <button onclick="doLogout()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 transition-colors group">
-        <div class="w-9 h-9 bg-amber-500/20 rounded-full flex items-center justify-center font-bold text-amber-400 text-sm group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">A</div>
+        <div class="w-9 h-9 bg-cyan-500/20 rounded-full flex items-center justify-center font-bold text-cyan-400 text-sm group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">A</div>
         <div class="text-left flex-1"><p class="font-bold text-sm text-white">Admin</p><p class="text-[11px] text-slate-500 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
         <i class="fas fa-sign-out-alt text-slate-600 group-hover:text-red-400 transition-colors"></i>
       </button>
@@ -178,7 +198,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 
   <!-- MAIN CONTENT -->
   <div class="lg:ml-[280px] min-h-screen flex flex-col">
-    <header class="bg-[rgba(5,8,18,0.92)] backdrop-blur-xl p-4 sticky top-0 z-20 border-b border-white/5 flex justify-between items-center gap-4">
+    <header class="bg-[rgba(5,8,18,0.80)] backdrop-blur-xl p-4 sticky top-0 z-20 border-b border-white/5 flex justify-between items-center gap-4">
       <div class="flex items-center gap-3">
         <button id="open-sidebar-btn" class="lg:hidden text-slate-300 text-xl hover:text-white"><i class="fas fa-bars"></i></button>
         <h2 id="page-title" class="text-lg font-extrabold tracking-tight text-white">Dashboard</h2>
@@ -196,7 +216,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="gc ga p-6 pg">
             <div class="flex items-center gap-3 mb-3">
-              <div class="si bg-amber-500/10 text-amber-400"><i class="fas fa-coins"></i></div>
+              <div class="si bg-cyan-500/10 text-cyan-400"><i class="fas fa-coins"></i></div>
               <p class="d-label">Total Pendapatan</p>
             </div>
             <p class="d-value text-white" id="d-pendapatan">฿0</p>
@@ -259,9 +279,9 @@ tr:hover td{background:rgba(255,255,255,0.02)}
 
       <!-- ===== JUAL ===== -->
       <div id="page-jual" class="hidden fi space-y-6">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="jual-grid">
           <div class="gc ga p-6 md:p-8">
-            <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-cart-shopping text-amber-400"></i> Form Penjualan</h3>
+            <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-cart-shopping text-cyan-400"></i> Form Penjualan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
               <div><label class="ls">Tanggal</label><input type="date" id="jual-tgl" class="is"></div>
               <div><label class="ls">Nama Pembeli</label><input type="text" id="jual-nama" class="is" placeholder="Wajib diisi"></div>
@@ -271,13 +291,13 @@ tr:hover td{background:rgba(255,255,255,0.02)}
               <div id="wrap-tipebayar"><label class="ls">Tipe Bayar</label><select id="jual-tipebayar" class="is"><option value="ABA">ABA</option></select></div>
               <div id="wrap-status"><label class="ls">Status Bayar</label><select id="jual-status" class="is"><option value="DONE BAYAR ABA">Done Bayar ABA</option><option value="BELUM BAYAR">Belum Bayar</option></select></div>
             </div>
-            <div class="bg-gradient-to-r from-amber-900/30 to-amber-600/10 p-5 rounded-2xl border border-amber-500/20 mb-6 flex justify-between items-center">
-              <span class="text-xs font-bold text-amber-300 uppercase tracking-widest">Total Harga</span>
-              <p class="text-3xl font-extrabold text-amber-400" id="jual-harga">฿0</p>
+            <div class="bg-gradient-to-r from-cyan-900/30 to-cyan-600/10 p-5 rounded-2xl border border-cyan-500/20 mb-6 flex justify-between items-center">
+              <span class="text-xs font-bold text-cyan-300 uppercase tracking-widest">Total Harga</span>
+              <p class="text-3xl font-extrabold text-cyan-400" id="jual-harga">฿0</p>
             </div>
             <button onclick="saveJual()" id="btn-save-jual" class="bp w-full">SIMPAN TRANSAKSI</button>
           </div>
-          <div class="gc flex flex-col overflow-hidden">
+          <div class="gc flex flex-col overflow-hidden" id="jual-riwayat-card">
             <h4 id="title-rekap-jual" class="st"><i class="fas fa-receipt"></i> Riwayat Penjualan</h4>
             <div class="sa flex-1"><table class="text-center"><thead><tr><th class="text-left">Tanggal</th><th>Nama</th><th>Situs</th><th>Rokok</th><th>Jumlah</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="tb-jual"></tbody></table></div>
           </div>
@@ -288,7 +308,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
       <div id="page-stok" class="hidden fi space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="gc ga p-6">
-            <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-plus-circle text-amber-400"></i> Catat Pengambilan</h3>
+            <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-plus-circle text-cyan-400"></i> Catat Pengambilan</h3>
             <label class="ls">Tanggal</label><input type="date" id="stok-tgl" class="is mb-3">
             <label class="ls">Jenis Rokok</label><select id="stok-rokok" class="is mb-3"></select>
             <label class="ls">Jumlah Slop Diambil</label><input type="number" id="stok-jml" class="is mb-3" placeholder="0">
@@ -336,7 +356,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
       <div id="page-rokok" class="hidden fi space-y-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div class="gc ga p-6 md:p-8">
-            <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-smoking text-amber-400"></i> Kelola Harga Rokok</h3>
+            <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-smoking text-cyan-400"></i> Kelola Harga Rokok</h3>
             <div class="space-y-3 mb-5">
               <div><label class="ls">Nama Rokok</label><input type="text" id="m-nama" class="is" placeholder="Contoh: Sampoerna Mild"></div>
               <div class="grid grid-cols-2 gap-3">
@@ -365,7 +385,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
       <!-- ===== REKAP UANG MAKAN ===== -->
       <div id="page-rekap" class="hidden fi space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="gc ga p-5"><p class="d-label">Total Uang Makan Keseluruhan</p><p class="d-value text-amber-400" id="um-total">฿0</p></div>
+          <div class="gc ga p-5"><p class="d-label">Total Uang Makan Keseluruhan</p><p class="d-value text-cyan-400" id="um-total">฿0</p></div>
           <div class="gc gg p-5"><p class="d-label">Sudah Cair</p><p class="d-value text-green-400" id="um-cair">฿0</p></div>
           <div class="gc gr p-5"><p class="d-label">Belum Cair</p><p class="d-value text-red-400" id="um-belum">฿0</p></div>
         </div>
@@ -383,7 +403,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
       <div id="page-kas" class="hidden fi space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="gc ga p-6">
-            <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-coins text-amber-400"></i> Laporan Setoran</h3>
+            <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-coins text-cyan-400"></i> Laporan Setoran</h3>
             <div class="space-y-3">
               <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Total Penjualan</span><span class="font-bold text-lg text-white" id="kas-pendapatan">฿0</span></div>
               <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Total Modal</span><span class="font-bold text-lg text-red-400" id="kas-modal">฿0</span></div>
@@ -509,7 +529,7 @@ async function api(action,payload={}){
 function toast(msg,type='success'){
   const el=document.getElementById('toast');
   el.innerText=msg;
-  el.className='fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl shadow-2xl z-[100] font-bold text-sm ta '+(type==='success'?'bg-amber-500 text-black':'bg-red-500 text-white');
+  el.className='fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl shadow-2xl z-[100] font-bold text-sm ta '+(type==='success'?'bg-cyan-500 text-black':'bg-red-500 text-white');
   setTimeout(()=>el.classList.add('hidden'),2500);
 }
 
@@ -526,7 +546,7 @@ function getMonth(d){if(!d)return'';let dt=d instanceof Date?d:new Date(d);if(is
 function fmtDate(d,time=true){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);const date=dt.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});return time?date+' '+dt.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):date;}
 function fmtDateShort(d){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);return dt.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});}
 function setLoading(btnId,loading,txt){const b=document.getElementById(btnId);if(!b)return;if(loading){b.disabled=true;b.innerHTML='<i class="anim-spin fas fa-circle-notch mr-2"></i>Menyimpan...';}else{b.disabled=false;b.innerText=txt;}}
-function applyMonthFilter(){selMonth=document.getElementById('month-filter').value;if(dashState){renderDashboard();renderJualTable();renderRekapUM();renderKas();}}
+function applyMonthFilter(){selMonth=document.getElementById('month-filter').value;if(dashState){renderDashboard();renderJualTable();renderStok();renderCrosscheck();renderRekapUM();renderKas();}}
 function show(id){const el=document.getElementById(id);el.classList.remove('hidden');void el.offsetWidth;el.classList.add('fi');}
 
 /* ====== UPDATE STATE DARI RESPONSE SERVER ====== */
@@ -545,7 +565,7 @@ function switchPage(page,sub){
   if(page==='dashboard'){show('page-dashboard');document.getElementById('nav-dashboard').classList.add('ac');title.innerText='Dashboard';if(dashState)renderDashboard();}
   else if(page==='jual'){
     show('page-jual');
-    if(sub==='Perslop ABA'){curJualTipe='Perslop';curJualFilter='ABA';document.getElementById('nav-jual-aba').classList.add('ac');title.innerText='Jual Perslop ABA';}
+    if(sub==='Perslop ABA'){curJualTipe='Perslop';curJualFilter='ABA';document.getElementById('nav-jual-aba').classList.add('ac');title.innerText='Jual Perslop Cash';}
     else if(sub==='Perslop UM'){curJualTipe='Perslop';curJualFilter='UM';document.getElementById('nav-jual-um').classList.add('ac');title.innerText='Jual Perslop Uang Makan';}
     else{curJualTipe='Eceran';curJualFilter='Eceran';document.getElementById('nav-jual-eceran').classList.add('ac');title.innerText='Jual Rokok Eceran';}
     setupJualForm();if(dashState)renderJualTable();
@@ -591,7 +611,6 @@ function renderDashboard(){
     else{untungSlop+=harga-(mp*j.jumlah);totalSlop+=j.jumlah;}
     if(j.tipeBayar==='ABA')abaTotal+=harga;
     else if(j.tipeBayar==='Uang Makan'){
-      /* Belum cair = statusBayar tidak mengandung "CAIR" */
       if(!j.statusBayar||!j.statusBayar.includes('CAIR'))umBelumCair+=harga;
     }
   });
@@ -614,16 +633,30 @@ function renderChart(){
   const dataABA=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&j.tipeBayar==='ABA').reduce((s,j)=>s+(j.harga||0),0));
   const dataUM=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&j.tipeBayar==='Uang Makan').reduce((s,j)=>s+(j.harga||0),0));
   const dataEceran=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&j.tipe==='Eceran').reduce((s,j)=>s+(j.harga||0),0));
-  const ctx=document.getElementById('salesChart');
+  
+  const ctx=document.getElementById('salesChart').getContext('2d');
+  
+  const gradABA = ctx.createLinearGradient(0, 0, 0, 320);
+  gradABA.addColorStop(0, 'rgba(59,130,246,0.9)');
+  gradABA.addColorStop(1, 'rgba(59,130,246,0.1)');
+  
+  const gradUM = ctx.createLinearGradient(0, 0, 0, 320);
+  gradUM.addColorStop(0, 'rgba(236,72,153,0.9)');
+  gradUM.addColorStop(1, 'rgba(236,72,153,0.1)');
+  
+  const gradEceran = ctx.createLinearGradient(0, 0, 0, 320);
+  gradEceran.addColorStop(0, 'rgba(168,85,247,0.9)');
+  gradEceran.addColorStop(1, 'rgba(168,85,247,0.1)');
+
   if(salesChart)salesChart.destroy();
   salesChart=new Chart(ctx,{
     type:'bar',
     data:{labels:labels,datasets:[
-      {label:'ABA',data:dataABA,backgroundColor:'rgba(59,130,246,0.7)',borderColor:'#3b82f6',borderWidth:2,borderRadius:8},
-      {label:'Uang Makan',data:dataUM,backgroundColor:'rgba(236,72,153,0.7)',borderColor:'#ec4899',borderWidth:2,borderRadius:8},
-      {label:'Eceran',data:dataEceran,backgroundColor:'rgba(168,85,247,0.7)',borderColor:'#a855f7',borderWidth:2,borderRadius:8}
+      {label:'ABA',data:dataABA,backgroundColor:gradABA,borderColor:'#3b82f6',borderWidth:2,borderRadius:8,hoverBackgroundColor:'#3b82f6'},
+      {label:'Uang Makan',data:dataUM,backgroundColor:gradUM,borderColor:'#ec4899',borderWidth:2,borderRadius:8,hoverBackgroundColor:'#ec4899'},
+      {label:'Eceran',data:dataEceran,backgroundColor:gradEceran,borderColor:'#a855f7',borderWidth:2,borderRadius:8,hoverBackgroundColor:'#a855f7'}
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{family:'Kanit',weight:'600',size:13}}}},scales:{x:{ticks:{color:'#64748b',font:{family:'Kanit',size:12}},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#64748b',font:{family:'Kanit',size:12},callback:v=>Bt(v)},grid:{color:'rgba(255,255,255,0.04)'}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#e2e8f0',font:{family:'Plus Jakarta Sans',weight:'600',size:13},padding:15}},tooltip:{backgroundColor:'rgba(15,23,42,0.9)',titleColor:'#fff',bodyColor:'#e2e8f0',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,padding:10,cornerRadius:8}},scales:{x:{ticks:{color:'#94a3b8',font:{family:'Plus Jakarta Sans',size:12}},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#94a3b8',font:{family:'Plus Jakarta Sans',size:12},callback:v=>Bt(v)},grid:{color:'rgba(255,255,255,0.05)'}}}}
   });
 }
 
@@ -633,31 +666,38 @@ function setupJualForm(){
   const wTB=document.getElementById('wrap-tipebayar');
   const wSt=document.getElementById('wrap-status');
   const lJml=document.getElementById('label-jml');
+  const jualGrid=document.getElementById('jual-grid');
+  const riwayatCard=document.getElementById('jual-riwayat-card');
 
   if(curJualTipe==='Eceran'){
-    /* Eceran: ABA saja, status DONE/BELUM */
     wSitus.style.display='none';
     lJml.innerText='Jumlah Bungkus';
     wTB.style.display='block';
     wSt.style.display='block';
     document.getElementById('jual-tipebayar').innerHTML='<option value="ABA">ABA</option>';
     document.getElementById('jual-status').innerHTML='<option value="DONE BAYAR ABA">Done Bayar ABA</option><option value="BELUM BAYAR">Belum Bayar</option>';
+    riwayatCard.classList.remove('hidden');
+    jualGrid.classList.add('lg:grid-cols-2');
   }else if(curJualFilter==='UM'){
-    /* Perslop Uang Makan: auto bayar, TANPA dropdown status */
     wSitus.style.display='block';
     lJml.innerText='Jumlah Slop';
     wTB.style.display='block';
-    wSt.style.display='none'; /* Sembunyikan status - otomatis sudah bayar */
+    wSt.style.display='none';
     document.getElementById('jual-tipebayar').innerHTML='<option value="Uang Makan">Uang Makan</option>';
     document.getElementById('jual-status').innerHTML='<option value="SUDAH BAYAR UM">Sudah Bayar Uang Makan</option>';
+    riwayatCard.classList.add('hidden');
+    jualGrid.classList.remove('lg:grid-cols-2');
+    jualGrid.classList.add('lg:grid-cols-1', 'max-w-2xl', 'mx-auto');
   }else{
-    /* Perslop ABA */
     wSitus.style.display='block';
     lJml.innerText='Jumlah Slop';
     wTB.style.display='block';
     wSt.style.display='block';
     document.getElementById('jual-tipebayar').innerHTML='<option value="ABA">ABA</option>';
     document.getElementById('jual-status').innerHTML='<option value="DONE BAYAR ABA">Done Bayar ABA</option><option value="BELUM BAYAR">Belum Bayar</option>';
+    riwayatCard.classList.remove('hidden');
+    jualGrid.classList.add('lg:grid-cols-2');
+    jualGrid.classList.remove('lg:grid-cols-1', 'max-w-2xl', 'mx-auto');
   }
   hitungOtomatis();
 }
@@ -710,12 +750,17 @@ async function saveJual(){
   if(res.success){
     toast('Transaksi tersimpan!');
     applyServerData(res);
-    renderJualTable();
-    renderDashboard();
     document.getElementById('jual-nama').value='';
     document.getElementById('jual-situs').value='';
     document.getElementById('jual-jml').value='';
     document.getElementById('jual-harga').innerText='฿0';
+    
+    if(curJualFilter==='UM'){
+      switchPage('rekap');
+    } else {
+      renderJualTable();
+      renderDashboard();
+    }
   }else{toast('Gagal menyimpan','error');}
 }
 
@@ -731,7 +776,7 @@ function renderJualTable(){
   const titleEl=document.getElementById('title-rekap-jual');
   if(curJualFilter==='UM')titleEl.innerHTML='<i class="fas fa-receipt"></i> Riwayat Penjualan Uang Makan';
   else if(curJualTipe==='Eceran')titleEl.innerHTML='<i class="fas fa-receipt"></i> Riwayat Penjualan Eceran';
-  else titleEl.innerHTML='<i class="fas fa-receipt"></i> Riwayat Penjualan ABA';
+  else titleEl.innerHTML='<i class="fas fa-receipt"></i> Riwayat Penjualan Cash';
 
   const tb=document.getElementById('tb-jual');
   tb.innerHTML='';
@@ -745,9 +790,9 @@ function renderJualTable(){
 }
 
 async function deleteJual(row){
-  if(!confirm('Hapus transaksi ini?'))return;
+  if(!confirm('Hapus transaksi ini?')) return;
   const res=await api('deletePenjualan',{payload:{row:row}});
-  if(res.success){toast('Terhapus!');applyServerData(res);renderJualTable();renderDashboard();}
+  if(res.success){toast('Transaksi dihapus!');applyServerData(res);renderJualTable();renderDashboard();renderRekapUM();}
   else{toast('Gagal menghapus','error');}
 }
 
@@ -756,14 +801,13 @@ async function saveAmbilStok(){
   const rok=document.getElementById('stok-rokok').value;
   const jml=parseInt(document.getElementById('stok-jml').value)||0;
   const modal=parseNum(document.getElementById('stok-modal').value);
+  const tgl=document.getElementById('stok-tgl').value;
   if(!rok){toast('Pilih rokok!','error');return;}
   if(!jml){toast('Jumlah wajib diisi!','error');return;}
-  const tgl=document.getElementById('stok-tgl').value;
   setLoading('btn-save-stok',true);
-  const res=await api('savePengambilan',{payload:{tanggal:tgl,rokok:rok,jumlah:jml,modal:modal,tipe:'Masuk'}});
+  const res=await api('savePengambilan',{payload:{tanggal:tgl,rokok:rok,jumlah:jml,modal:modal,tipe:"Masuk"}});
   setLoading('btn-save-stok',false,'CATAT PENGAMBILAN');
-  if(res.success){toast('Pengambilan dicatat!');applyServerData(res);renderStok();document.getElementById('stok-jml').value='';document.getElementById('stok-modal').value='';}
-  else{toast('Gagal','error');}
+  if(res.success){toast('Pengambilan dicatat!');applyServerData(res);renderStok();renderDashboard();document.getElementById('stok-jml').value='';document.getElementById('stok-modal').value='';}else{toast('Gagal menyimpan','error');}
 }
 
 async function saveBukaSlop(){
@@ -772,60 +816,46 @@ async function saveBukaSlop(){
   if(!rok){toast('Pilih rokok!','error');return;}
   if(!jml){toast('Jumlah wajib diisi!','error');return;}
   setLoading('btn-buka-slop',true);
-  const res=await api('savePengambilan',{payload:{tanggal:new Date().toISOString().slice(0,10),rokok:rok,jumlah:jml,modal:0,tipe:'Buka Eceran'}});
+  const res=await api('savePengambilan',{payload:{rokok:rok,jumlah:jml,tipe:"Buka Slop"}});
   setLoading('btn-buka-slop',false,'BUKA SLOP KE ECERAN');
-  if(res.success){toast('Slop dibuka ke eceran!');applyServerData(res);renderStok();document.getElementById('buka-jml').value='';}
-  else{toast('Gagal','error');}
+  if(res.success){toast('Slop dibuka jadi eceran!');applyServerData(res);renderStok();renderDashboard();document.getElementById('buka-jml').value='';}else{toast('Gagal','error');}
 }
 
 function renderStok(){
   if(!dashState)return;
   const d=dashState,m=selMonth;
-  const allP=d.allPengambilan||[];
-  const allS=d.allSales||[];
-  const pBulan=allP.filter(x=>getMonth(x.tanggal)===m);
-  const sBulan=allS.filter(x=>getMonth(x.tanggal)===m);
-
-  /* Stok mini */
-  const stokMap={};
-  Object.keys(masterData).forEach(r=>{stokMap[r]={masuk:0,terjualSlop:0,terjualEcer:0,dibuka:0};});
-  allP.forEach(p=>{if(!stokMap[p.rokok])stokMap[p.rokok]={masuk:0,terjualSlop:0,terjualEcer:0,dibuka:0};if(p.tipe==='Masuk')stokMap[p.rokok].masuk+=p.jumlah||0;else if(p.tipe==='Buka Eceran')stokMap[p.rokok].dibuka+=p.jumlah||0;});
-  allS.forEach(s=>{if(!stokMap[s.rokok])stokMap[s.rokok]={masuk:0,terjualSlop:0,terjualEcer:0,dibuka:0};if(s.tipe==='Eceran')stokMap[s.rokok].terjualEcer+=s.jumlah||0;else stokMap[s.rokok].terjualSlop+=s.jumlah||0;});
-
-  let miniHtml='',perslopHtml='',eceranHtml='';
-  Object.keys(stokMap).sort().forEach(r=>{
-    const s=stokMap[r];
-    const sisaSlop=s.masuk-s.terjualSlop-s.dibuka;
-    const sisaEcer=(s.dibuka*10)-s.terjualEcer;
-    miniHtml+=`<tr><td class="text-left">${r}</td><td>${sisaSlop}</td><td>${sisaEcer}</td></tr>`;
+  const ambilBulan=(d.allPengambilan||[]).filter(x=>getMonth(x.tanggal)===m);
+  const tbAmbil=document.getElementById('tb-pengambilan');
+  tbAmbil.innerHTML='';
+  ambilBulan.slice().reverse().forEach(p=>{
+    tbAmbil.innerHTML+=`<tr><td class="text-left text-xs">${fmtDateShort(p.tanggal)}</td><td>${p.rokok}</td><td>${p.tipe}</td><td>${p.jumlah}</td><td>${Bt(p.modal)}</td><td><button onclick="deletePengambilan(${p.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
   });
-  Object.keys(stokMap).sort().forEach(r=>{
-    const s=stokMap[r];const pB=pBulan.filter(x=>x.rokok===r&&x.tipe==='Masuk').reduce((a,x)=>a+(x.jumlah||0),0);
-    const sB=sBulan.filter(x=>x.rokok===r&&x.tipe==='Perslop').reduce((a,x)=>a+(x.jumlah||0),0);
-    perslopHtml+=`<tr><td class="text-left">${r}</td><td>${pB}</td><td>${sB}</td><td>${pB-sB}</td></tr>`;
+  if(tbAmbil.innerHTML==='') tbAmbil.innerHTML='<tr><td colspan="6" class="text-center text-slate-500 py-4">Belum ada riwayat</td></tr>';
+  
+  const tbMini=document.getElementById('tb-stok-mini');
+  tbMini.innerHTML='';
+  Object.keys(masterData).sort().forEach(r=>{
+    tbMini.innerHTML+=`<tr><td class="text-left">${r}</td><td>-</td><td>-</td></tr>`;
   });
-  Object.keys(stokMap).sort().forEach(r=>{
-    const s=stokMap[r];const dB=pBulan.filter(x=>x.rokok===r&&x.tipe==='Buka Eceran').reduce((a,x)=>a+(x.jumlah||0),0);
-    const sB=sBulan.filter(x=>x.rokok===r&&x.tipe==='Eceran').reduce((a,x)=>a+(x.jumlah||0),0);
-    eceranHtml+=`<tr><td class="text-left">${r}</td><td>${dB*10} Bks</td><td>${sB} Bks</td><td>${(dB*10)-sB} Bks</td></tr>`;
+  
+  const jualBulan=(d.allSales||[]).filter(x=>getMonth(x.tanggal)===m);
+  const tbSlop=document.getElementById('tb-stok-perslop');
+  const tbEceran=document.getElementById('tb-stok-eceran');
+  tbSlop.innerHTML=''; tbEceran.innerHTML='';
+  Object.keys(masterData).sort().forEach(r=>{
+    const jualSlop=jualBulan.filter(x=>x.rokok===r&&x.tipe==='Perslop').reduce((s,x)=>s+x.jumlah,0);
+    const jualEceran=jualBulan.filter(x=>x.rokok===r&&x.tipe==='Eceran').reduce((s,x)=>s+x.jumlah,0);
+    if(jualSlop>0) tbSlop.innerHTML+=`<tr><td class="text-left">${r}</td><td>-</td><td>${jualSlop}</td><td>-</td></tr>`;
+    if(jualEceran>0) tbEceran.innerHTML+=`<tr><td class="text-left">${r}</td><td>-</td><td>${jualEceran}</td><td>-</td></tr>`;
   });
-  document.getElementById('tb-stok-mini').innerHTML=miniHtml;
-  document.getElementById('tb-stok-perslop').innerHTML=perslopHtml;
-  document.getElementById('tb-stok-eceran').innerHTML=eceranHtml;
-
-  /* Riwayat pengambilan */
-  let riwHtml='';
-  pBulan.slice().reverse().forEach(p=>{
-    riwHtml+=`<tr><td class="text-left text-xs">${fmtDate(p.tanggal,false)}</td><td>${p.rokok}</td><td><span class="badge ${p.tipe==='Masuk'?'bg1':'bp1'}">${p.tipe}</span></td><td>${p.jumlah}</td><td>${Bt(p.modal||0)}</td><td><button onclick="deletePengambilan(${p.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
-  });
-  document.getElementById('tb-pengambilan').innerHTML=riwHtml;
+  if(tbSlop.innerHTML==='') tbSlop.innerHTML='<tr><td colspan="4" class="text-center text-slate-500 py-4">Belum ada data bulan ini</td></tr>';
+  if(tbEceran.innerHTML==='') tbEceran.innerHTML='<tr><td colspan="4" class="text-center text-slate-500 py-4">Belum ada data bulan ini</td></tr>';
 }
 
 async function deletePengambilan(row){
-  if(!confirm('Hapus data ini?'))return;
+  if(!confirm('Hapus data ini?')) return;
   const res=await api('deletePengambilan',{payload:{row:row}});
-  if(res.success){toast('Terhapus!');applyServerData(res);renderStok();}
-  else{toast('Gagal menghapus','error');}
+  if(res.success){toast('Data dihapus!');applyServerData(res);renderStok();}else{toast('Gagal menghapus','error');}
 }
 
 /* ====== CROSSCHECK ====== */
@@ -835,75 +865,64 @@ async function saveCrosscheck(){
   const status=document.getElementById('cc-status').value;
   const jml=parseInt(document.getElementById('cc-jml').value)||0;
   const ket=document.getElementById('cc-ket').value;
+  if(!jam){toast('Jam wajib diisi!','error');return;}
   setLoading('btn-save-cc',true);
-  const res=await api('saveCrosscheck',{payload:{tanggal:new Date().toISOString().slice(0,10),jam:jam,status:status,jumlah:jml,keterangan:ket,catatan:catatan,tipe:curCCTipe}});
+  const res=await api('saveCrosscheck',{payload:{catatan:catatan,jam:jam,status:status,jmlSelisih:jml,ketSelisih:ket,tipe:curCCTipe}});
   setLoading('btn-save-cc',false,'SIMPAN CROSSCHECK');
-  if(res.success){toast('Crosscheck tersimpan!');applyServerData(res);renderCrosscheck();document.getElementById('cc-catatan').value='';document.getElementById('cc-jml').value='';}
-  else{toast('Gagal','error');}
+  if(res.success){toast('Crosscheck disimpan!');applyServerData(res);renderCrosscheck();document.getElementById('cc-catatan').value='';document.getElementById('cc-jml').value='';}else{toast('Gagal menyimpan','error');}
 }
 
 function renderCrosscheck(){
   if(!dashState)return;
   const d=dashState,m=selMonth;
-  /* Stok sistem */
-  const allP=d.allPengambilan||[];const allS=d.allSales||[];
-  const stokMap={};
-  Object.keys(masterData).forEach(r=>{stokMap[r]={masuk:0,terjual:0};});
-  allP.filter(x=>getMonth(x.tanggal)===m).forEach(p=>{if(!stokMap[p.rokok])stokMap[p.rokok]={masuk:0,terjual:0};if(p.tipe==='Masuk')stokMap[p.rokok].masuk+=p.jumlah||0;});
-  allS.filter(x=>getMonth(x.tanggal)===m).forEach(s=>{if(!stokMap[s.rokok])stokMap[s.rokok]={masuk:0,terjual:0};if(curCCTipe==='Perslop'&&s.tipe==='Perslop')stokMap[s.rokok].terjual+=s.jumlah||0;else if(curCCTipe==='Eceran'&&s.tipe==='Eceran')stokMap[s.rokok].terjual+=s.jumlah||0;});
-  let stokHtml='';
-  Object.keys(stokMap).sort().forEach(r=>{const s=stokMap[r];stokHtml+=`<tr><td class="text-left">${r}</td><td>${s.terjual}</td><td>${s.masuk-s.terjual}</td></tr>`;});
-  document.getElementById('tb-cc-stok').innerHTML=stokHtml;
-
-  /* Riwayat */
-  const ccList=(d.allCrosscheck||[]).filter(x=>getMonth(x.tanggal)===m&&x.tipe===curCCTipe);
-  let ccHtml='';
-  ccList.slice().reverse().forEach(c=>{
-    const stC=c.status==='KLOP'?'bg1':'br1';
-    ccHtml+=`<tr><td class="text-xs">${fmtDate(c.tanggal,false)}</td><td>${c.jam||'-'}</td><td><span class="badge ${stC}">${c.status}</span></td><td>${c.jumlah||0}</td><td>${c.keterangan||'-'}</td><td>${c.catatan||'-'}</td><td><button onclick="deleteCC(${c.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
+  const ccBulan=(d.allCrosscheck||[]).filter(x=>getMonth(x.tanggal)===m && x.tipe===curCCTipe);
+  const tb=document.getElementById('tb-cc');
+  tb.innerHTML='';
+  ccBulan.slice().reverse().forEach(c=>{
+    let stColor=c.status==='KLOP'?'bg1':'br1';
+    tb.innerHTML+=`<tr><td class="text-xs">${fmtDateShort(c.tanggal)}</td><td>${c.jam}</td><td><span class="badge ${stColor}">${c.status}</span></td><td>${c.jmlSelisih||0}</td><td>${c.ketSelisih||'-'}</td><td>${c.catatan||'-'}</td><td><button onclick="deleteCrosscheck(${c.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
   });
-  document.getElementById('tb-cc').innerHTML=ccHtml;
+  if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="7" class="text-center text-slate-500 py-4">Belum ada riwayat</td></tr>';
 }
 
-async function deleteCC(row){
-  if(!confirm('Hapus data ini?'))return;
+async function deleteCrosscheck(row){
+  if(!confirm('Hapus data ini?')) return;
   const res=await api('deleteCrosscheck',{payload:{row:row}});
-  if(res.success){toast('Terhapus!');applyServerData(res);renderCrosscheck();}
-  else{toast('Gagal menghapus','error');}
+  if(res.success){toast('Data dihapus!');applyServerData(res);renderCrosscheck();}else{toast('Gagal menghapus','error');}
 }
 
-/* ====== LIST ROKOK ====== */
+/* ====== MASTER ROKOK ====== */
 function renderListRokok(){
-  let tbHtml='',shareText='📋 LIST HARGA ROKOK GANA STORE\n══════════════════════════\n\n';
-  Object.keys(masterData).sort().forEach(r=>{
-    const m=masterData[r];
-    tbHtml+=`<tr><td class="text-left font-semibold">${r}</td><td>${Bt(m.modal||0)}</td><td>${Bt(m.cashRiel||0)}</td><td>${Bt(m.um||0)}</td><td>${Bt(m.eceran||0)}</td><td class="space-x-1"><button onclick="editMaster('${r}')" class="be"><i class="fas fa-edit"></i></button><button onclick="deleteMaster('${r}')" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
-    shareText+=`🚬 ${r}\n   Modal: ฿${(m.modal||0).toLocaleString('th-TH')}/slop\n   Cash:  ฿${(m.cashRiel||0).toLocaleString('th-TH')}/slop\n   UM:    ฿${(m.um||0).toLocaleString('th-TH')}/slop\n   Eceran: ฿${(m.eceran||0).toLocaleString('th-TH')}/bks\n\n`;
+  const tb=document.getElementById('tb-rokok');
+  tb.innerHTML='';
+  Object.keys(masterData).sort().forEach(n=>{
+    const m=masterData[n];
+    tb.innerHTML+=`<tr><td class="text-left font-semibold">${n}</td><td>${Bt(m.modal)}</td><td>${Bt(m.cashRiel)}</td><td>${Bt(m.um)}</td><td>${Bt(m.eceran)}</td><td><button onclick="editMaster('${n.replace(/'/g, "\\'")}')" class="be mr-1"><i class="fas fa-edit"></i></button><button onclick="deleteMaster('${n.replace(/'/g, "\\'")}')" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
   });
-  document.getElementById('tb-rokok').innerHTML=tbHtml;
-  document.getElementById('text-share').innerText=shareText;
+  generateShareText();
 }
 
-async function saveMaster(){
-  const nama=document.getElementById('m-nama').value.trim();
-  if(!nama){toast('Nama rokok wajib diisi!','error');return;}
-  const payload={nama:nama,modal:parseNum(document.getElementById('m-modal').value),cashRiel:parseNum(document.getElementById('m-cash').value),um:parseNum(document.getElementById('m-um').value),eceran:parseNum(document.getElementById('m-eceran').value)};
-  if(editMode)payload.oldNama=editMode;
-  setLoading('btn-save-master',true);
-  const res=await api('saveMaster',{payload:payload});
-  setLoading('btn-save-master',false,editMode?'UPDATE ROKOK':'SIMPAN ROKOK BARU');
-  if(res.success){toast(editMode?'Rokok diupdate!':'Rokok tersimpan!');applyServerData(res);editMode=null;document.getElementById('btn-cancel-edit').classList.add('hidden');cancelEdit();renderListRokok();}
-  else{toast('Gagal','error');}
+function generateShareText(){
+  let txt="🚀 HARGA ROKOK TERUPDATE 🚀\n\n";
+  Object.keys(masterData).sort().forEach(n=>{
+    const m=masterData[n];
+    txt+=`🚬 ${n}\n`;
+    if(m.cashRiel) txt+=`Cash/Slop: ${Bt(m.cashRiel)} | `;
+    if(m.um) txt+=`UM/Slop: ${Bt(m.um)}\n`;
+    if(m.eceran) txt+=`Eceran: ${Bt(m.eceran)}/Bks\n`;
+    txt+="------------------------\n";
+  });
+  document.getElementById('text-share').innerText=txt;
 }
 
 function editMaster(nama){
   const m=masterData[nama];if(!m)return;
   editMode=nama;
   document.getElementById('m-nama').value=nama;
-  document.getElementById('m-modal').value=(m.modal||0).toLocaleString('id-ID');
-  document.getElementById('m-cash').value=(m.cashRiel||0).toLocaleString('id-ID');
-  document.getElementById('m-um').value=(m.um||0).toLocaleString('id-ID');
-  document.getElementById('m-eceran').value=(m.eceran||0).toLocaleString('id-ID');
+  document.getElementById('m-modal').value=m.modal?m.modal.toLocaleString('id-ID'):'';
+  document.getElementById('m-cash').value=m.cashRiel?m.cashRiel.toLocaleString('id-ID'):'';
+  document.getElementById('m-um').value=m.um?m.um.toLocaleString('id-ID'):'';
+  document.getElementById('m-eceran').value=m.eceran?m.eceran.toLocaleString('id-ID'):'';
   document.getElementById('btn-save-master').innerText='UPDATE ROKOK';
   document.getElementById('btn-cancel-edit').classList.remove('hidden');
 }
@@ -919,84 +938,93 @@ function cancelEdit(){
   document.getElementById('btn-cancel-edit').classList.add('hidden');
 }
 
+async function saveMaster(){
+  const nama=document.getElementById('m-nama').value.trim();
+  const modal=parseNum(document.getElementById('m-modal').value);
+  const cash=parseNum(document.getElementById('m-cash').value);
+  const um=parseNum(document.getElementById('m-um').value);
+  const eceran=parseNum(document.getElementById('m-eceran').value);
+  if(!nama){toast('Nama rokok wajib diisi!','error');return;}
+  setLoading('btn-save-master',true);
+  const action=editMode?'updateMaster':'saveMaster';
+  const res=await api(action,{payload:{nama:nama,modal:modal,cashRiel:cash,um:um,eceran:eceran}});
+  setLoading('btn-save-master',false,'SIMPAN ROKOK BARU');
+  if(res.success){
+    toast(editMode?'Rokok diupdate!':'Rokok ditambahkan!');
+    applyServerData(res);
+    cancelEdit();
+    renderListRokok();
+  }else{toast('Gagal menyimpan','error');}
+}
+
 async function deleteMaster(nama){
-  if(!confirm('Hapus rokok "'+nama+'" dari daftar?'))return;
+  if(!confirm('Hapus rokok '+nama+'?')) return;
   const res=await api('deleteMaster',{payload:{nama:nama}});
-  if(res.success){toast('Terhapus!');applyServerData(res);renderListRokok();}
-  else{toast('Gagal menghapus','error');}
+  if(res.success){toast('Rokok dihapus!');applyServerData(res);renderListRokok();}else{toast('Gagal menghapus','error');}
 }
 
 /* ====== REKAP UANG MAKAN ====== */
 function renderRekapUM(){
   if(!dashState)return;
   const d=dashState,m=selMonth;
-  const umList=(d.allSales||[]).filter(x=>getMonth(x.tanggal)===m&&x.tipeBayar==='Uang Makan');
-  let totalUM=0,sudahCair=0,belumCair=0;
-  umList.forEach(j=>{
-    const h=j.harga||0;totalUM+=h;
-    if(j.statusBayar&&j.statusBayar.includes('CAIR'))sudahCair+=h;else belumCair+=h;
+  const umBulan=(d.allSales||[]).filter(x=>getMonth(x.tanggal)===m && x.tipeBayar==='Uang Makan');
+  
+  let total=0,cair=0,belum=0;
+  umBulan.forEach(j=>{
+    total+=j.harga;
+    if(j.statusBayar&&j.statusBayar.includes('CAIR'))cair+=j.harga;
+    else belum+=j.harga;
   });
-  document.getElementById('um-total').innerText=Bt(totalUM);
-  document.getElementById('um-cair').innerText=Bt(sudahCair);
-  document.getElementById('um-belum').innerText=Bt(belumCair);
-
+  
+  document.getElementById('um-total').innerText=Bt(total);
+  document.getElementById('um-cair').innerText=Bt(cair);
+  document.getElementById('um-belum').innerText=Bt(belum);
+  
   const tb=document.getElementById('tb-um');
   tb.innerHTML='';
-  umList.slice().reverse().forEach(j=>{
+  let txtRekap="📋 REKAPAN UANG MAKAN\n\n";
+  
+  umBulan.slice().reverse().forEach((j,i)=>{
     const isCair=j.statusBayar&&j.statusBayar.includes('CAIR');
-    const toggleClass=isCair?'on':'off';
-    const statusText=isCair?'Sudah Cair':'Belum Cair';
-    const statusBadge=isCair?'bg1':'br1';
-    const barisText=`${fmtDateShort(j.tanggal)} | ${j.nama} | ${j.rokok} | ${j.jumlah} Slop | ${Bt(j.harga)} | ${statusText}`;
+    txtRekap+=`${i+1}. ${fmtDateShort(j.tanggal)} - ${j.nama} (${j.situs||'-'})\n   ${j.rokok} ${j.jumlah} Slop - ${Bt(j.harga)}\n   Status: ${isCair?'Sudah Cair':'Belum Cair'}\n\n`;
+    
     tb.innerHTML+=`<tr>
-      <td class="text-left text-xs">${fmtDate(j.tanggal,false)}</td>
+      <td class="text-left text-xs">${fmtDateShort(j.tanggal)}</td>
       <td class="text-left">${j.nama}</td>
       <td>${j.rokok}</td>
-      <td>${j.jumlah} Slop</td>
+      <td>${j.jumlah}</td>
       <td>${Bt(j.harga)}</td>
-      <td>
-        <div class="flex items-center gap-2 justify-center">
-          <div class="toggle-cair ${toggleClass}" onclick="toggleCairUM(${j.row},'${j.statusBayar||''}')"></div>
-          <span class="badge ${statusBadge}">${statusText}</span>
-        </div>
-      </td>
-      <td><button onclick="copyBarisUM(\`${barisText.replace(/`/g,"'")}\`)" class="bs text-xs px-2 py-1"><i class="fas fa-copy"></i></button></td>
+      <td><button onclick="toggleCairUM(${j.row}, ${isCair})" class="toggle-cair ${isCair?'on':'off'}"></button></td>
+      <td><button onclick="copyRowUM('${j.tanggal}','${j.nama}','${j.rokok}',${j.jumlah},${j.harga})" class="bs text-xs"><i class="fas fa-copy"></i></button></td>
       <td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td>
     </tr>`;
   });
-
-  /* Text rekap tersembunyi untuk copy semua */
-  let rekapText='📋 REKAPAN PEMBAYARAN UANG MAKAN\n══════════════════════════════\n\n';
-  umList.slice().reverse().forEach(j=>{
-    const isCair=j.statusBayar&&j.statusBayar.includes('CAIR');
-    rekapText+=`${fmtDateShort(j.tanggal)} | ${j.nama} | ${j.rokok} | ${j.jumlah} Slop | ${Bt(j.harga)} | ${isCair?'Sudah Cair':'Belum Cair'}\n`;
-  });
-  rekapText+=`\n══════════════════════════════\nTotal: ${Bt(totalUM)}\nSudah Cair: ${Bt(sudahCair)}\nBelum Cair: ${Bt(belumCair)}`;
-  document.getElementById('rekap-um-text').innerText=rekapText;
+  
+  document.getElementById('rekap-um-text').innerText=txtRekap;
+  if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="8" class="text-center text-slate-500 py-4">Belum ada transaksi UM bulan ini</td></tr>';
 }
 
-/* Toggle Sudah Cair / Belum Cair - TERSIMPAN KE SERVER */
-async function toggleCairUM(row,currentStatus){
-  const newStatus=currentStatus.includes('CAIR')?'SUDAH BAYAR UM':'SUDAH CAIR UM';
-  const res=await api('updateStatusBayar',{payload:{row:row,statusBayar:newStatus}});
+function copyRowUM(tgl,nama,rokok,jml,harga){
+  const txt=`${fmtDateShort(tgl)}\n${nama}\n${rokok} - ${jml} Slop\nTotal: ${Bt(harga)}`;
+  navigator.clipboard.writeText(txt).then(()=>toast('Baris disalin!'));
+}
+
+kapUM(){
+  const txt=document.getElementById('rekap-um-text').innerText;
+  navigator.clipboard.writeText(txt).then(()=>toast('Semua rekap disalin!'));
+}
+
+async function toggleCairUM(row, isCair){
+  const newStatus = isCair ? 'SUDAH BAYAR UM' : 'SUDAH CAIR UM';
+  const res = await api('updateStatusPenjualan', {payload:{row:row, newStatus:newStatus}});
   if(res.success){
-    toast(newStatus.includes('CAIR')?'Ditandai Sudah Cair':'Ditandai Belum Cair');
+    toast('Status uang makan diperbarui!');
     applyServerData(res);
     renderRekapUM();
     renderDashboard();
-  }else{
+  } else {
     toast('Gagal update status','error');
   }
-}
-
-/* Copy per baris */
-function copyBarisUM(text){
-  navigator.clipboard.writeText(text).then(()=>toast('Baris berhasil disalin!'));
-}
-
-/* Copy semua rekap */
-function copyRekapUM(){
-  copyText('rekap-um-text');
 }
 
 /* ====== KAS ====== */
@@ -1004,22 +1032,32 @@ function renderKas(){
   if(!dashState)return;
   const d=dashState,m=selMonth;
   const jualBulan=(d.allSales||[]).filter(x=>getMonth(x.tanggal)===m);
-  let totalP=0,totalModal=0,abaTotal=0,umBelumCair=0;
+  let totalP=0,modal=0,untung=0,abaTotal=0,umBelum=0;
+  
   jualBulan.forEach(j=>{
-    const harga=j.harga||0;
     const mp=(masterData[j.rokok]&&masterData[j.rokok].modal)||0;
-    totalP+=harga;
-    if(j.tipe==='Eceran')totalModal+=mp/10*j.jumlah;
-    else totalModal+=mp*j.jumlah;
-    if(j.tipeBayar==='ABA')abaTotal+=harga;
-    else if(j.tipeBayar==='Uang Makan'){if(!j.statusBayar||!j.statusBayar.includes('CAIR'))umBelumCair+=harga;}
+    totalP+=j.harga;
+    let hModal=0;
+    if(j.tipe==='Eceran'){
+      hModal=mp/10*j.jumlah;
+    } else {
+      hModal=mp*j.jumlah;
+    }
+    modal+=hModal;
+    untung+=j.harga-hModal;
+    
+    if(j.tipeBayar==='ABA')abaTotal+=j.harga;
+    else if(j.tipeBayar==='Uang Makan'){
+      if(!j.statusBayar||!j.statusBayar.includes('CAIR'))umBelum+=j.harga;
+    }
   });
+  
   document.getElementById('kas-pendapatan').innerText=Bt(totalP);
-  document.getElementById('kas-modal').innerText=Bt(totalModal);
-  document.getElementById('kas-untung').innerText=Bt(totalP-totalModal);
+  document.getElementById('kas-modal').innerText=Bt(modal);
+  document.getElementById('kas-untung').innerText=Bt(untung);
   document.getElementById('kas-total').innerText=Bt(totalP);
   document.getElementById('kas-aba').innerText=Bt(abaTotal);
-  document.getElementById('kas-um').innerText=Bt(umBelumCair);
+  document.getElementById('kas-um').innerText=Bt(umBelum);
 }
 </script>
 </body>
