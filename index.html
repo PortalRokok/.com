@@ -89,9 +89,16 @@ input[type="date"]::-webkit-calendar-picker-indicator,input[type="month"]::-webk
 .ni:hover{background:rgba(255,255,255,0.06);color:#e2e8f0}
 .ni.ac{background:linear-gradient(135deg,rgba(56,189,248,0.15),rgba(56,189,248,0.05));color:#38bdf8;border:1px solid rgba(56,189,248,0.2);font-weight:700}
 .si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px}
+
+/* ====== TABEL HIDUP BERWARNA ====== */
 table{width:100%;border-collapse:collapse;white-space:nowrap}
-th{color:#94a3b8;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding:12px 14px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:2}
-td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.04)}
+th{font-family:'Kanit',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em;padding:14px 12px;background:linear-gradient(135deg,rgba(56,189,248,0.35),rgba(168,85,247,0.3),rgba(236,72,153,0.3));background-size:200% 100%;color:#f0f9ff;border-bottom:2px solid rgba(56,189,248,0.6);border-top:1px solid rgba(255,255,255,0.15);position:sticky;top:0;z-index:2;text-shadow:0 0 12px rgba(56,189,248,0.6);animation:headerFlow 6s ease infinite;white-space:nowrap}
+@keyframes headerFlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.05)}
+tbody tr:nth-child(odd) td{background:rgba(56,189,248,0.045)}
+tbody tr:nth-child(even) td{background:rgba(168,85,247,0.035)}
+tbody tr{transition:all .15s}
+tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3px 0 0 #38bdf8}
 .badge{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;display:inline-block;text-align:center}
 .bg1{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
 .br1{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.2)}
@@ -444,7 +451,6 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
 const API='https://script.google.com/macros/s/AKfycbybxNIoRebMvOprAiJMKetSdx24UiZeVU7EfP7deLlEueyd8ZZTLEiKHDANPTjYAoFw/exec';
 const BARCODE_URL='https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN';
 const Bt=(n)=>'฿'+(n||0).toLocaleString('th-TH');
-/* Nama bulan PENUH, tidak disingkat */
 const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 
 let masterData={};
@@ -1110,17 +1116,14 @@ function copyRekapUM(){
   navigator.clipboard.writeText(txt).then(()=>toast('Semua rekap disalin!'));
 }
 
-/* ====== TOGGLE CAIR: INSTAN TANPA DELAY ====== */
 function toggleCairUM(row,isCair){
   const newStatus=isCair?'SUDAH BAYAR UM':'SUDAH CAIR UM';
-  /* 1. Langsung ubah data lokal & render ulang DETIK ITU JUGA */
   const rec=(dashState.allSales||[]).find(x=>x.row===row);
   if(rec)rec.statusBayar=newStatus;
   persistLocal();
   renderRekapUM();
   renderDashboard();
   toast(isCair?'Dikembalikan ke Belum Cair':'Sudah Cair!');
-  /* 2. Kirim ke server di belakang layar (gak nunggu) */
   if(row<0)return;
   api('updateStatusPenjualan',{payload:{row:row,newStatus:newStatus}}).then(res=>{
     if(!res||!res.success){
