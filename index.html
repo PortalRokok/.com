@@ -24,23 +24,53 @@ input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit
 .lamp-bg .l2{width:500px;height:500px;background:#a855f7;bottom:-150px;right:-100px}
 .lamp-bg .l3{width:300px;height:300px;background:#22d3ee;top:40%;left:40%}
 @keyframes floatLamp{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-30px)}}
+
+/* ====== KOTAK HIDUP DENGAN LAMPU ====== */
+.vivid{transition:transform .3s ease;overflow:hidden}
+.vivid:hover{transform:translateY(-6px)}
+.glow-ring{position:absolute;inset:0;border-radius:20px;padding:2px;pointer-events:none;background-size:300% 100%;animation:flowBorder 5s linear infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude}
+@keyframes flowBorder{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.g-cyan{background-image:linear-gradient(90deg,#38bdf8,#22d3ee,#0ea5e9,#38bdf8)}
+.g-green{background-image:linear-gradient(90deg,#4ade80,#34d399,#22c55e,#4ade80)}
+.g-blue{background-image:linear-gradient(90deg,#60a5fa,#38bdf8,#3b82f6,#60a5fa)}
+.g-purple{background-image:linear-gradient(90deg,#c084fc,#a855f7,#8b5cf6,#c084fc)}
+.g-pink{background-image:linear-gradient(90deg,#f472b6,#ec4899,#f43f5e,#f472b6)}
+.g-red{background-image:linear-gradient(90deg,#f87171,#ef4444,#dc2626,#f87171)}
+.g-gold{background-image:linear-gradient(90deg,#fbbf24,#f59e0b,#eab308,#fbbf24)}
+@keyframes glowCyan{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(56,189,248,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(56,189,248,0.4)}}
+@keyframes glowGreen{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(74,222,128,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(74,222,128,0.4)}}
+@keyframes glowBlue{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(96,165,250,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(96,165,250,0.4)}}
+@keyframes glowPurple{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(192,132,252,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(192,132,252,0.4)}}
+@keyframes glowPink{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(244,114,182,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(244,114,182,0.4)}}
+@keyframes glowRed{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(248,113,113,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(248,113,113,0.4)}}
+@keyframes glowGold{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(251,191,36,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(251,191,36,0.4)}}
+.pc-cyan{animation:glowCyan 4s ease-in-out infinite}
+.pc-green{animation:glowGreen 4s ease-in-out infinite}
+.pc-blue{animation:glowBlue 4s ease-in-out infinite}
+.pc-purple{animation:glowPurple 4s ease-in-out infinite}
+.pc-pink{animation:glowPink 4s ease-in-out infinite}
+.pc-red{animation:glowRed 4s ease-in-out infinite}
+.pc-gold{animation:glowGold 4s ease-in-out infinite}
+.ifloat{animation:ifloat 3s ease-in-out infinite}
+@keyframes ifloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.shine{position:relative;overflow:hidden;display:inline-block}
+.shine::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,0.35),transparent);animation:sweep 3.5s ease-in-out infinite;pointer-events:none}
+@keyframes sweep{0%{left:-100%}60%,100%{left:150%}}
+
 .gc{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--bdr);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.4);position:relative;z-index:1}
-.ga{box-shadow:0 0 30px rgba(56,189,248,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(56,189,248,0.2)}
-.gb{box-shadow:0 0 30px rgba(59,130,246,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(59,130,246,0.2)}
-.gp{box-shadow:0 0 30px rgba(168,85,247,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(168,85,247,0.2)}
-.gr{box-shadow:0 0 30px rgba(239,68,68,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(239,68,68,0.2)}
-.gc2{box-shadow:0 0 30px rgba(6,182,212,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(6,182,212,0.2)}
-.gg{box-shadow:0 0 30px rgba(34,197,94,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(34,197,94,0.2)}
-.gpk{box-shadow:0 0 30px rgba(236,72,153,0.15),0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(236,72,153,0.2)}
 .is{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);color:#f8fafc;border-radius:12px;padding:14px 16px;width:100%}
 .is:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(56,189,248,0.15);background:rgba(255,255,255,0.08)}
 .is option{background:#0f172a;color:#f8fafc;font-size:16px}
 .ls{color:#94a3b8;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
 input[type="date"]::-webkit-calendar-picker-indicator,input[type="month"]::-webkit-calendar-picker-indicator,input[type="time"]::-webkit-calendar-picker-indicator{filter:invert(0.8) sepia(1) saturate(5) hue-rotate(180deg);cursor:pointer}
-.bp{background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#00121f;font-weight:700;padding:14px 24px;border-radius:14px;border:none;cursor:pointer;font-size:16px;box-shadow:0 4px 15px rgba(56,189,248,0.3)}
+.bp{background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#00121f;font-weight:700;padding:14px 24px;border-radius:14px;border:none;cursor:pointer;font-size:16px;box-shadow:0 4px 15px rgba(56,189,248,0.3);transition:all .15s}
+.bp:hover{box-shadow:0 6px 25px rgba(56,189,248,0.5);transform:translateY(-1px)}
+.bp:active{transform:scale(.97)}
 .bs{background:rgba(255,255,255,0.06);color:#e2e8f0;font-weight:600;padding:10px 18px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-size:14px}
 .bd{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-weight:700;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-size:13px}
-.be{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-weight:700;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-size:13px}
+.bd:hover{box-shadow:0 4px 15px rgba(239,68,68,0.4)}
+.be{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-weight:700;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-size:13px;transition:all .15s}
+.be:hover{box-shadow:0 4px 15px rgba(59,130,246,0.5);transform:translateY(-1px)}
 .fi{animation:fi .25s ease-out}
 @keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .ta{animation:ta .25s ease-out}
@@ -56,8 +86,6 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
 .bg1{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
 .br1{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.2)}
 .ba1{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.2)}
-.bb1{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.2)}
-.bc1{background:rgba(6,182,212,0.15);color:#22d3ee;border:1px solid rgba(6,182,212,0.2)}
 .sa{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .st{font-size:15px;font-weight:700;color:#38bdf8;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px}
 .fl{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f8fafc;border-radius:10px;padding:10px 12px;font-size:14px;font-weight:600}
@@ -83,7 +111,8 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
 <div id="toast" class="hidden fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl shadow-2xl z-[100] font-bold text-sm ta"></div>
 
 <div id="login-view" class="min-h-screen flex items-center justify-center p-4 relative">
-  <div class="relative z-10 gc ga p-10 w-full max-w-md fi">
+  <div class="relative z-10 gc pc-cyan p-10 w-full max-w-md fi">
+    <div class="glow-ring g-cyan"></div>
     <div class="flex flex-col items-center mb-8">
       <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-w-[180px] h-auto object-fill mb-5 rounded-xl" alt="Logo">
       <h1 class="text-3xl font-extrabold tracking-tight text-blink">Gana Store</h1>
@@ -160,33 +189,57 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
 
       <div id="page-dashboard" class="fi space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="gc ga p-6 pg">
-            <div class="flex items-center gap-3 mb-3"><div class="si bg-cyan-500/10 text-cyan-400"><i class="fas fa-coins"></i></div><p class="d-label">Total Pendapatan</p></div>
-            <p class="d-value text-white" id="d-pendapatan">฿0</p>
+          <div class="gc vivid pc-cyan p-6">
+            <div class="glow-ring g-cyan"></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-cyan-500/10 text-cyan-400 ifloat"><i class="fas fa-coins"></i></div><p class="d-label">Total Pendapatan</p></div>
+            <p class="d-value text-white shine" id="d-pendapatan">฿0</p>
           </div>
-          <div class="gc gg p-6">
-            <div class="flex items-center gap-3 mb-3"><div class="si bg-green-500/10 text-green-400"><i class="fas fa-sack-dollar"></i></div><p class="d-label">Untung Gabungan</p></div>
-            <p class="d-value text-green-400" id="d-untung">฿0</p>
+          <div class="gc vivid pc-green p-6">
+            <div class="glow-ring g-green"></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-green-500/10 text-green-400 ifloat"><i class="fas fa-sack-dollar"></i></div><p class="d-label">Untung Gabungan</p></div>
+            <p class="d-value text-green-400 shine" id="d-untung">฿0</p>
           </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="gc gb p-6"><div class="flex items-center gap-3 mb-3"><div class="si bg-blue-500/10 text-blue-400"><i class="fas fa-box"></i></div><p class="d-label">Untung Perslop</p></div><p class="d-value text-blue-400" id="d-untung-slop">฿0</p></div>
-          <div class="gc gp p-6"><div class="flex items-center gap-3 mb-3"><div class="si bg-purple-500/10 text-purple-400"><i class="fas fa-shopping-basket"></i></div><p class="d-label">Untung Eceran</p></div><p class="d-value text-purple-400" id="d-untung-eceran">฿0</p></div>
-          <div class="gc gc2 p-6"><div class="flex items-center gap-3 mb-3"><div class="si bg-cyan-500/10 text-cyan-400"><i class="fas fa-box-open"></i></div><p class="d-label">Slop Terjual</p></div><p class="d-value text-cyan-400" id="d-slop">0 Slop</p></div>
+          <div class="gc vivid pc-blue p-6">
+            <div class="glow-ring g-blue"></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-blue-500/10 text-blue-400 ifloat"><i class="fas fa-box"></i></div><p class="d-label">Untung Perslop</p></div>
+            <p class="d-value text-blue-400 shine" id="d-untung-slop">฿0</p>
+          </div>
+          <div class="gc vivid pc-purple p-6">
+            <div class="glow-ring g-purple"></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-purple-500/10 text-purple-400 ifloat"><i class="fas fa-shopping-basket"></i></div><p class="d-label">Untung Eceran</p></div>
+            <p class="d-value text-purple-400 shine" id="d-untung-eceran">฿0</p>
+          </div>
+          <div class="gc vivid pc-cyan p-6">
+            <div class="glow-ring g-cyan"></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-cyan-500/10 text-cyan-400 ifloat"><i class="fas fa-box-open"></i></div><p class="d-label">Slop Terjual</p></div>
+            <p class="d-value text-cyan-400 shine" id="d-slop">0 Slop</p>
+          </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="gc gb p-6"><div class="flex items-center gap-3 mb-3"><div class="si bg-blue-500/10 text-blue-400"><i class="fas fa-building-columns"></i></div><p class="d-label">Pembayaran ABA / Cash</p></div><p class="d-value text-blue-400" id="d-aba">฿0</p></div>
-          <div class="gc gpk p-6"><div class="flex items-center gap-3 mb-3"><div class="si bg-pink-500/10 text-pink-400"><i class="fas fa-utensils"></i></div><p class="d-label">Uang Makan Belum Cair</p></div><p class="d-value text-pink-400" id="d-um">฿0</p></div>
+          <div class="gc vivid pc-blue p-6">
+            <div class="glow-ring g-blue"></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-blue-500/10 text-blue-400 ifloat"><i class="fas fa-building-columns"></i></div><p class="d-label">Pembayaran ABA / Cash</p></div>
+            <p class="d-value text-blue-400 shine" id="d-aba">฿0</p>
+          </div>
+          <div class="gc vivid pc-pink p-6">
+            <div class="glow-ring g-pink"></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-pink-500/10 text-pink-400 ifloat"><i class="fas fa-utensils"></i></div><p class="d-label">Uang Makan Belum Cair</p></div>
+            <p class="d-value text-pink-400 shine" id="d-um">฿0</p>
+          </div>
         </div>
-        <div class="gc gpk p-6">
-          <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-chart-bar text-pink-400"></i> Grafik Penjualan 6 Bulan Terakhir</h3>
+        <div class="gc vivid pc-pink p-6">
+          <div class="glow-ring g-pink"></div>
+          <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-chart-bar text-pink-400 ifloat"></i> Grafik Penjualan 6 Bulan Terakhir</h3>
           <div style="height:320px;position:relative"><canvas id="salesChart"></canvas></div>
         </div>
       </div>
 
       <div id="page-jual" class="hidden fi space-y-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="jual-grid">
-          <div class="gc ga p-6 md:p-8">
+          <div class="gc vivid pc-cyan p-6 md:p-8">
+            <div class="glow-ring g-cyan"></div>
             <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-cart-shopping text-cyan-400"></i> Form Penjualan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
               <div><label class="ls">Tanggal</label><input type="date" id="jual-tgl" class="is"></div>
@@ -199,7 +252,7 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
             </div>
             <div class="bg-gradient-to-r from-cyan-900/30 to-cyan-600/10 p-5 rounded-2xl border border-cyan-500/20 mb-6 flex justify-between items-center">
               <span class="text-xs font-bold text-cyan-300 uppercase tracking-widest">Total Harga</span>
-              <p class="text-3xl font-extrabold text-cyan-400" id="jual-harga">฿0</p>
+              <p class="text-3xl font-extrabold text-cyan-400 shine" id="jual-harga">฿0</p>
             </div>
             <button onclick="saveJual()" id="btn-save-jual" class="bp w-full">SIMPAN TRANSAKSI</button>
           </div>
@@ -212,7 +265,8 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
 
       <div id="page-stok" class="hidden fi space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="gc ga p-6">
+          <div class="gc vivid pc-cyan p-6">
+            <div class="glow-ring g-cyan"></div>
             <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-plus-circle text-cyan-400"></i> Catat Pengambilan</h3>
             <label class="ls">Tanggal</label><input type="date" id="stok-tgl" class="is mb-3">
             <label class="ls">Jenis Rokok</label><select id="stok-rokok" class="is mb-3"></select>
@@ -220,7 +274,8 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
             <label class="ls">Modal Per Slop (฿)</label><input type="text" inputmode="numeric" id="stok-modal" class="is mb-4" placeholder="0">
             <button onclick="saveAmbilStok()" id="btn-save-stok" class="bp w-full">CATAT PENGAMBILAN</button>
           </div>
-          <div class="gc gp p-6">
+          <div class="gc vivid pc-purple p-6">
+            <div class="glow-ring g-purple"></div>
             <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-box-open text-purple-400"></i> Buka Slop ke Eceran</h3>
             <label class="ls">Jenis Rokok</label><select id="buka-rokok" class="is mb-3"></select>
             <label class="ls">Jumlah Slop Dibuka</label><input type="number" id="buka-jml" class="is mb-3" placeholder="1 Slop = 10 Bungkus">
@@ -239,7 +294,8 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
 
       <div id="page-crosscheck" class="hidden fi space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="gc gb p-6">
+          <div class="gc vivid pc-blue p-6">
+            <div class="glow-ring g-blue"></div>
             <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-clipboard-check text-blue-400"></i> Form Crosscheck</h3>
             <label class="ls">Catatan / Nama</label><input type="text" id="cc-catatan" class="is mb-3" placeholder="Opsional">
             <label class="ls">Jam Cek</label><input type="time" id="cc-jam" class="is mb-3">
@@ -258,7 +314,8 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
 
       <div id="page-rokok" class="hidden fi space-y-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="gc ga p-6 md:p-8">
+          <div class="gc vivid pc-cyan p-6 md:p-8">
+            <div class="glow-ring g-cyan"></div>
             <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-smoking text-cyan-400"></i> Kelola Harga Rokok</h3>
             <div class="space-y-3 mb-5">
               <div><label class="ls">Nama Rokok</label><input type="text" id="m-nama" class="is" placeholder="Contoh: Sampoerna Mild"></div>
@@ -276,8 +333,9 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
               <button onclick="cancelEdit()" id="btn-cancel-edit" class="hidden bs flex-1">BATAL</button>
             </div>
           </div>
-          <div class="gc gc2 p-6 flex flex-col">
-            <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-share-nodes text-cyan-400"></i> Format List Buat Share</h3>
+          <div class="gc vivid pc-purple p-6 flex flex-col">
+            <div class="glow-ring g-purple"></div>
+            <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-share-nodes text-purple-400"></i> Format List Buat Share</h3>
             <div id="text-share" class="bg-[rgba(5,8,18,0.6)] p-4 rounded-2xl mb-4 text-sm text-slate-300 whitespace-pre-wrap flex-1 overflow-auto max-h-80 border border-white/5" style="font-family:'Kanit',sans-serif"></div>
             <button onclick="copyText('text-share')" class="bp w-full"><i class="fas fa-copy mr-2"></i> COPY TEXT</button>
           </div>
@@ -287,9 +345,21 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
 
       <div id="page-rekap" class="hidden fi space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="gc ga p-5"><p class="d-label">Total Uang Makan Keseluruhan</p><p class="d-value text-cyan-400" id="um-total">฿0</p></div>
-          <div class="gc gg p-5"><p class="d-label">Sudah Cair</p><p class="d-value text-green-400" id="um-cair">฿0</p></div>
-          <div class="gc gr p-5"><p class="d-label">Belum Cair</p><p class="d-value text-red-400" id="um-belum">฿0</p></div>
+          <div class="gc vivid pc-cyan p-5">
+            <div class="glow-ring g-cyan"></div>
+            <div class="flex items-center gap-3 mb-2"><div class="si bg-cyan-500/10 text-cyan-400 ifloat"><i class="fas fa-utensils"></i></div><p class="d-label">Total Uang Makan Keseluruhan</p></div>
+            <p class="d-value text-cyan-400 shine" id="um-total">฿0</p>
+          </div>
+          <div class="gc vivid pc-green p-5">
+            <div class="glow-ring g-green"></div>
+            <div class="flex items-center gap-3 mb-2"><div class="si bg-green-500/10 text-green-400 ifloat"><i class="fas fa-circle-check"></i></div><p class="d-label">Sudah Cair</p></div>
+            <p class="d-value text-green-400 shine" id="um-cair">฿0</p>
+          </div>
+          <div class="gc vivid pc-red p-5">
+            <div class="glow-ring g-red"></div>
+            <div class="flex items-center gap-3 mb-2"><div class="si bg-red-500/10 text-red-400 ifloat"><i class="fas fa-hourglass-half"></i></div><p class="d-label">Belum Cair</p></div>
+            <p class="d-value text-red-400 shine" id="um-belum">฿0</p>
+          </div>
         </div>
         <div class="gc p-4">
           <div class="flex flex-wrap justify-between items-center mb-3 gap-2">
@@ -303,16 +373,18 @@ td{color:#e2e8f0;font-weight:500;font-size:14px;padding:12px 14px;border-bottom:
 
       <div id="page-kas" class="hidden fi space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="gc ga p-6">
-            <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-coins text-cyan-400"></i> Laporan Setoran</h3>
+          <div class="gc vivid pc-gold p-6">
+            <div class="glow-ring g-gold"></div>
+            <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-coins text-yellow-400 ifloat"></i> Laporan Setoran</h3>
             <div class="space-y-3">
               <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Total Penjualan</span><span class="font-bold text-lg text-white" id="kas-pendapatan">฿0</span></div>
               <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Total Modal</span><span class="font-bold text-lg text-red-400" id="kas-modal">฿0</span></div>
-              <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Untung Bersih</span><span class="font-bold text-lg text-green-400" id="kas-untung">฿0</span></div>
+              <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Untung Bersih</span><span class="font-bold text-lg text-green-400 shine" id="kas-untung">฿0</span></div>
             </div>
           </div>
-          <div class="gc gb p-6">
-            <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-wallet text-blue-400"></i> Detail Kas</h3>
+          <div class="gc vivid pc-blue p-6">
+            <div class="glow-ring g-blue"></div>
+            <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-wallet text-blue-400 ifloat"></i> Detail Kas</h3>
             <div class="space-y-3">
               <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Total Pendapatan</span><span class="font-bold text-lg text-white" id="kas-total">฿0</span></div>
               <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Pembayaran ABA / Cash</span><span class="font-bold text-lg text-blue-400" id="kas-aba">฿0</span></div>
@@ -352,9 +424,9 @@ let editMode=null;
 let salesChart=null;
 let today=new Date();
 let selMonth=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
+let sortedKeys=[];
 try{const sm=localStorage.getItem('gs_month');if(sm)selMonth=sm;}catch(e){}
 
-/* ====== PENYIMPANAN LOKAL (data ga akan hilang walau F5 / ganti browser) ====== */
 function persistLocal(){
   try{localStorage.setItem('gs_data',JSON.stringify({masterData:masterData,dashState:dashState,ts:Date.now()}));}catch(e){}
 }
@@ -368,7 +440,6 @@ function loadLocal(){
   }catch(e){}
   return false;
 }
-/* Antrian data yang gagal kirim ke server (auto-sync pas dibuka lagi) */
 function getPending(){try{return JSON.parse(localStorage.getItem('gs_pending')||'[]');}catch(e){return[];}}
 function savePending(p){try{localStorage.setItem('gs_pending',JSON.stringify(p));}catch(e){}}
 function addPending(op){try{op.id='op_'+Date.now()+'_'+Math.random();const p=getPending();p.push(op);savePending(p);}catch(e){}}
@@ -390,7 +461,6 @@ imgBC.src=BARCODE_URL;
 document.getElementById('barcode-link').href=BARCODE_URL;
 imgBC.onerror=()=>{imgBC.style.display='none';};
 
-/* ====== ENTER LANGSUNG LOGIN ====== */
 document.getElementById('toggle-pass-btn').addEventListener('click',togglePass);
 document.getElementById('username').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doLogin();}});
 document.getElementById('password').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doLogin();}});
@@ -475,7 +545,6 @@ function applyServerData(res){
   const d=res.dashboard||res;
   if(d.masterMap){masterData=d.masterMap;}
   if(d.allSales||d.allPengambilan||d.allCrosscheck){dashState=d;}
-  /* masukin lagi data lokal yang belum sempat masuk server */
   getPending().forEach(op=>{
     if(op.action==='saveMaster'||op.action==='updateMaster'){
       const p=op.payload;
@@ -532,22 +601,16 @@ async function initApp(){
   document.getElementById('stok-tgl').value=new Date().toISOString().slice(0,10);
   document.getElementById('jual-tgl').value=new Date().toISOString().slice(0,10);
   const ind=document.getElementById('sync-indicator');
-  
-  /* 1. Langsung tampilin data dari simpanan lokal (INSTAN, tanpa nunggu server) */
   const adaLokal=loadLocal();
   if(adaLokal&&Object.keys(masterData).length>0){
     populateDropdowns();
     renderDashboard();
   }
-  
-  /* 2. Kirim ulang data yang kemarin gagal masuk server */
   if(getPending().length>0){
     if(ind)ind.classList.remove('hidden');
     await syncPending();
     renderDashboard();
   }
-  
-  /* 3. Ambil data terbaru dari Google Sheet */
   if(ind)ind.classList.remove('hidden');
   const res=await api('getDashboard');
   if(ind)ind.classList.add('hidden');
@@ -679,8 +742,6 @@ async function saveJual(){
   if(curJualTipe==='Eceran'){harga=(m.eceran||0)*jml;}
   else{if(tb==='ABA'||tb==='CASH')harga=(m.cashRiel||0)*jml;else if(tb==='Uang Makan')harga=(m.um||0)*jml;}
   const payload={tipe:curJualTipe,nama:nama,situs:document.getElementById('jual-situs').value.trim(),rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st,tanggal:tglVal};
-  
-  /* TAMPILIN LANGSUNG - INSTAN TANPA NUNGGU SERVER */
   const tempRow=-Date.now();
   if(!dashState)dashState={masterMap:masterData,allSales:[],allPengambilan:[],allCrosscheck:[]};
   dashState.allSales.push({row:tempRow,tanggal:new Date(tglVal||Date.now()),tipe:curJualTipe,nama:nama,situs:payload.situs||'-',rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st});
@@ -690,14 +751,11 @@ async function saveJual(){
   document.getElementById('jual-situs').value='';
   document.getElementById('jual-jml').value='';
   document.getElementById('jual-harga').innerText='฿0';
-  
   if(curJualFilter==='UM'){
     switchPage('rekap');
   }else{
     renderJualTable();renderDashboard();
   }
-  
-  /* Kirim ke server di belakang layar */
   const res=await api('savePenjualan',{payload:payload});
   if(res&&res.success){
     applyServerData(res);
@@ -734,7 +792,6 @@ function renderJualTable(){
 async function deleteJual(row){
   if(!confirm('Hapus transaksi ini?')) return;
   if(row<0){
-    /* data lokal (belum masuk server), hapus lokal aja */
     dashState.allSales=dashState.allSales.filter(x=>x.row!==row);
     savePending(getPending().filter(x=>x.tempRow!==row));
     persistLocal();
@@ -895,14 +952,72 @@ async function deleteCrosscheck(row){
   if(res.success){toast('Data dihapus!');applyServerData(res);renderCrosscheck();}else{toast('Gagal menghapus','error');}
 }
 
+/* ====== LIST ROKOK: PAKAI INDEX ANTI ERROR ====== */
 function renderListRokok(){
   const tb=document.getElementById('tb-rokok');
   tb.innerHTML='';
-  Object.keys(masterData).sort().forEach(n=>{
+  sortedKeys=Object.keys(masterData).sort();
+  sortedKeys.forEach((n,idx)=>{
     const m=masterData[n];
-    tb.innerHTML+=`<tr><td class="text-left font-semibold">${n}</td><td>${Bt(m.modal)}</td><td>${Bt(m.cashRiel)}</td><td>${Bt(m.um)}</td><td>${Bt(m.eceran)}</td><td><button onclick="editMaster('${n.replace(/'/g,"\\'")}')" class="be mr-1"><i class="fas fa-edit"></i></button><button onclick="deleteMaster('${n.replace(/'/g,"\\'")}')" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
+    tb.innerHTML+=`<tr><td class="text-left font-semibold">${n}</td><td>${Bt(m.modal)}</td><td>${Bt(m.cashRiel)}</td><td>${Bt(m.um)}</td><td>${Bt(m.eceran)}</td><td><button onclick="editMaster(${idx})" class="be mr-1" title="Edit"><i class="fas fa-edit"></i></button><button onclick="deleteMaster(${idx})" class="bd" title="Hapus"><i class="fas fa-trash"></i></button></td></tr>`;
   });
   generateShareText();
+}
+
+function editMaster(idx){
+  const nama=sortedKeys[idx];
+  if(!nama)return;
+  const m=masterData[nama];if(!m)return;
+  editMode=nama;
+  document.getElementById('m-nama').value=nama;
+  document.getElementById('m-modal').value=m.modal?m.modal.toLocaleString('id-ID'):'';
+  document.getElementById('m-cash').value=m.cashRiel?m.cashRiel.toLocaleString('id-ID'):'';
+  document.getElementById('m-um').value=m.um?m.um.toLocaleString('id-ID'):'';
+  document.getElementById('m-eceran').value=m.eceran?m.eceran.toLocaleString('id-ID'):'';
+  document.getElementById('btn-save-master').innerText='UPDATE ROKOK';
+  document.getElementById('btn-cancel-edit').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function cancelEdit(){
+  editMode=null;
+  document.getElementById('m-nama').value='';document.getElementById('m-modal').value='';document.getElementById('m-cash').value='';document.getElementById('m-um').value='';document.getElementById('m-eceran').value='';
+  document.getElementById('btn-save-master').innerText='SIMPAN ROKOK BARU';
+  document.getElementById('btn-cancel-edit').classList.add('hidden');
+}
+
+async function saveMaster(){
+  const nama=document.getElementById('m-nama').value.trim();
+  const modal=parseNum(document.getElementById('m-modal').value);
+  const cash=parseNum(document.getElementById('m-cash').value);
+  const um=parseNum(document.getElementById('m-um').value);
+  const eceran=parseNum(document.getElementById('m-eceran').value);
+  if(!nama){toast('Nama rokok wajib diisi!','error');return;}
+  const action=editMode?'updateMaster':'saveMaster';
+  const payload={nama:nama,modal:modal,cashRiel:cash,um:um,eceran:eceran};
+  masterData[nama]={modal:modal,cashRiel:cash,um:um,eceran:eceran};
+  persistLocal();
+  populateDropdowns();
+  renderListRokok();
+  toast(editMode?'Rokok diupdate!':'Rokok ditambahkan!');
+  cancelEdit();
+  const res=await api(action,{payload:payload});
+  if(res&&res.success){applyServerData(res);renderListRokok();}
+  else{addPending({action:action,payload:payload});toast('Server sibuk, auto-sync nanti','error');}
+}
+
+async function deleteMaster(idx){
+  const nama=sortedKeys[idx];
+  if(!nama)return;
+  if(!confirm('Hapus rokok '+nama+'?')) return;
+  delete masterData[nama];
+  persistLocal();
+  populateDropdowns();
+  renderListRokok();
+  toast('Rokok dihapus!');
+  const res=await api('deleteMaster',{payload:{nama:nama}});
+  if(res&&res.success){applyServerData(res);renderListRokok();}
+  else{addPending({action:'deleteMaster',payload:{nama:nama}});toast('Server sibuk, auto-sync nanti','error');}
 }
 
 function generateShareText(){
@@ -923,59 +1038,6 @@ function generateShareText(){
     }
   });
   document.getElementById('text-share').innerText=txt;
-}
-
-function editMaster(nama){
-  const m=masterData[nama];if(!m)return;
-  editMode=nama;
-  document.getElementById('m-nama').value=nama;
-  document.getElementById('m-modal').value=m.modal?m.modal.toLocaleString('id-ID'):'';
-  document.getElementById('m-cash').value=m.cashRiel?m.cashRiel.toLocaleString('id-ID'):'';
-  document.getElementById('m-um').value=m.um?m.um.toLocaleString('id-ID'):'';
-  document.getElementById('m-eceran').value=m.eceran?m.eceran.toLocaleString('id-ID'):'';
-  document.getElementById('btn-save-master').innerText='UPDATE ROKOK';
-  document.getElementById('btn-cancel-edit').classList.remove('hidden');
-}
-
-function cancelEdit(){
-  editMode=null;
-  document.getElementById('m-nama').value='';document.getElementById('m-modal').value='';document.getElementById('m-cash').value='';document.getElementById('m-um').value='';document.getElementById('m-eceran').value='';
-  document.getElementById('btn-save-master').innerText='SIMPAN ROKOK BARU';
-  document.getElementById('btn-cancel-edit').classList.add('hidden');
-}
-
-async function saveMaster(){
-  const nama=document.getElementById('m-nama').value.trim();
-  const modal=parseNum(document.getElementById('m-modal').value);
-  const cash=parseNum(document.getElementById('m-cash').value);
-  const um=parseNum(document.getElementById('m-um').value);
-  const eceran=parseNum(document.getElementById('m-eceran').value);
-  if(!nama){toast('Nama rokok wajib diisi!','error');return;}
-  const action=editMode?'updateMaster':'saveMaster';
-  const payload={nama:nama,modal:modal,cashRiel:cash,um:um,eceran:eceran};
-  /* Tampilin langsung */
-  masterData[nama]={modal:modal,cashRiel:cash,um:um,eceran:eceran};
-  persistLocal();
-  populateDropdowns();
-  renderListRokok();
-  toast(editMode?'Rokok diupdate!':'Rokok ditambahkan!');
-  cancelEdit();
-  /* Kirim ke server di belakang layar */
-  const res=await api(action,{payload:payload});
-  if(res&&res.success){applyServerData(res);renderListRokok();}
-  else{addPending({action:action,payload:payload});toast('Server sibuk, auto-sync nanti','error');}
-}
-
-async function deleteMaster(nama){
-  if(!confirm('Hapus rokok '+nama+'?')) return;
-  delete masterData[nama];
-  persistLocal();
-  populateDropdowns();
-  renderListRokok();
-  toast('Rokok dihapus!');
-  const res=await api('deleteMaster',{payload:{nama:nama}});
-  if(res&&res.success){applyServerData(res);renderListRokok();}
-  else{addPending({action:'deleteMaster',payload:{nama:nama}});toast('Server sibuk, auto-sync nanti','error');}
 }
 
 function renderRekapUM(){
