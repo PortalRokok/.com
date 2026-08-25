@@ -24,8 +24,6 @@ input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit
 .lamp-bg .l2{width:500px;height:500px;background:#a855f7;bottom:-150px;right:-100px}
 .lamp-bg .l3{width:300px;height:300px;background:#22d3ee;top:40%;left:40%}
 @keyframes floatLamp{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-30px)}}
-
-/* ====== KOTAK HIDUP DENGAN LAMPU ====== */
 .vivid{transition:transform .3s ease;overflow:hidden}
 .vivid:hover{transform:translateY(-5px)}
 .glow-ring{position:absolute;inset:0;border-radius:20px;padding:2px;pointer-events:none;background-size:300% 100%;animation:flowBorder 5s linear infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude}
@@ -56,8 +54,6 @@ input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit
 .shine{position:relative;overflow:hidden;display:inline-block}
 .shine::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,0.35),transparent);animation:sweep 3.5s ease-in-out infinite;pointer-events:none}
 @keyframes sweep{0%{left:-100%}60%,100%{left:150%}}
-
-/* ====== TEKS GRADASI CANTIK ====== */
 .gt-cyan,.gt-green,.gt-blue,.gt-purple,.gt-pink,.gt-red,.gt-gold{font-family:'Kanit',sans-serif;font-weight:800;-webkit-background-clip:text;background-clip:text;color:transparent!important}
 .gt-cyan{background-image:linear-gradient(135deg,#e0f2fe,#7dd3fc,#38bdf8)}
 .gt-green{background-image:linear-gradient(135deg,#dcfce7,#86efac,#4ade80)}
@@ -66,7 +62,6 @@ input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit
 .gt-pink{background-image:linear-gradient(135deg,#fce7f3,#f9a8d4,#f472b6)}
 .gt-red{background-image:linear-gradient(135deg,#fee2e2,#fca5a5,#f87171)}
 .gt-gold{background-image:linear-gradient(135deg,#fef9c3,#fde047,#facc15)}
-
 .gc{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--bdr);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.4);position:relative;z-index:1}
 .is{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);color:#f8fafc;border-radius:12px;padding:14px 16px;width:100%}
 .is:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(56,189,248,0.15);background:rgba(255,255,255,0.08)}
@@ -89,8 +84,6 @@ input[type="date"]::-webkit-calendar-picker-indicator,input[type="month"]::-webk
 .ni:hover{background:rgba(255,255,255,0.06);color:#e2e8f0}
 .ni.ac{background:linear-gradient(135deg,rgba(56,189,248,0.15),rgba(56,189,248,0.05));color:#38bdf8;border:1px solid rgba(56,189,248,0.2);font-weight:700}
 .si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px}
-
-/* ====== TABEL HIDUP BERWARNA ====== */
 table{width:100%;border-collapse:collapse;white-space:nowrap}
 th{font-family:'Kanit',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em;padding:14px 12px;background:linear-gradient(135deg,rgba(56,189,248,0.35),rgba(168,85,247,0.3),rgba(236,72,153,0.3));background-size:200% 100%;color:#f0f9ff;border-bottom:2px solid rgba(56,189,248,0.6);border-top:1px solid rgba(255,255,255,0.15);position:sticky;top:0;z-index:2;text-shadow:0 0 12px rgba(56,189,248,0.6);animation:headerFlow 6s ease infinite;white-space:nowrap}
 @keyframes headerFlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
@@ -403,7 +396,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
             <button onclick="copyRekapUM()" class="bs text-xs"><i class="fas fa-copy mr-1"></i> COPY SEMUA REKAPAN</button>
           </div>
           <div id="rekap-um-text" class="hidden"></div>
-          <div class="sa"><table class="text-center"><thead><tr><th class="text-left">Tanggal</th><th class="text-left">Nama</th><th>Rokok</th><th>Jumlah</th><th>Harga</th><th>Status Cair</th><th>Copy Baris</th><th>Aksi</th></tr></thead><tbody id="tb-um"></tbody></table></div>
+          <div class="sa"><table class="text-center"><thead><tr><th class="text-left">Tanggal</th><th class="text-left">Nama</th><th>Situs</th><th>Rokok</th><th>Jumlah</th><th>Harga</th><th>Status Cair</th><th>Copy Baris</th><th>Aksi</th></tr></thead><tbody id="tb-um"></tbody></table></div>
         </div>
       </div>
 
@@ -574,6 +567,7 @@ async function copyBarcodeImage(){try{const r=await fetch(BARCODE_URL),b=await r
 function getMonth(d){if(!d)return'';let dt=d instanceof Date?d:new Date(d);if(isNaN(dt))return'';return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0');}
 function fmtDate(d,time=true){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);const date=dt.getDate()+' '+BULAN[dt.getMonth()]+' '+dt.getFullYear();return time?date+' '+dt.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):date;}
 function fmtDateShort(d){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);return dt.getDate()+' '+BULAN[dt.getMonth()]+' '+dt.getFullYear();}
+function cleanSitus(s){if(!s)return'-';s=String(s).trim();return (s===''||s==='-'||s==='undefined'||s==='null')?'-':s;}
 function setLoading(btnId,loading,txt){const b=document.getElementById(btnId);if(!b)return;if(loading){b.disabled=true;b.innerHTML='<i class="anim-spin fas fa-circle-notch mr-2"></i>Menyimpan...';}else{b.disabled=false;b.innerText=txt;}}
 function applyMonthFilter(){selMonth=document.getElementById('month-filter').value;try{localStorage.setItem('gs_month',selMonth);}catch(e){}if(dashState){renderDashboard();renderJualTable();renderStok();renderCrosscheck();renderRekapUM();renderKas();}}
 function show(id){const el=document.getElementById(id);el.classList.remove('hidden');void el.offsetWidth;el.classList.add('fi');}
@@ -582,7 +576,11 @@ function applyServerData(res){
   if(!res)return;
   const d=res.dashboard||res;
   if(d.masterMap){masterData=d.masterMap;}
-  if(d.allSales||d.allPengambilan||d.allCrosscheck){dashState=d;}
+  if(d.allSales||d.allPengambilan||d.allCrosscheck){
+    dashState=d;
+    /* pastikan situs selalu terbaca benar dari server */
+    (dashState.allSales||[]).forEach(s=>{s.situs=cleanSitus(s.situs);});
+  }
   getPending().forEach(op=>{
     if(op.action==='saveMaster'||op.action==='updateMaster'){
       const p=op.payload;
@@ -592,7 +590,7 @@ function applyServerData(res){
     }else if(op.action==='savePenjualan'&&op.tempRow){
       const p=op.payload;
       if(dashState&&!dashState.allSales.some(x=>x.row===op.tempRow)){
-        dashState.allSales.push({row:op.tempRow,tanggal:new Date(p.tanggal||Date.now()),tipe:p.tipe,nama:p.nama,situs:p.situs||'-',rokok:p.rokok,jumlah:p.jumlah,tipeBayar:p.tipeBayar,harga:p.harga,statusBayar:p.statusBayar});
+        dashState.allSales.push({row:op.tempRow,tanggal:new Date(p.tanggal||Date.now()),tipe:p.tipe,nama:p.nama,situs:cleanSitus(p.situs),rokok:p.rokok,jumlah:p.jumlah,tipeBayar:p.tipeBayar,harga:p.harga,statusBayar:p.statusBayar});
       }
     }else if(op.action==='savePengambilan'&&op.tempRow){
       const p=op.payload;
@@ -778,14 +776,15 @@ async function saveJual(){
   const tb=document.getElementById('jual-tipebayar').value;
   const st=document.getElementById('jual-status').value;
   const tglVal=document.getElementById('jual-tgl').value;
+  const situsVal=document.getElementById('jual-situs').value.trim();
   const m=masterData[rok]||{};
   let harga=0;
   if(curJualTipe==='Eceran'){harga=(m.eceran||0)*jml;}
   else{if(tb==='ABA'||tb==='CASH')harga=(m.cashRiel||0)*jml;else if(tb==='Uang Makan')harga=(m.um||0)*jml;}
-  const payload={tipe:curJualTipe,nama:nama,situs:document.getElementById('jual-situs').value.trim(),rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st,tanggal:tglVal};
+  const payload={tipe:curJualTipe,nama:nama,situs:situsVal,rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st,tanggal:tglVal};
   const tempRow=-Date.now();
   if(!dashState)dashState={masterMap:masterData,allSales:[],allPengambilan:[],allCrosscheck:[]};
-  dashState.allSales.push({row:tempRow,tanggal:new Date(tglVal||Date.now()),tipe:curJualTipe,nama:nama,situs:payload.situs||'-',rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st});
+  dashState.allSales.push({row:tempRow,tanggal:new Date(tglVal||Date.now()),tipe:curJualTipe,nama:nama,situs:situsVal,rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st});
   persistLocal();
   toast('Transaksi tersimpan!');
   document.getElementById('jual-nama').value='';
@@ -825,7 +824,7 @@ function renderJualTable(){
     let stColor='br1';
     if(j.statusBayar&&j.statusBayar.includes('DONE'))stColor='bg1';
     else if(j.statusBayar&&j.statusBayar.includes('SUDAH'))stColor='ba1';
-    tb.innerHTML+=`<tr><td class="text-left text-xs">${fmtDateShort(j.tanggal)}</td><td>${j.nama}</td><td>${j.situs||'-'}</td><td>${j.rokok}</td><td>${j.jumlah}${satuan}</td><td>${Bt(j.harga)}</td><td><span class="badge ${stColor}">${j.statusBayar||'-'}</span></td><td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
+    tb.innerHTML+=`<tr><td class="text-left text-xs">${fmtDateShort(j.tanggal)}</td><td>${j.nama}</td><td>${cleanSitus(j.situs)}</td><td>${j.rokok}</td><td>${j.jumlah}${satuan}</td><td>${Bt(j.harga)}</td><td><span class="badge ${stColor}">${j.statusBayar||'-'}</span></td><td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
   });
 }
 
@@ -1097,17 +1096,19 @@ function renderRekapUM(){
   let txtRekap="📋 REKAPAN UANG MAKAN\n\n";
   umBulan.slice().reverse().forEach((j,i)=>{
     const isCair=j.statusBayar&&j.statusBayar.includes('CAIR');
-    txtRekap+=`${i+1}. ${fmtDateShort(j.tanggal)} - ${j.nama} (${j.situs||'-'})\n   ${j.rokok} ${j.jumlah} Slop - ${Bt(j.harga)}\n   Status: ${isCair?'Sudah Cair':'Belum Cair'}\n\n`;
-    tb.innerHTML+=`<tr><td class="text-left text-xs">${fmtDateShort(j.tanggal)}</td><td class="text-left">${j.nama}</td><td>${j.rokok}</td><td>${j.jumlah} Slop</td><td>${Bt(j.harga)}</td><td><button onclick="toggleCairUM(${j.row},${isCair})" class="toggle-cair ${isCair?'on':'off'}"></button></td><td><button onclick="copyRowUM(${j.row})" class="bs text-xs"><i class="fas fa-copy"></i></button></td><td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
+    const situsTampil=cleanSitus(j.situs);
+    txtRekap+=`${i+1}. ${fmtDateShort(j.tanggal)} - ${j.nama}${situsTampil!=='-'?' ('+situsTampil+')':''}\n   ${j.rokok} ${j.jumlah} Slop - ${Bt(j.harga)}\n   Status: ${isCair?'Sudah Cair':'Belum Cair'}\n\n`;
+    tb.innerHTML+=`<tr><td class="text-left text-xs">${fmtDateShort(j.tanggal)}</td><td class="text-left">${j.nama}</td><td>${situsTampil}</td><td>${j.rokok}</td><td>${j.jumlah} Slop</td><td>${Bt(j.harga)}</td><td><button onclick="toggleCairUM(${j.row},${isCair})" class="toggle-cair ${isCair?'on':'off'}"></button></td><td><button onclick="copyRowUM(${j.row})" class="bs text-xs"><i class="fas fa-copy"></i></button></td><td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
   });
   document.getElementById('rekap-um-text').innerText=txtRekap;
-  if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="8" class="text-center text-slate-500 py-4">Belum ada transaksi UM bulan ini</td></tr>';
+  if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="9" class="text-center text-slate-500 py-4">Belum ada transaksi UM bulan ini</td></tr>';
 }
 
 function copyRowUM(row){
   const j=(dashState.allSales||[]).find(x=>x.row===row);
   if(!j)return;
-  const txt=`${fmtDateShort(j.tanggal)}\n${j.nama}\n${j.rokok} - ${j.jumlah} Slop\nTotal: ${Bt(j.harga)}`;
+  const situsTampil=cleanSitus(j.situs);
+  const txt=`${fmtDateShort(j.tanggal)}\n${j.nama}${situsTampil!=='-'?'\nSitus: '+situsTampil:''}\n${j.rokok} - ${j.jumlah} Slop\nTotal: ${Bt(j.harga)}`;
   navigator.clipboard.writeText(txt).then(()=>toast('Baris disalin!'));
 }
 
