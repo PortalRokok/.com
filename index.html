@@ -63,10 +63,11 @@ input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit
 .gt-red{background-image:linear-gradient(135deg,#fee2e2,#fca5a5,#f87171)}
 .gt-gold{background-image:linear-gradient(135deg,#fef9c3,#fde047,#facc15)}
 .gc{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--bdr);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.4);position:relative;z-index:1}
-.is{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);color:#f8fafc;border-radius:12px;padding:14px 16px;width:100%}
-.is:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(56,189,248,0.15);background:rgba(255,255,255,0.08)}
+.is{background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.14);color:#f8fafc;border-radius:12px;padding:14px 16px;width:100%}
+.is:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(56,189,248,0.15);background:rgba(255,255,255,0.09)}
 .is option{background:#0f172a;color:#f8fafc;font-size:16px}
-.ls{color:#94a3b8;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
+.is::placeholder{color:#a8b8cc;opacity:1}
+.ls{color:#dbeafe;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block;text-shadow:0 0 10px rgba(56,189,248,0.45)}
 input[type="date"]::-webkit-calendar-picker-indicator,input[type="month"]::-webkit-calendar-picker-indicator,input[type="time"]::-webkit-calendar-picker-indicator{filter:invert(0.8) sepia(1) saturate(5) hue-rotate(180deg);cursor:pointer}
 .bp{background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#00121f;font-weight:700;padding:14px 24px;border-radius:14px;border:none;cursor:pointer;font-size:16px;box-shadow:0 4px 15px rgba(56,189,248,0.3);transition:all .15s}
 .bp:hover{box-shadow:0 6px 25px rgba(56,189,248,0.5);transform:translateY(-1px)}
@@ -80,25 +81,25 @@ input[type="date"]::-webkit-calendar-picker-indicator,input[type="month"]::-webk
 @keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .ta{animation:ta .25s ease-out}
 @keyframes ta{from{opacity:0;transform:translate(-50%,15px)}to{opacity:1;transform:translate(-50%,0)}}
-.ni{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;color:#94a3b8;font-weight:500;font-size:14px;cursor:pointer;border:none;background:transparent;width:100%;text-align:left}
-.ni:hover{background:rgba(255,255,255,0.06);color:#e2e8f0}
+.ni{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;color:#b8c8dc;font-weight:500;font-size:14px;cursor:pointer;border:none;background:transparent;width:100%;text-align:left}
+.ni:hover{background:rgba(255,255,255,0.06);color:#f1f5f9}
 .ni.ac{background:linear-gradient(135deg,rgba(56,189,248,0.15),rgba(56,189,248,0.05));color:#38bdf8;border:1px solid rgba(56,189,248,0.2);font-weight:700}
 .si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px}
 table{width:100%;border-collapse:collapse;white-space:nowrap}
 th{font-family:'Kanit',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em;padding:14px 12px;background:linear-gradient(135deg,rgba(56,189,248,0.35),rgba(168,85,247,0.3),rgba(236,72,153,0.3));background-size:200% 100%;color:#f0f9ff;border-bottom:2px solid rgba(56,189,248,0.6);border-top:1px solid rgba(255,255,255,0.15);position:sticky;top:0;z-index:2;text-shadow:0 0 12px rgba(56,189,248,0.6);animation:headerFlow 6s ease infinite;white-space:nowrap;vertical-align:middle}
 @keyframes headerFlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-td{font-family:'Kanit',sans-serif;font-weight:600;color:#dbeafe;font-size:14.5px;padding:14px 14px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:middle;text-shadow:0 1px 2px rgba(0,0,0,0.5)}
-tbody tr:nth-child(odd) td{background:rgba(56,189,248,0.045)}
-tbody tr:nth-child(even) td{background:rgba(168,85,247,0.035)}
+td{font-family:'Kanit',sans-serif;font-weight:600;color:#e8f4ff;font-size:15px;padding:14px 14px;border-bottom:1px solid rgba(255,255,255,0.06);vertical-align:middle;text-shadow:0 1px 3px rgba(0,0,0,0.7)}
+tbody tr:nth-child(odd) td{background:rgba(56,189,248,0.05)}
+tbody tr:nth-child(even) td{background:rgba(168,85,247,0.04)}
 tbody tr{transition:all .15s}
-tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3px 0 0 #38bdf8}
-.td-date{font-family:'Kanit',sans-serif;font-weight:700;color:#7dd3fc;text-shadow:0 0 10px rgba(56,189,248,0.5);letter-spacing:.02em}
-.td-name{font-family:'Kanit',sans-serif;font-weight:700;color:#ffffff;text-shadow:0 0 8px rgba(255,255,255,0.25);letter-spacing:.03em}
-.td-situs{display:inline-block;font-family:'Kanit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.05em;padding:5px 14px;border-radius:8px;background:rgba(168,85,247,0.18);color:#d8b4fe;border:1px solid rgba(168,85,247,0.4);text-shadow:0 0 8px rgba(192,132,252,0.5)}
-.td-situs.empty{background:transparent;border:1px dashed rgba(148,163,184,0.25);color:#64748b;text-shadow:none}
-.td-rokok{font-family:'Kanit',sans-serif;font-weight:700;color:#fbbf24;text-shadow:0 0 10px rgba(251,191,36,0.4)}
-.td-jml{font-family:'Kanit',sans-serif;font-weight:700;color:#4ade80;text-shadow:0 0 10px rgba(74,222,128,0.4)}
-.td-harga{font-family:'Kanit',sans-serif;font-weight:800;font-size:15px;-webkit-background-clip:text;background-clip:text;color:transparent!important;background-image:linear-gradient(135deg,#fef9c3,#fde047,#facc15);filter:drop-shadow(0 0 6px rgba(250,204,21,0.35))}
+tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3px 0 0 #38bdf8}
+.td-date{font-family:'Kanit',sans-serif;font-weight:700;font-size:15px;color:#7dd3fc;text-shadow:0 0 12px rgba(56,189,248,0.7);letter-spacing:.02em}
+.td-name{font-family:'Kanit',sans-serif;font-weight:700;font-size:15px;color:#ffffff;text-shadow:0 0 10px rgba(255,255,255,0.35);letter-spacing:.03em}
+.td-situs{display:inline-block;font-family:'Kanit',sans-serif;font-weight:700;font-size:13px;letter-spacing:.05em;padding:5px 14px;border-radius:8px;background:rgba(168,85,247,0.22);color:#e9d5ff;border:1px solid rgba(192,132,252,0.55);text-shadow:0 0 10px rgba(192,132,252,0.7)}
+.td-situs.empty{background:transparent;border:1px dashed rgba(148,163,184,0.3);color:#94a3b8;text-shadow:none}
+.td-rokok{font-family:'Kanit',sans-serif;font-weight:700;font-size:16px;color:#fdba74;text-shadow:0 0 12px rgba(251,146,60,0.6)}
+.td-jml{font-family:'Kanit',sans-serif;font-weight:800;font-size:16px;color:#86efac;text-shadow:0 0 12px rgba(74,222,128,0.6)}
+.td-harga{font-family:'Kanit',sans-serif;font-weight:800;font-size:16px;color:#fde047;text-shadow:0 0 14px rgba(250,204,21,0.75),0 1px 3px rgba(0,0,0,0.8)}
 .badge{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;display:inline-block;text-align:center}
 .bg1{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
 .br1{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.2)}
@@ -117,7 +118,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
 .toggle-cair::after{content:'';position:absolute;top:3px;width:18px;height:18px;border-radius:50%;transition:all .2s}
 .toggle-cair.off::after{left:3px;background:#f87171}
 .toggle-cair.on::after{left:23px;background:#4ade80}
-.d-label{font-size:13px;font-weight:600;color:#94a3b8;letter-spacing:.04em;margin-bottom:4px;line-height:1.3}
+.d-label{font-size:13px;font-weight:600;color:#cbd5e1;letter-spacing:.04em;margin-bottom:4px;line-height:1.3}
 .d-value{font-size:28px;font-weight:800;line-height:1.1}
 </style>
 </head>
@@ -133,22 +134,22 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
     <div class="flex flex-col items-center mb-8">
       <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-w-[180px] h-auto object-fill mb-5 rounded-xl" alt="Logo">
       <h1 class="text-3xl font-extrabold tracking-tight text-blink">Gana Store</h1>
-      <p class="text-sm text-slate-400 mt-2">Masuk untuk mengelola data toko</p>
+      <p class="text-sm text-slate-300 mt-2 font-semibold">Masuk untuk mengelola data toko</p>
     </div>
     <form id="login-form" onsubmit="return false;">
       <div class="mb-5">
         <label class="ls">Username</label>
         <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500"><i class="fas fa-user text-sm"></i></span>
+          <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-cyan-300"><i class="fas fa-user text-sm"></i></span>
           <input type="text" id="username" class="is pl-11" placeholder="Masukkan username" autocomplete="off">
         </div>
       </div>
       <div class="mb-6">
         <label class="ls">Password</label>
         <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500"><i class="fas fa-lock text-sm"></i></span>
+          <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-cyan-300"><i class="fas fa-lock text-sm"></i></span>
           <input type="password" id="password" class="is pl-11 pr-12" placeholder="Masukkan password">
-          <button type="button" id="toggle-pass-btn" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-cyan-400 transition-colors">
+          <button type="button" id="toggle-pass-btn" class="absolute inset-y-0 right-0 flex items-center pr-4 text-cyan-300 hover:text-cyan-100 transition-colors">
             <i id="eye-icon" class="fas fa-eye"></i>
           </button>
         </div>
@@ -162,29 +163,29 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
   <aside id="sidebar" class="fixed top-0 left-0 z-40 h-screen w-[280px] bg-[rgba(5,8,18,0.92)] backdrop-blur-xl flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 border-r border-white/5">
     <div class="p-5 flex items-center justify-center border-b border-white/5 relative">
       <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-h-20 object-fill rounded-lg" alt="Logo">
-      <button id="close-sidebar-btn" class="lg:hidden ml-auto text-slate-400 absolute right-4 top-4 hover:text-white"><i class="fas fa-times text-lg"></i></button>
+      <button id="close-sidebar-btn" class="lg:hidden ml-auto text-slate-300 absolute right-4 top-4 hover:text-white"><i class="fas fa-times text-lg"></i></button>
     </div>
     <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-      <p class="text-slate-600 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-1">Menu Utama</p>
+      <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-1">Menu Utama</p>
       <button onclick="switchPage('dashboard')" id="nav-dashboard" class="ni ac"><i class="fas fa-chart-line w-5 text-center"></i> Dashboard</button>
-      <p class="text-slate-600 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-5">Penjualan</p>
+      <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-5">Penjualan</p>
       <button onclick="switchPage('jual','Perslop ABA')" id="nav-jual-aba" class="ni"><i class="fas fa-building-columns w-5 text-center"></i> Jual Perslop Cash</button>
       <button onclick="switchPage('jual','Perslop UM')" id="nav-jual-um" class="ni"><i class="fas fa-utensils w-5 text-center"></i> Jual Perslop Uang Makan</button>
       <button onclick="switchPage('jual','Eceran')" id="nav-jual-eceran" class="ni"><i class="fas fa-shopping-basket w-5 text-center"></i> Jual Rokok Eceran</button>
-      <p class="text-slate-600 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-5">Stok & Inventaris</p>
+      <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-5">Stok & Inventaris</p>
       <button onclick="switchPage('stok')" id="nav-stok" class="ni"><i class="fas fa-boxes-stacked w-5 text-center"></i> Stok & Pengambilan</button>
       <button onclick="switchPage('crosscheck','Perslop')" id="nav-cc-perslop" class="ni"><i class="fas fa-box w-5 text-center"></i> Crosscheck Perslop</button>
       <button onclick="switchPage('crosscheck','Eceran')" id="nav-cc-eceran" class="ni"><i class="fas fa-check-double w-5 text-center"></i> Crosscheck Eceran</button>
       <button onclick="switchPage('rokok')" id="nav-rokok" class="ni"><i class="fas fa-list w-5 text-center"></i> List Harga Rokok</button>
-      <p class="text-slate-600 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-5">Keuangan</p>
+      <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest px-4 mb-2 mt-5">Keuangan</p>
       <button onclick="switchPage('rekap')" id="nav-rekap" class="ni"><i class="fas fa-file-invoice w-5 text-center"></i> Rekapan Bayar Uang Makan</button>
       <button onclick="switchPage('kas')" id="nav-kas" class="ni"><i class="fas fa-wallet w-5 text-center"></i> Kas & Setoran</button>
     </nav>
     <div class="p-4 border-t border-white/5">
       <button onclick="doLogout()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 transition-colors group">
         <div class="w-9 h-9 bg-cyan-500/20 rounded-full flex items-center justify-center font-bold text-cyan-400 text-sm group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">A</div>
-        <div class="text-left flex-1"><p class="font-bold text-sm text-white">Admin</p><p class="text-[11px] text-slate-500 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
-        <i class="fas fa-sign-out-alt text-slate-600 group-hover:text-red-400 transition-colors"></i>
+        <div class="text-left flex-1"><p class="font-bold text-sm text-white">Admin</p><p class="text-[11px] text-slate-400 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
+        <i class="fas fa-sign-out-alt text-slate-500 group-hover:text-red-400 transition-colors"></i>
       </button>
     </div>
   </aside>
@@ -198,7 +199,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
       </div>
       <div class="flex items-center gap-3">
         <div id="sync-indicator" class="hidden text-[11px] text-cyan-400 font-bold"><i class="fas fa-rotate anim-spin mr-1"></i>Sinkron</div>
-        <label class="text-[10px] text-slate-500 font-bold hidden md:block uppercase tracking-wider">Filter Bulan</label>
+        <label class="text-[11px] text-slate-300 font-bold hidden md:block uppercase tracking-wider">Filter Bulan</label>
         <input type="month" id="month-filter" class="fl">
       </div>
     </header>
@@ -208,41 +209,41 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="gc vivid pc-cyan p-6">
             <div class="glow-ring g-cyan"></div>
-            <div class="flex items-center gap-3 mb-3"><div class="si bg-cyan-500/10 text-cyan-400 ifloat"><i class="fas fa-coins"></i></div><p class="d-label text-cyan-300">Total Pendapatan</p></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-cyan-500/10 text-cyan-400 ifloat"><i class="fas fa-coins"></i></div><p class="d-label text-cyan-200">Total Pendapatan</p></div>
             <p class="d-value shine gt-cyan" id="d-pendapatan">฿0</p>
           </div>
           <div class="gc vivid pc-green p-6">
             <div class="glow-ring g-green"></div>
-            <div class="flex items-center gap-3 mb-3"><div class="si bg-green-500/10 text-green-400 ifloat"><i class="fas fa-sack-dollar"></i></div><p class="d-label text-green-300">Untung Gabungan</p></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-green-500/10 text-green-400 ifloat"><i class="fas fa-sack-dollar"></i></div><p class="d-label text-green-200">Untung Gabungan</p></div>
             <p class="d-value shine gt-green" id="d-untung">฿0</p>
           </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="gc vivid pc-blue p-6">
             <div class="glow-ring g-blue"></div>
-            <div class="flex items-center gap-3 mb-3"><div class="si bg-blue-500/10 text-blue-400 ifloat"><i class="fas fa-box"></i></div><p class="d-label text-blue-300">Untung Perslop</p></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-blue-500/10 text-blue-400 ifloat"><i class="fas fa-box"></i></div><p class="d-label text-blue-200">Untung Perslop</p></div>
             <p class="d-value shine gt-blue" id="d-untung-slop">฿0</p>
           </div>
           <div class="gc vivid pc-purple p-6">
             <div class="glow-ring g-purple"></div>
-            <div class="flex items-center gap-3 mb-3"><div class="si bg-purple-500/10 text-purple-400 ifloat"><i class="fas fa-shopping-basket"></i></div><p class="d-label text-purple-300">Untung Eceran</p></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-purple-500/10 text-purple-400 ifloat"><i class="fas fa-shopping-basket"></i></div><p class="d-label text-purple-200">Untung Eceran</p></div>
             <p class="d-value shine gt-purple" id="d-untung-eceran">฿0</p>
           </div>
           <div class="gc vivid pc-cyan p-6">
             <div class="glow-ring g-cyan"></div>
-            <div class="flex items-center gap-3 mb-3"><div class="si bg-cyan-500/10 text-cyan-400 ifloat"><i class="fas fa-box-open"></i></div><p class="d-label text-cyan-300">Slop Terjual</p></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-cyan-500/10 text-cyan-400 ifloat"><i class="fas fa-box-open"></i></div><p class="d-label text-cyan-200">Slop Terjual</p></div>
             <p class="d-value shine gt-cyan" id="d-slop">0 Slop</p>
           </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="gc vivid pc-blue p-6">
             <div class="glow-ring g-blue"></div>
-            <div class="flex items-center gap-3 mb-3"><div class="si bg-blue-500/10 text-blue-400 ifloat"><i class="fas fa-building-columns"></i></div><p class="d-label text-blue-300">Pembayaran ABA / Cash</p></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-blue-500/10 text-blue-400 ifloat"><i class="fas fa-building-columns"></i></div><p class="d-label text-blue-200">Pembayaran ABA / Cash</p></div>
             <p class="d-value shine gt-blue" id="d-aba">฿0</p>
           </div>
           <div class="gc vivid pc-pink p-6">
             <div class="glow-ring g-pink"></div>
-            <div class="flex items-center gap-3 mb-3"><div class="si bg-pink-500/10 text-pink-400 ifloat"><i class="fas fa-utensils"></i></div><p class="d-label text-pink-300">Uang Makan Belum Cair</p></div>
+            <div class="flex items-center gap-3 mb-3"><div class="si bg-pink-500/10 text-pink-400 ifloat"><i class="fas fa-utensils"></i></div><p class="d-label text-pink-200">Uang Makan Belum Cair</p></div>
             <p class="d-value shine gt-pink" id="d-um">฿0</p>
           </div>
         </div>
@@ -268,7 +269,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
               <div id="wrap-status"><label class="ls">Status Bayar</label><select id="jual-status" class="is"><option value="DONE BAYAR CASH">Done Bayar Cash</option><option value="DONE BAYAR ABA">Done Bayar ABA</option><option value="BELUM BAYAR">Belum Bayar</option></select></div>
             </div>
             <div class="bg-gradient-to-r from-cyan-900/30 to-cyan-600/10 p-5 rounded-2xl border border-cyan-500/20 mb-6 flex justify-between items-center">
-              <span class="text-xs font-bold text-cyan-300 uppercase tracking-widest">Total Harga</span>
+              <span class="text-xs font-bold text-cyan-200 uppercase tracking-widest">Total Harga</span>
               <p class="text-3xl font-extrabold shine gt-cyan" id="jual-harga">฿0</p>
             </div>
             <button onclick="saveJual()" id="btn-save-jual" class="bp w-full">SIMPAN TRANSAKSI</button>
@@ -297,7 +298,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
             <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-box-open text-purple-400"></i> Buka Slop ke Eceran</h3>
             <label class="ls">Jenis Rokok</label><select id="buka-rokok" class="is mb-3"></select>
             <label class="ls">Jumlah Slop Dibuka</label><input type="number" id="buka-jml" class="is mb-3" placeholder="1 Slop = 10 Bungkus">
-            <div class="bg-purple-500/10 p-4 rounded-2xl mb-4 text-center text-xs text-purple-300 border border-purple-500/20">Stok Perslop berkurang, Eceran bertambah otomatis</div>
+            <div class="bg-purple-500/10 p-4 rounded-2xl mb-4 text-center text-xs text-purple-200 border border-purple-500/20 font-semibold">Stok Perslop berkurang, Eceran bertambah otomatis</div>
             <button onclick="saveBukaSlop()" id="btn-buka-slop" class="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white font-bold py-3 rounded-xl active:scale-95 transition-all hover:shadow-purple-500/30 hover:shadow-lg">BUKA SLOP KE ECERAN</button>
           </div>
           <div class="gc vivid pc-blue flex flex-col overflow-hidden">
@@ -368,7 +369,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
           <div class="gc vivid pc-purple p-6 flex flex-col">
             <div class="glow-ring g-purple"></div>
             <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-share-nodes text-purple-400"></i> Format List Buat Share</h3>
-            <div id="text-share" class="bg-[rgba(5,8,18,0.6)] p-4 rounded-2xl mb-4 text-sm text-slate-300 whitespace-pre-wrap flex-1 overflow-auto max-h-80 border border-white/5" style="font-family:'Kanit',sans-serif"></div>
+            <div id="text-share" class="bg-[rgba(5,8,18,0.6)] p-4 rounded-2xl mb-4 text-sm text-slate-200 whitespace-pre-wrap flex-1 overflow-auto max-h-80 border border-white/5" style="font-family:'Kanit',sans-serif"></div>
             <button onclick="copyText('text-share')" class="bp w-full"><i class="fas fa-copy mr-2"></i> COPY TEXT</button>
           </div>
         </div>
@@ -382,17 +383,17 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="gc vivid pc-cyan p-5">
             <div class="glow-ring g-cyan"></div>
-            <div class="flex items-center gap-3 mb-2"><div class="si bg-cyan-500/10 text-cyan-400 ifloat"><i class="fas fa-utensils"></i></div><p class="d-label text-cyan-300">Total Uang Makan Keseluruhan</p></div>
+            <div class="flex items-center gap-3 mb-2"><div class="si bg-cyan-500/10 text-cyan-400 ifloat"><i class="fas fa-utensils"></i></div><p class="d-label text-cyan-200">Total Uang Makan Keseluruhan</p></div>
             <p class="d-value shine gt-cyan" id="um-total">฿0</p>
           </div>
           <div class="gc vivid pc-green p-5">
             <div class="glow-ring g-green"></div>
-            <div class="flex items-center gap-3 mb-2"><div class="si bg-green-500/10 text-green-400 ifloat"><i class="fas fa-circle-check"></i></div><p class="d-label text-green-300">Sudah Cair</p></div>
+            <div class="flex items-center gap-3 mb-2"><div class="si bg-green-500/10 text-green-400 ifloat"><i class="fas fa-circle-check"></i></div><p class="d-label text-green-200">Sudah Cair</p></div>
             <p class="d-value shine gt-green" id="um-cair">฿0</p>
           </div>
           <div class="gc vivid pc-red p-5">
             <div class="glow-ring g-red"></div>
-            <div class="flex items-center gap-3 mb-2"><div class="si bg-red-500/10 text-red-400 ifloat"><i class="fas fa-hourglass-half"></i></div><p class="d-label text-red-300">Belum Cair</p></div>
+            <div class="flex items-center gap-3 mb-2"><div class="si bg-red-500/10 text-red-400 ifloat"><i class="fas fa-hourglass-half"></i></div><p class="d-label text-red-200">Belum Cair</p></div>
             <p class="d-value shine gt-red" id="um-belum">฿0</p>
           </div>
         </div>
@@ -413,18 +414,18 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
             <div class="glow-ring g-gold"></div>
             <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-coins text-yellow-400 ifloat"></i> Laporan Setoran</h3>
             <div class="space-y-3">
-              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Total Penjualan</span><span class="font-bold text-lg gt-gold" id="kas-pendapatan">฿0</span></div>
-              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Total Modal</span><span class="font-bold text-lg gt-red" id="kas-modal">฿0</span></div>
-              <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Untung Bersih</span><span class="font-bold text-lg shine gt-green" id="kas-untung">฿0</span></div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-300 text-sm font-semibold">Total Penjualan</span><span class="font-bold text-lg gt-gold" id="kas-pendapatan">฿0</span></div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-300 text-sm font-semibold">Total Modal</span><span class="font-bold text-lg gt-red" id="kas-modal">฿0</span></div>
+              <div class="flex justify-between items-center"><span class="text-slate-300 text-sm font-semibold">Untung Bersih</span><span class="font-bold text-lg shine gt-green" id="kas-untung">฿0</span></div>
             </div>
           </div>
           <div class="gc vivid pc-blue p-6">
             <div class="glow-ring g-blue"></div>
             <h3 class="font-bold text-white mb-5 flex items-center gap-2 text-sm"><i class="fas fa-wallet text-blue-400 ifloat"></i> Detail Kas</h3>
             <div class="space-y-3">
-              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Total Pendapatan</span><span class="font-bold text-lg gt-gold" id="kas-total">฿0</span></div>
-              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-400 text-sm">Pembayaran ABA / Cash</span><span class="font-bold text-lg gt-blue" id="kas-aba">฿0</span></div>
-              <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Uang Makan Belum Cair</span><span class="font-bold text-lg gt-pink" id="kas-um">฿0</span></div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-300 text-sm font-semibold">Total Pendapatan</span><span class="font-bold text-lg gt-gold" id="kas-total">฿0</span></div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/5"><span class="text-slate-300 text-sm font-semibold">Pembayaran ABA / Cash</span><span class="font-bold text-lg gt-blue" id="kas-aba">฿0</span></div>
+              <div class="flex justify-between items-center"><span class="text-slate-300 text-sm font-semibold">Uang Makan Belum Cair</span><span class="font-bold text-lg gt-pink" id="kas-um">฿0</span></div>
             </div>
           </div>
         </div>
@@ -437,7 +438,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
             </div>
             <div class="flex-1 w-full flex flex-col gap-3">
               <button onclick="copyBarcodeImage()" class="bs"><i class="fas fa-copy mr-2"></i> Copy Gambar Barcode</button>
-              <p class="text-xs text-slate-500"><i class="fas fa-info-circle mr-1"></i> Pastikan link barcode benar agar gambar muncul.</p>
+              <p class="text-xs text-slate-300 font-medium"><i class="fas fa-info-circle mr-1"></i> Pastikan link barcode benar agar gambar muncul.</p>
             </div>
           </div>
         </div>
@@ -587,7 +588,6 @@ function parseNum(s){return parseFloat(String(s).replace(/[.,]/g,''))||0;}
 function copyText(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>toast('Text berhasil disalin!'));}
 async function copyBarcodeImage(){try{const r=await fetch(BARCODE_URL),b=await r.blob();await navigator.clipboard.write([new ClipboardItem({[b.type]:b})]);toast('Barcode disalin!');}catch(e){toast('Gagal copy gambar','error');}}
 function getMonth(d){if(!d)return'';let dt=d instanceof Date?d:new Date(d);if(isNaN(dt))return'';return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0');}
-/* Tanggal pakai NOL di depan: 01 September 2026 */
 function fmtDate(d,time=true){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);const date=String(dt.getDate()).padStart(2,'0')+' '+BULAN[dt.getMonth()]+' '+dt.getFullYear();return time?date+' '+dt.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):date;}
 function fmtDateShort(d){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);return String(dt.getDate()).padStart(2,'0')+' '+BULAN[dt.getMonth()]+' '+dt.getFullYear();}
 function cleanSitus(s){if(!s)return'-';s=String(s).trim();return (s===''||s==='-'||s==='undefined'||s==='null')?'-':s;}
@@ -857,7 +857,7 @@ function renderJualTable(){
     const isAmbil=j.statusAmbil&&j.statusAmbil.includes('SUDAH AMBIL');
     tb.innerHTML+=`<tr><td class="text-left td-date">${fmtDateShort(j.tanggal)}</td><td class="td-name">${j.nama}</td><td>${situsHtml(j.situs)}</td><td class="td-rokok">${j.rokok}</td><td class="td-jml">${j.jumlah}${satuan}</td><td class="td-harga">${Bt(j.harga)}</td><td><span class="badge ${stColor}">${j.statusBayar||'-'}</span></td><td><button onclick="toggleAmbilJual(${j.row},${isAmbil})" class="toggle-cair ${isAmbil?'on':'off'}" title="${isAmbil?'Sudah diambil':'Belum diambil'}"></button></td><td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
   });
-  if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="9" class="text-center text-slate-500 py-4">Belum ada transaksi</td></tr>';
+  if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="9" class="text-center text-slate-400 py-4">Belum ada transaksi</td></tr>';
 }
 
 function toggleAmbilJual(row,isAmbil){
@@ -938,7 +938,7 @@ function renderStok(){
   ambilBulan.slice().reverse().forEach(p=>{
     tbAmbil.innerHTML+=`<tr><td class="text-left td-date">${fmtDateShort(p.tanggal)}</td><td class="td-rokok">${p.rokok}</td><td>${p.tipe}</td><td class="td-jml">${p.jumlah}</td><td class="td-harga">${Bt(p.modal)}</td><td><button onclick="deletePengambilan(${p.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
   });
-  if(tbAmbil.innerHTML==='') tbAmbil.innerHTML='<tr><td colspan="6" class="text-center text-slate-500 py-4">Belum ada riwayat</td></tr>';
+  if(tbAmbil.innerHTML==='') tbAmbil.innerHTML='<tr><td colspan="6" class="text-center text-slate-400 py-4">Belum ada riwayat</td></tr>';
   const tbMini=document.getElementById('tb-stok-mini');
   tbMini.innerHTML='';
   const jualBulan=(d.allSales||[]).filter(x=>getMonth(x.tanggal)===m);
@@ -962,8 +962,8 @@ function renderStok(){
     if(masukSlop>0||jualSlop>0||bukaSlop>0) tbSlop.innerHTML+=`<tr><td class="text-left td-rokok">${r}</td><td class="td-jml">${masukSlop}</td><td class="td-jml">${jualSlop}</td><td class="td-jml">${masukSlop-jualSlop-bukaSlop}</td></tr>`;
     if(bukaSlop>0||jualEceran>0) tbEceran.innerHTML+=`<tr><td class="text-left td-rokok">${r}</td><td class="td-jml">${bukaSlop*10}</td><td class="td-jml">${jualEceran}</td><td class="td-jml">${(bukaSlop*10)-jualEceran}</td></tr>`;
   });
-  if(tbSlop.innerHTML==='') tbSlop.innerHTML='<tr><td colspan="4" class="text-center text-slate-500 py-4">Belum ada data bulan ini</td></tr>';
-  if(tbEceran.innerHTML==='') tbEceran.innerHTML='<tr><td colspan="4" class="text-center text-slate-500 py-4">Belum ada data bulan ini</td></tr>';
+  if(tbSlop.innerHTML==='') tbSlop.innerHTML='<tr><td colspan="4" class="text-center text-slate-400 py-4">Belum ada data bulan ini</td></tr>';
+  if(tbEceran.innerHTML==='') tbEceran.innerHTML='<tr><td colspan="4" class="text-center text-slate-400 py-4">Belum ada data bulan ini</td></tr>';
 }
 
 async function deletePengambilan(row){
@@ -1015,7 +1015,7 @@ function renderCrosscheck(){
       tbStok.innerHTML+=`<tr><td class="text-left td-rokok">${r}</td><td class="td-jml">${ambil}${satuan}</td><td class="td-jml">${jual}${satuan}</td><td class="td-jml">${sisa}${satuan}</td></tr>`;
     }
   });
-  if(tbStok.innerHTML==='') tbStok.innerHTML='<tr><td colspan="4" class="text-center text-slate-500 py-4">Belum ada data pengambilan & penjualan</td></tr>';
+  if(tbStok.innerHTML==='') tbStok.innerHTML='<tr><td colspan="4" class="text-center text-slate-400 py-4">Belum ada data pengambilan & penjualan</td></tr>';
 
   const ccBulan=(d.allCrosscheck||[]).filter(x=>getMonth(x.tanggal)===m&&x.tipe===curCCTipe);
   const tb=document.getElementById('tb-cc');
@@ -1024,7 +1024,7 @@ function renderCrosscheck(){
     let stColor=c.status==='KLOP'?'bg1':'br1';
     tb.innerHTML+=`<tr><td class="td-date">${fmtDateShort(c.tanggal)}</td><td class="td-name">${c.jam}</td><td><span class="badge ${stColor}">${c.status}</span></td><td class="td-jml">${c.jmlSelisih||0}</td><td>${c.ketSelisih||'-'}</td><td>${c.catatan||'-'}</td><td><button onclick="deleteCrosscheck(${c.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
   });
-  if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="7" class="text-center text-slate-500 py-4">Belum ada riwayat</td></tr>';
+  if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="7" class="text-center text-slate-400 py-4">Belum ada riwayat</td></tr>';
 }
 
 async function deleteCrosscheck(row){
@@ -1137,6 +1137,7 @@ function generateShareText(){
       txt+=`• ${n}\n`;
       if(m.cashRiel>0)txt+=`Cash: ${Bt(m.cashRiel)} /Slop\n`;
       if(m.um>0)txt+=`Pembayaran uang makan: ${Bt(m.um)}/Slop\n`;
+      txt+="\n";
     }
   });
   document.getElementById('text-share').innerText=txt;
@@ -1166,7 +1167,7 @@ function renderRekapUM(){
     tb.innerHTML+=`<tr><td class="text-left td-date">${fmtDateShort(j.tanggal)}</td><td class="td-name">${j.nama}</td><td>${situsHtml(j.situs)}</td><td class="td-rokok">${j.rokok}</td><td class="td-jml">${j.jumlah} Slop</td><td class="td-harga">${Bt(j.harga)}</td><td><button onclick="toggleCairUM(${j.row},${isCair})" class="toggle-cair ${isCair?'on':'off'}"></button></td><td><button onclick="toggleAmbilJual(${j.row},${isAmbil})" class="toggle-cair ${isAmbil?'on':'off'}" title="${isAmbil?'Sudah diambil':'Belum diambil'}"></button></td><td><button onclick="copyRowUM(${j.row})" class="bs text-xs"><i class="fas fa-copy"></i></button></td><td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
   });
   document.getElementById('rekap-um-text').innerText=txtRekap;
-  if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="10" class="text-center text-slate-500 py-4">Belum ada transaksi UM bulan ini</td></tr>';
+  if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="10" class="text-center text-slate-400 py-4">Belum ada transaksi UM bulan ini</td></tr>';
 }
 
 function copyRowUM(row){
