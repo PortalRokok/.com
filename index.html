@@ -269,7 +269,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.16)!important;box-shadow:inset 3p
           <div class="gc vivid pc-purple flex flex-col overflow-hidden" id="jual-riwayat-card">
             <div class="glow-ring g-purple"></div>
             <h4 id="title-rekap-jual" class="st"><i class="fas fa-receipt"></i> Riwayat Penjualan</h4>
-            <div class="sa flex-1"><table class="text-center"><thead><tr><th class="text-left">Tanggal</th><th>Nama</th><th>Situs</th><th>Rokok</th><th>Jumlah</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="tb-jual"></tbody></table></div>
+            <div class="sa flex-1"><table class="text-center"><thead><tr><th class="text-left">Tanggal</th><th>Nama</th><th>Situs</th><th>Rokok</th><th>Jumlah</th><th>Harga</th><th>Status</th><th>Ambil</th><th>Aksi</th></tr></thead><tbody id="tb-jual"></tbody></table></div>
           </div>
         </div>
       </div>
@@ -445,6 +445,7 @@ const API='https://script.google.com/macros/s/AKfycbybxNIoRebMvOprAiJMKetSdx24Ui
 const BARCODE_URL='https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN';
 const Bt=(n)=>'฿'+(n||0).toLocaleString('th-TH');
 const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+function normalizeName(s){return String(s||'').trim().replace(/\s+/g,' ');}
 
 let masterData={};
 let dashState=null;
@@ -457,6 +458,20 @@ let today=new Date();
 let selMonth=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
 let sortedKeys=[];
 try{const sm=localStorage.getItem('gs_month');if(sm)selMonth=sm;}catch(e){}
+
+function dedupMaster(){
+  const out={};
+  Object.keys(masterData).forEach(k=>{
+    const nk=normalizeName(k);
+    if(!nk)return;
+    if(!out[nk]){out[nk]=masterData[k];}
+    else{
+      const a=out[nk],b=masterData[k];
+      out[nk]={modal:a.modal||b.modal||0,cashRiel:a.cashRiel||b.cashRiel||0,um:a.um||b.um||0,eceran:a.eceran||b.eceran||0};
+    }
+  });
+  masterData=out;
+}
 
 function persistLocal(){
   try{localStorage.setItem('gs_data',JSON.stringify({masterData:masterData,dashState:dashState,ts:Date.now()}));}catch(e){}
@@ -520,8 +535,8 @@ function checkSession(){
 }
 
 function doLogin(){
-  const u=document.getElementById('username').value.trim();
-  const p=document.getElementById('password').value.trim();
+  let u=document.getElementById('username').value.replace(/\s+/g,'').toLowerCase();
+  let p=document.getElementById('password').value.trim();
   if(!u||!p){toast('Isi username dan password dulu!','error');return;}
   if(u==='admin'&&p==='admin123'){
     localStorage.setItem('gs_session','active');
@@ -568,7 +583,6 @@ function getMonth(d){if(!d)return'';let dt=d instanceof Date?d:new Date(d);if(is
 function fmtDate(d,time=true){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);const date=dt.getDate()+' '+BULAN[dt.getMonth()]+' '+dt.getFullYear();return time?date+' '+dt.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):date;}
 function fmtDateShort(d){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);return dt.getDate()+' '+BULAN[dt.getMonth()]+' '+dt.getFullYear();}
 function cleanSitus(s){if(!s)return'-';s=String(s).trim();return (s===''||s==='-'||s==='undefined'||s==='null')?'-':s;}
-function setLoading(btnId,loading,txt){const b=document.getElementById(btnId);if(!b)return;if(loading){b.disabled=true;b.innerHTML='<i class="anim-spin fas fa-circle-notch mr-2"></i>Menyimpan...';}else{b.disabled=false;b.innerText=txt;}}
 function applyMonthFilter(){selMonth=document.getElementById('month-filter').value;try{localStorage.setItem('gs_month',selMonth);}catch(e){}if(dashState){renderDashboard();renderJualTable();renderStok();renderCrosscheck();renderRekapUM();renderKas();}}
 function show(id){const el=document.getElementById(id);el.classList.remove('hidden');void el.offsetWidth;el.classList.add('fi');}
 
@@ -578,19 +592,19 @@ function applyServerData(res){
   if(d.masterMap){masterData=d.masterMap;}
   if(d.allSales||d.allPengambilan||d.allCrosscheck){
     dashState=d;
-    /* pastikan situs selalu terbaca benar dari server */
-    (dashState.allSales||[]).forEach(s=>{s.situs=cleanSitus(s.situs);});
+    (dashState.allSales||[]).forEach(s=>{s.situs=cleanSitus(s.situs);if(!s.statusAmbil)s.statusAmbil='BELUM AMBIL';});
   }
+  dedupMaster();
   getPending().forEach(op=>{
     if(op.action==='saveMaster'||op.action==='updateMaster'){
       const p=op.payload;
-      masterData[p.nama]={modal:p.modal||0,cashRiel:p.cashRiel||0,um:p.um||0,eceran:p.eceran||0};
+      masterData[normalizeName(p.nama)]={modal:p.modal||0,cashRiel:p.cashRiel||0,um:p.um||0,eceran:p.eceran||0};
     }else if(op.action==='deleteMaster'){
-      delete masterData[op.payload.nama];
+      delete masterData[normalizeName(op.payload.nama)];
     }else if(op.action==='savePenjualan'&&op.tempRow){
       const p=op.payload;
       if(dashState&&!dashState.allSales.some(x=>x.row===op.tempRow)){
-        dashState.allSales.push({row:op.tempRow,tanggal:new Date(p.tanggal||Date.now()),tipe:p.tipe,nama:p.nama,situs:cleanSitus(p.situs),rokok:p.rokok,jumlah:p.jumlah,tipeBayar:p.tipeBayar,harga:p.harga,statusBayar:p.statusBayar});
+        dashState.allSales.push({row:op.tempRow,tanggal:new Date(p.tanggal||Date.now()),tipe:p.tipe,nama:p.nama,situs:cleanSitus(p.situs),rokok:p.rokok,jumlah:p.jumlah,tipeBayar:p.tipeBayar,harga:p.harga,statusBayar:p.statusBayar,statusAmbil:p.statusAmbil||'BELUM AMBIL'});
       }
     }else if(op.action==='savePengambilan'&&op.tempRow){
       const p=op.payload;
@@ -605,6 +619,9 @@ function applyServerData(res){
     }else if(op.action==='updateStatusPenjualan'&&dashState){
       const rec=dashState.allSales.find(x=>x.row===op.payload.row);
       if(rec)rec.statusBayar=op.payload.newStatus;
+    }else if(op.action==='updateAmbilPenjualan'&&dashState){
+      const rec=dashState.allSales.find(x=>x.row===op.payload.row);
+      if(rec)rec.statusAmbil=op.payload.newAmbil;
     }
   });
   if(Object.keys(masterData).length>0)populateDropdowns();
@@ -641,9 +658,13 @@ async function initApp(){
   document.getElementById('jual-tgl').value=new Date().toISOString().slice(0,10);
   const ind=document.getElementById('sync-indicator');
   const adaLokal=loadLocal();
-  if(adaLokal&&Object.keys(masterData).length>0){
-    populateDropdowns();
-    renderDashboard();
+  if(adaLokal){
+    dedupMaster();
+    persistLocal();
+    if(Object.keys(masterData).length>0){
+      populateDropdowns();
+      renderDashboard();
+    }
   }
   if(getPending().length>0){
     if(ind)ind.classList.remove('hidden');
@@ -679,7 +700,7 @@ function renderDashboard(){
   let totalP=0,untungSlop=0,untungEceran=0,abaTotal=0,umBelumCair=0,totalSlop=0;
   jualBulan.forEach(j=>{
     const harga=j.harga||0;
-    const mp=(masterData[j.rokok]&&masterData[j.rokok].modal)||0;
+    const mp=(masterData[j.rokok]&&masterData[j.rokok].modal)||(masterData[normalizeName(j.rokok)]&&masterData[normalizeName(j.rokok)].modal)||0;
     totalP+=harga;
     if(j.tipe==='Eceran'){untungEceran+=harga-(mp/10*j.jumlah);}
     else{untungSlop+=harga-(mp*j.jumlah);totalSlop+=j.jumlah;}
@@ -755,7 +776,7 @@ function hitungOtomatis(){
   const jml=parseInt(document.getElementById('jual-jml').value)||0;
   const tb=document.getElementById('jual-tipebayar').value;
   if(!rok||!jml){document.getElementById('jual-harga').innerText='฿0';return;}
-  const m=masterData[rok];if(!m){document.getElementById('jual-harga').innerText='฿0';return;}
+  const m=masterData[rok]||masterData[normalizeName(rok)];if(!m){document.getElementById('jual-harga').innerText='฿0';return;}
   let harga=0;
   if(curJualTipe==='Eceran'){harga=(m.eceran||0)*jml;}
   else{
@@ -777,14 +798,14 @@ async function saveJual(){
   const st=document.getElementById('jual-status').value;
   const tglVal=document.getElementById('jual-tgl').value;
   const situsVal=document.getElementById('jual-situs').value.trim();
-  const m=masterData[rok]||{};
+  const m=masterData[rok]||masterData[normalizeName(rok)]||{};
   let harga=0;
   if(curJualTipe==='Eceran'){harga=(m.eceran||0)*jml;}
   else{if(tb==='ABA'||tb==='CASH')harga=(m.cashRiel||0)*jml;else if(tb==='Uang Makan')harga=(m.um||0)*jml;}
-  const payload={tipe:curJualTipe,nama:nama,situs:situsVal,rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st,tanggal:tglVal};
+  const payload={tipe:curJualTipe,nama:nama,situs:situsVal,rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st,tanggal:tglVal,statusAmbil:'BELUM AMBIL'};
   const tempRow=-Date.now();
   if(!dashState)dashState={masterMap:masterData,allSales:[],allPengambilan:[],allCrosscheck:[]};
-  dashState.allSales.push({row:tempRow,tanggal:new Date(tglVal||Date.now()),tipe:curJualTipe,nama:nama,situs:situsVal,rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st});
+  dashState.allSales.push({row:tempRow,tanggal:new Date(tglVal||Date.now()),tipe:curJualTipe,nama:nama,situs:situsVal,rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st,statusAmbil:'BELUM AMBIL'});
   persistLocal();
   toast('Transaksi tersimpan!');
   document.getElementById('jual-nama').value='';
@@ -824,7 +845,23 @@ function renderJualTable(){
     let stColor='br1';
     if(j.statusBayar&&j.statusBayar.includes('DONE'))stColor='bg1';
     else if(j.statusBayar&&j.statusBayar.includes('SUDAH'))stColor='ba1';
-    tb.innerHTML+=`<tr><td class="text-left text-xs">${fmtDateShort(j.tanggal)}</td><td>${j.nama}</td><td>${cleanSitus(j.situs)}</td><td>${j.rokok}</td><td>${j.jumlah}${satuan}</td><td>${Bt(j.harga)}</td><td><span class="badge ${stColor}">${j.statusBayar||'-'}</span></td><td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
+    const isAmbil=j.statusAmbil&&j.statusAmbil.includes('SUDAH AMBIL');
+    tb.innerHTML+=`<tr><td class="text-left text-xs">${fmtDateShort(j.tanggal)}</td><td>${j.nama}</td><td>${cleanSitus(j.situs)}</td><td>${j.rokok}</td><td>${j.jumlah}${satuan}</td><td>${Bt(j.harga)}</td><td><span class="badge ${stColor}">${j.statusBayar||'-'}</span></td><td><button onclick="toggleAmbilJual(${j.row},${isAmbil})" class="toggle-cair ${isAmbil?'on':'off'}" title="${isAmbil?'Sudah diambil':'Belum diambil'}"></button></td><td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
+  });
+}
+
+function toggleAmbilJual(row,isAmbil){
+  const newAmbil=isAmbil?'BELUM AMBIL':'SUDAH AMBIL';
+  const rec=(dashState.allSales||[]).find(x=>x.row===row);
+  if(rec)rec.statusAmbil=newAmbil;
+  persistLocal();
+  renderJualTable();
+  toast(newAmbil==='SUDAH AMBIL'?'✅ Ditandai SUDAH DIAMBIL':'Ditandai BELUM diambil');
+  if(row<0)return;
+  api('updateAmbilPenjualan',{payload:{row:row,newAmbil:newAmbil}}).then(res=>{
+    if(!res||!res.success){
+      addPending({action:'updateAmbilPenjualan',payload:{row:row,newAmbil:newAmbil}});
+    }
   });
 }
 
@@ -1025,23 +1062,39 @@ function cancelEdit(){
 }
 
 async function saveMaster(){
-  const nama=document.getElementById('m-nama').value.trim();
+  const nama=normalizeName(document.getElementById('m-nama').value);
   const modal=parseNum(document.getElementById('m-modal').value);
   const cash=parseNum(document.getElementById('m-cash').value);
   const um=parseNum(document.getElementById('m-um').value);
   const eceran=parseNum(document.getElementById('m-eceran').value);
   if(!nama){toast('Nama rokok wajib diisi!','error');return;}
-  const action=editMode?'updateMaster':'saveMaster';
+  const oldName=editMode;
+  const renamed=oldName&&oldName!==nama;
   const payload={nama:nama,modal:modal,cashRiel:cash,um:um,eceran:eceran};
+  if(renamed)delete masterData[oldName];
   masterData[nama]={modal:modal,cashRiel:cash,um:um,eceran:eceran};
+  dedupMaster();
   persistLocal();
   populateDropdowns();
   renderListRokok();
-  toast(editMode?'Rokok diupdate!':'Rokok ditambahkan!');
+  toast(oldName?'Rokok diupdate!':'Rokok ditambahkan!');
   cancelEdit();
-  const res=await api(action,{payload:payload});
-  if(res&&res.success){applyServerData(res);renderListRokok();}
-  else{addPending({action:action,payload:payload});}
+  if(renamed){
+    const resNew=await api('saveMaster',{payload:payload});
+    const resDel=await api('deleteMaster',{payload:{nama:oldName}});
+    if(resNew&&resNew.success){applyServerData(resNew);renderListRokok();}
+    else addPending({action:'saveMaster',payload:payload});
+    if(resDel&&resDel.success){applyServerData(resDel);renderListRokok();}
+    else addPending({action:'deleteMaster',payload:{nama:oldName}});
+  }else if(oldName){
+    const res=await api('updateMaster',{payload:payload});
+    if(res&&res.success){applyServerData(res);renderListRokok();}
+    else addPending({action:'updateMaster',payload:payload});
+  }else{
+    const res=await api('saveMaster',{payload:payload});
+    if(res&&res.success){applyServerData(res);renderListRokok();}
+    else addPending({action:'saveMaster',payload:payload});
+  }
 }
 
 async function deleteMaster(idx){
@@ -1139,7 +1192,7 @@ function renderKas(){
   const jualBulan=(d.allSales||[]).filter(x=>getMonth(x.tanggal)===m);
   let totalP=0,modal=0,untung=0,abaTotal=0,umBelum=0;
   jualBulan.forEach(j=>{
-    const mp=(masterData[j.rokok]&&masterData[j.rokok].modal)||0;
+    const mp=(masterData[j.rokok]&&masterData[j.rokok].modal)||(masterData[normalizeName(j.rokok)]&&masterData[normalizeName(j.rokok)].modal)||0;
     totalP+=j.harga;
     let hModal=0;
     if(j.tipe==='Eceran'){hModal=mp/10*j.jumlah;}else{hModal=mp*j.jumlah;}
