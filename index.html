@@ -102,6 +102,8 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 .td-jml{font-family:'Kanit',sans-serif;font-weight:800;font-size:16px;color:#86efac;text-shadow:0 0 12px rgba(74,222,128,0.6)}
 .td-harga{font-family:'Kanit',sans-serif;font-weight:800;font-size:16px;color:#fde047;text-shadow:0 0 14px rgba(250,204,21,0.75),0 1px 3px rgba(0,0,0,0.8)}
 .badge{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;display:inline-block;text-align:center}
+.badge.clickable{cursor:pointer;transition:all .15s}
+.badge.clickable:hover{transform:scale(1.08)}
 .bg1{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
 .br1{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.2)}
 .ba1{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.2)}
@@ -415,7 +417,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
             <h4 class="st" style="border:0;padding:0"><i class="fas fa-utensils"></i> Rekapan Pembayaran Uang Makan</h4>
             <button onclick="copyRekapUM()" class="bs text-xs"><i class="fas fa-copy mr-1"></i> COPY SEMUA REKAPAN</button>
           </div>
-          <p class="text-[11px] text-slate-300 font-medium px-2 pb-2"><i class="fas fa-hand-pointer mr-1 text-cyan-300"></i> Tips: cubit (pinch) layar HP untuk perkecil/perbesar tabel biar kelihatan semua.</p>
+          <p class="text-[11px] text-slate-300 font-medium px-2 pb-2"><i class="fas fa-hand-pointer mr-1 text-cyan-300"></i> Klik badge BELUM BAYAR untuk tandai sudah bayar. Cubit (pinch) layar untuk perkecil tabel.</p>
           <div id="rekap-um-text" class="hidden"></div>
           <div class="sa"><table class="text-center"><thead><tr><th class="text-left">Tanggal</th><th>Nama</th><th>Situs</th><th>Rokok</th><th>Jumlah</th><th>Harga</th><th>Status Cair</th><th>Ambil</th><th>Copy Baris</th><th>Aksi</th></tr></thead><tbody id="tb-um"></tbody></table></div>
         </div>
@@ -479,10 +481,18 @@ let today=new Date();
 let selMonth=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
 let sortedKeys=[];
 let isRefreshing=false;
-/* KUNCI LOKAL: status yang baru ditandai tidak boleh ditimpa data lama server */
+/* ====== KUNCI STATUS: tidak boleh ditimpa data lama server ====== */
 let ambilLocks={};
-let cairLocks={};
+let statusLocks={};
+/* ====== BUKU CATATAN BARU: dipaksa tampil sampai server mengakuinya ====== */
+let saveBuffer={sales:[],ambil:[],cc:[]};
+try{const sb=localStorage.getItem('gs_savebuffer');if(sb)saveBuffer=JSON.parse(sb);}catch(e){saveBuffer={sales:[],ambil:[],cc:[]};}
 try{const sm=localStorage.getItem('gs_month');if(sm)selMonth=sm;}catch(e){}
+
+function persistBuffer(){try{localStorage.setItem('gs_savebuffer',JSON.stringify(saveBuffer));}catch(e){}}
+function sigSale(r){return [r.tipe,String(r.nama||'').trim(),r.rokok,r.jumlah,r.harga,r.tipeBayar].join('|');}
+function sigAmbil(r){return [r.rokok,r.jumlah,r.tipe].join('|');}
+function sigCC(r){return [String(r.jam||''),r.status,r.tipe,r.jmlSelisih||0,String(r.catatan||'')].join('|');}
 
 function dedupMaster(){
   const out={};
@@ -634,11 +644,12 @@ async function refreshServerData(silent){
     return false;
   }
 }
-/* Auto-sinkron 5 DETIK (diam-diam, cuma kalau tab terlihat & tidak sedang refresh) */
+/* Auto-sinkron 5 detik */
 setInterval(function(){
   if(document.visibilityState==='visible'&&dashState&&!isRefreshing)refreshServerData(true);
 },5000);
 
+/* ====== APPLY SERVER DATA DENGAN PROTEKSI PENUH ====== */
 function applyServerData(res){
   if(!res)return;
   const d=res.dashboard||res;
@@ -648,6 +659,67 @@ function applyServerData(res){
     (dashState.allSales||[]).forEach(s=>{s.situs=cleanSitus(s.situs);if(!s.statusAmbil)s.statusAmbil='BELUM AMBIL';});
   }
   dedupMaster();
+
+  /* 1. Masukin ulang catatan yang masih dikunci (belum diakui server) */
+  if(dashState){
+    const sisaSales=[];
+    saveBuffer.sales.forEach(sb=>{
+      const ada=dashState.allSales.some(x=>sigSale(x)===sb.sig&&String(x.row)>0);
+      if(ada){/* server sudah punya, lepas kunci */}
+      else{
+        if(!dashState.allSales.some(x=>x.row===sb.rec.row)){
+          dashState.allSales.push(sb.rec);
+        }
+        sisaSales.push(sb);
+      }
+    });
+    saveBuffer.sales=sisaSales;
+
+    const sisaAmbil=[];
+    saveBuffer.ambil.forEach(sb=>{
+      const ada=dashState.allPengambilan.some(x=>sigAmbil(x)===sb.sig&&String(x.row)>0);
+      if(ada){/* lepas kunci */}
+      else{
+        if(!dashState.allPengambilan.some(x=>x.row===sb.rec.row)){
+          dashState.allPengambilan.push(sb.rec);
+        }
+        sisaAmbil.push(sb);
+      }
+    });
+    saveBuffer.ambil=sisaAmbil;
+
+    const sisaCC=[];
+    saveBuffer.cc.forEach(sb=>{
+      const ada=dashState.allCrosscheck.some(x=>sigCC(x)===sb.sig&&String(x.row)>0);
+      if(ada){/* lepas kunci */}
+      else{
+        if(!dashState.allCrosscheck.some(x=>x.row===sb.rec.row)){
+          dashState.allCrosscheck.push(sb.rec);
+        }
+        sisaCC.push(sb);
+      }
+    });
+    saveBuffer.cc=sisaCC;
+    persistBuffer();
+
+    /* 2. Terapkan status terkunci (Ambil & Status Bayar/Cair) */
+    Object.keys(ambilLocks).forEach(r=>{
+      const rec=dashState.allSales.find(x=>x.row==r);
+      if(rec){
+        if(rec.statusAmbil===ambilLocks[r]){delete ambilLocks[r];}
+        else{rec.statusAmbil=ambilLocks[r];}
+      }
+    });
+    Object.keys(statusLocks).forEach(r=>{
+      const rec=dashState.allSales.find(x=>x.row==r);
+      if(rec){
+        if(rec.statusBayar===statusLocks[r]){delete statusLocks[r];}
+        else{rec.statusBayar=statusLocks[r];}
+      }
+    });
+  }
+
+  /* 3. Masukin ulang operasi pending yang belum masuk server */
   getPending().forEach(op=>{
     if(op.action==='saveMaster'||op.action==='updateMaster'){
       const p=op.payload;
@@ -677,23 +749,6 @@ function applyServerData(res){
       if(rec)rec.statusAmbil=op.payload.newAmbil;
     }
   });
-  /* PENTING: terapkan kembali status yang DIKUNCI, jangan sampai ditimpa data lama server */
-  if(dashState){
-    Object.keys(ambilLocks).forEach(r=>{
-      const rec=dashState.allSales.find(x=>x.row==r);
-      if(rec){
-        if(rec.statusAmbil===ambilLocks[r]){delete ambilLocks[r];}
-        else{rec.statusAmbil=ambilLocks[r];}
-      }
-    });
-    Object.keys(cairLocks).forEach(r=>{
-      const rec=dashState.allSales.find(x=>x.row==r);
-      if(rec){
-        if(rec.statusBayar===cairLocks[r]){delete cairLocks[r];}
-        else{rec.statusBayar=cairLocks[r];}
-      }
-    });
-  }
   if(Object.keys(masterData).length>0)populateDropdowns();
   persistLocal();
 }
@@ -760,11 +815,16 @@ function renderDashboard(){
   jualBulan.forEach(j=>{
     const harga=j.harga||0;
     const mp=(masterData[j.rokok]&&masterData[j.rokok].modal)||(masterData[normalizeName(j.rokok)]&&masterData[normalizeName(j.rokok)].modal)||0;
-    totalP+=harga;
+    /* Yang BELUM BAYAR belum dihitung sebagai uang masuk */
+    const sudahBayar=j.statusBayar&&j.statusBayar.includes('DONE');
+    const isUM=j.tipeBayar==='Uang Makan';
     if(j.tipe==='Eceran'){untungEceran+=harga-(mp/10*j.jumlah);}
     else{untungSlop+=harga-(mp*j.jumlah);totalSlop+=j.jumlah;}
-    if(j.tipeBayar==='ABA'||j.tipeBayar==='CASH')abaTotal+=harga;
-    else if(j.tipeBayar==='Uang Makan'){if(!j.statusBayar||!j.statusBayar.includes('CAIR'))umBelumCair+=harga;}
+    if(sudahBayar||isUM){
+      totalP+=harga;
+      if(j.tipeBayar==='ABA'||j.tipeBayar==='CASH')abaTotal+=harga;
+      else if(isUM){if(!j.statusBayar||!j.statusBayar.includes('CAIR'))umBelumCair+=harga;}
+    }
   });
   document.getElementById('d-pendapatan').innerText=Bt(totalP);
   document.getElementById('d-untung').innerText=Bt(untungSlop+untungEceran);
@@ -782,7 +842,7 @@ function renderChart(){
   const months=[];const now=new Date();
   for(let i=5;i>=0;i--){const dt=new Date(now.getFullYear(),now.getMonth()-i,1);months.push(dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0'));}
   const labels=months.map(m=>BULAN[parseInt(m.split('-')[1])-1]);
-  const dataABA=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&(j.tipeBayar==='ABA'||j.tipeBayar==='CASH')).reduce((s,j)=>s+(j.harga||0),0));
+  const dataABA=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&(j.tipeBayar==='ABA'||j.tipeBayar==='CASH')&&(!j.statusBayar||j.statusBayar.includes('DONE'))).reduce((s,j)=>s+(j.harga||0),0));
   const dataUM=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&j.tipeBayar==='Uang Makan').reduce((s,j)=>s+(j.harga||0),0));
   const dataEceran=months.map(m=>allJual.filter(j=>getMonth(j.tanggal)===m&&j.tipe==='Eceran').reduce((s,j)=>s+(j.harga||0),0));
   const ctx=document.getElementById('salesChart').getContext('2d');
@@ -863,8 +923,12 @@ async function saveJual(){
   else{if(tb==='ABA'||tb==='CASH')harga=(m.cashRiel||0)*jml;else if(tb==='Uang Makan')harga=(m.um||0)*jml;}
   const payload={tipe:curJualTipe,nama:nama,situs:situsVal,rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st,tanggal:tglVal,statusAmbil:'BELUM AMBIL'};
   const tempRow=-Date.now();
+  const recBaru={row:tempRow,tanggal:new Date(tglVal||Date.now()),tipe:curJualTipe,nama:nama,situs:situsVal,rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st,statusAmbil:'BELUM AMBIL'};
   if(!dashState)dashState={masterMap:masterData,allSales:[],allPengambilan:[],allCrosscheck:[]};
-  dashState.allSales.push({row:tempRow,tanggal:new Date(tglVal||Date.now()),tipe:curJualTipe,nama:nama,situs:situsVal,rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st,statusAmbil:'BELUM AMBIL'});
+  dashState.allSales.push(recBaru);
+  /* KUNCI: catatan baru dipaksa tampil sampai server mengakuinya */
+  saveBuffer.sales.push({sig:sigSale(recBaru),rec:recBaru,ts:Date.now()});
+  persistBuffer();
   persistLocal();
   toast('Transaksi tersimpan!');
   document.getElementById('jual-nama').value='';
@@ -905,9 +969,36 @@ function renderJualTable(){
     if(j.statusBayar&&j.statusBayar.includes('DONE'))stColor='bg1';
     else if(j.statusBayar&&j.statusBayar.includes('SUDAH'))stColor='ba1';
     const isAmbil=j.statusAmbil&&j.statusAmbil.includes('SUDAH AMBIL');
-    tb.innerHTML+=`<tr><td class="text-left td-date">${fmtDateShort(j.tanggal)}</td><td class="td-name">${j.nama}</td><td>${situsHtml(j.situs)}</td><td class="td-rokok">${j.rokok}</td><td class="td-jml">${j.jumlah}${satuan}</td><td class="td-harga">${Bt(j.harga)}</td><td><span class="badge ${stColor}">${j.statusBayar||'-'}</span></td><td><button onclick="toggleAmbilJual(${j.row},${isAmbil})" class="toggle-cair ${isAmbil?'on':'off'}" title="${isAmbil?'Sudah diambil':'Belum diambil'}"></button></td><td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
+    const isDone=j.statusBayar&&j.statusBayar.includes('DONE');
+    tb.innerHTML+=`<tr><td class="text-left td-date">${fmtDateShort(j.tanggal)}</td><td class="td-name">${j.nama}</td><td>${situsHtml(j.situs)}</td><td class="td-rokok">${j.rokok}</td><td class="td-jml">${j.jumlah}${satuan}</td><td class="td-harga">${Bt(j.harga)}</td><td><span onclick="toggleBayarJual(${j.row},${isDone})" class="badge ${stColor} clickable" title="Klik untuk ubah status bayar">${j.statusBayar||'-'}</span></td><td><button onclick="toggleAmbilJual(${j.row},${isAmbil})" class="toggle-cair ${isAmbil?'on':'off'}" title="${isAmbil?'Sudah diambil':'Belum diambil'}"></button></td><td><button onclick="deleteJual(${j.row})" class="bd"><i class="fas fa-trash"></i></button></td></tr>`;
   });
   if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="9" class="text-center text-slate-400 py-4">Belum ada transaksi</td></tr>';
+}
+
+/* Klik badge BELUM BAYAR <-> DONE BAYAR */
+function toggleBayarJual(row,isDone){
+  let newStatus;
+  if(isDone){
+    const rec=(dashState.allSales||[]).find(x=>x.row===row);
+    newStatus='BELUM BAYAR';
+  }else{
+    const rec=(dashState.allSales||[]).find(x=>x.row===row);
+    newStatus=(rec&&rec.tipeBayar==='ABA')?'DONE BAYAR ABA':'DONE BAYAR CASH';
+  }
+  const rec=(dashState.allSales||[]).find(x=>x.row===row);
+  if(rec)rec.statusBayar=newStatus;
+  if(row>0)statusLocks[row]=newStatus;
+  persistLocal();
+  renderJualTable();
+  renderRekapUM();
+  renderDashboard();
+  renderKas();
+  toast(newStatus.includes('DONE')?'✅ Ditandai SUDAH BAYAR - masuk total pendapatan':'Ditandai BELUM BAYAR');
+  if(row<0)return;
+  api('updateStatusPenjualan',{payload:{row:row,newStatus:newStatus}}).then(res=>{
+    if(res&&res.success){applyServerData(res);renderJualTable();renderRekapUM();renderDashboard();renderKas();}
+    else{addPending({action:'updateStatusPenjualan',payload:{row:row,newStatus:newStatus}});}
+  });
 }
 
 function toggleAmbilJual(row,isAmbil){
@@ -929,9 +1020,11 @@ function toggleAmbilJual(row,isAmbil){
 async function deleteJual(row){
   if(!confirm('Hapus transaksi ini?')) return;
   delete ambilLocks[row];
-  delete cairLocks[row];
+  delete statusLocks[row];
   if(row<0){
     dashState.allSales=dashState.allSales.filter(x=>x.row!==row);
+    saveBuffer.sales=saveBuffer.sales.filter(x=>x.rec.row!==row);
+    persistBuffer();
     savePending(getPending().filter(x=>x.tempRow!==row));
     persistLocal();
     toast('Transaksi dihapus!');
@@ -951,8 +1044,11 @@ async function saveAmbilStok(){
   if(!jml){toast('Jumlah wajib diisi!','error');return;}
   const payload={tanggal:tgl,rokok:rok,jumlah:jml,modal:modal,tipe:"Masuk"};
   const tempRow=-Date.now();
+  const recBaru={row:tempRow,tanggal:new Date(tgl||Date.now()),rokok:rok,jumlah:jml,modal:modal,tipe:"Masuk"};
   if(!dashState)dashState={masterMap:masterData,allSales:[],allPengambilan:[],allCrosscheck:[]};
-  dashState.allPengambilan.push({row:tempRow,tanggal:new Date(tgl||Date.now()),rokok:rok,jumlah:jml,modal:modal,tipe:"Masuk"});
+  dashState.allPengambilan.push(recBaru);
+  saveBuffer.ambil.push({sig:sigAmbil(recBaru),rec:recBaru,ts:Date.now()});
+  persistBuffer();
   persistLocal();
   toast('Pengambilan dicatat!');
   document.getElementById('stok-jml').value='';
@@ -970,8 +1066,11 @@ async function saveBukaSlop(){
   if(!jml){toast('Jumlah wajib diisi!','error');return;}
   const payload={rokok:rok,jumlah:jml,tipe:"Buka Slop"};
   const tempRow=-Date.now();
+  const recBaru={row:tempRow,tanggal:new Date(),rokok:rok,jumlah:jml,modal:0,tipe:"Buka Slop"};
   if(!dashState)dashState={masterMap:masterData,allSales:[],allPengambilan:[],allCrosscheck:[]};
-  dashState.allPengambilan.push({row:tempRow,tanggal:new Date(),rokok:rok,jumlah:jml,modal:0,tipe:"Buka Slop"});
+  dashState.allPengambilan.push(recBaru);
+  saveBuffer.ambil.push({sig:sigAmbil(recBaru),rec:recBaru,ts:Date.now()});
+  persistBuffer();
   persistLocal();
   toast('Slop dibuka jadi eceran!');
   document.getElementById('buka-jml').value='';
@@ -1022,6 +1121,8 @@ async function deletePengambilan(row){
   if(!confirm('Hapus data ini?')) return;
   if(row<0){
     dashState.allPengambilan=dashState.allPengambilan.filter(x=>x.row!==row);
+    saveBuffer.ambil=saveBuffer.ambil.filter(x=>x.rec.row!==row);
+    persistBuffer();
     savePending(getPending().filter(x=>x.tempRow!==row));
     persistLocal();renderStok();toast('Data dihapus!');
     return;
@@ -1039,8 +1140,11 @@ async function saveCrosscheck(){
   if(!jam){toast('Jam wajib diisi!','error');return;}
   const payload={catatan:catatan,jam:jam,status:status,jmlSelisih:jml,ketSelisih:ket,tipe:curCCTipe};
   const tempRow=-Date.now();
+  const recBaru={row:tempRow,tanggal:new Date(),jam:jam,status:status,catatan:catatan,tipe:curCCTipe,jmlSelisih:jml,ketSelisih:ket};
   if(!dashState)dashState={masterMap:masterData,allSales:[],allPengambilan:[],allCrosscheck:[]};
-  dashState.allCrosscheck.push({row:tempRow,tanggal:new Date(),jam:jam,status:status,catatan:catatan,tipe:curCCTipe,jmlSelisih:jml,ketSelisih:ket});
+  dashState.allCrosscheck.push(recBaru);
+  saveBuffer.cc.push({sig:sigCC(recBaru),rec:recBaru,ts:Date.now()});
+  persistBuffer();
   persistLocal();
   toast('Crosscheck disimpan!');
   document.getElementById('cc-catatan').value='';
@@ -1083,6 +1187,8 @@ async function deleteCrosscheck(row){
   if(!confirm('Hapus data ini?')) return;
   if(row<0){
     dashState.allCrosscheck=dashState.allCrosscheck.filter(x=>x.row!==row);
+    saveBuffer.cc=saveBuffer.cc.filter(x=>x.rec.row!==row);
+    persistBuffer();
     savePending(getPending().filter(x=>x.tempRow!==row));
     persistLocal();renderCrosscheck();toast('Data dihapus!');
     return;
@@ -1239,7 +1345,7 @@ function toggleCairUM(row,isCair){
   const newStatus=isCair?'SUDAH BAYAR UM':'SUDAH CAIR UM';
   const rec=(dashState.allSales||[]).find(x=>x.row===row);
   if(rec)rec.statusBayar=newStatus;
-  if(row>0)cairLocks[row]=newStatus;
+  if(row>0)statusLocks[row]=newStatus;
   persistLocal();
   renderRekapUM();
   renderDashboard();
