@@ -12,7 +12,6 @@
 :root{--bg:#070b14;--card:rgba(17,25,40,0.85);--bdr:rgba(255,255,255,0.08);--acc:#38bdf8;--acc2:#a855f7}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Plus Jakarta Sans','Kanit',sans-serif;-webkit-tap-highlight-color:transparent;background-color:var(--bg);min-height:100vh;color:#e2e8f0;font-size:15px;overscroll-behavior-y:contain}
-/* Background layer terpisah agar scroll mulus di HP (bukan attachment:fixed) */
 .bg-fixed{position:fixed;inset:0;z-index:-1;background-image:url('https://lh3.googleusercontent.com/d/1zoGFZJ_fpKsMOf29YqGXxjl3K1RMo4zW');background-size:cover;background-position:center;transform:translateZ(0)}
 h1,h2,h3,h4,h5,.font-heading{font-family:'Kanit',sans-serif;}
 .hidden{display:none!important}
@@ -122,7 +121,6 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 .toggle-cair.on::after{left:23px;background:#4ade80}
 .d-label{font-size:13px;font-weight:600;color:#cbd5e1;letter-spacing:.04em;margin-bottom:4px;line-height:1.3}
 .d-value{font-size:28px;font-weight:800;line-height:1.1}
-/* ====== MODE RINGAN UNTUK HP (anti lag scroll) ====== */
 @media (max-width:768px){
   .lamp-bg div{filter:blur(60px);opacity:0.18}
   .gc,.st,aside,header,.fl{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
@@ -212,7 +210,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
         <h2 id="page-title" class="text-lg font-extrabold tracking-tight text-white">Dashboard</h2>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="refreshServerData()" title="Muat data terbaru" class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/25 transition-colors"><i id="refresh-ico" class="fas fa-rotate"></i></button>
+        <button onclick="refreshServerData(false)" title="Muat data terbaru" class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/25 transition-colors"><i id="refresh-ico" class="fas fa-rotate"></i></button>
         <div id="sync-indicator" class="hidden text-[11px] text-cyan-400 font-bold"><i class="fas fa-rotate anim-spin mr-1"></i>Sinkron</div>
         <input type="month" id="month-filter" class="fl">
       </div>
@@ -481,6 +479,9 @@ let today=new Date();
 let selMonth=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
 let sortedKeys=[];
 let isRefreshing=false;
+/* KUNCI LOKAL: status yang baru ditandai tidak boleh ditimpa data lama server */
+let ambilLocks={};
+let cairLocks={};
 try{const sm=localStorage.getItem('gs_month');if(sm)selMonth=sm;}catch(e){}
 
 function dedupMaster(){
@@ -586,7 +587,7 @@ async function api(action,payload={},retry=1){
     const t=await r.text();
     try{return JSON.parse(t);}catch(e){return{error:'Server error'};}
   }catch(e){
-    if(isGet&&retry>0){await new Promise(res=>setTimeout(res,800));return api(action,payload,retry-1);}
+    if(isGet&&retry>0){await new Promise(res=>setTimeout(res,600));return api(action,payload,retry-1);}
     return{error:'Koneksi gagal'};
   }
 }
@@ -612,7 +613,6 @@ function applyMonthFilter(){selMonth=document.getElementById('month-filter').val
 function show(id){const el=document.getElementById(id);el.classList.remove('hidden');void el.offsetWidth;el.classList.add('fi');}
 function renderAll(){renderDashboard();renderJualTable();renderStok();renderCrosscheck();renderRekapUM();renderKas();}
 
-/* ====== REFRESH DATA SERVER (sinkron antar device) ====== */
 async function refreshServerData(silent){
   if(isRefreshing)return;
   isRefreshing=true;
@@ -634,10 +634,10 @@ async function refreshServerData(silent){
     return false;
   }
 }
-/* Auto-sinkron tiap 45 detik (diam-diam, biar centang dari device lain ikut ter-update) */
+/* Auto-sinkron 5 DETIK (diam-diam, cuma kalau tab terlihat & tidak sedang refresh) */
 setInterval(function(){
-  if(document.visibilityState==='visible'&&dashState)refreshServerData(true);
-},45000);
+  if(document.visibilityState==='visible'&&dashState&&!isRefreshing)refreshServerData(true);
+},5000);
 
 function applyServerData(res){
   if(!res)return;
@@ -677,6 +677,23 @@ function applyServerData(res){
       if(rec)rec.statusAmbil=op.payload.newAmbil;
     }
   });
+  /* PENTING: terapkan kembali status yang DIKUNCI, jangan sampai ditimpa data lama server */
+  if(dashState){
+    Object.keys(ambilLocks).forEach(r=>{
+      const rec=dashState.allSales.find(x=>x.row==r);
+      if(rec){
+        if(rec.statusAmbil===ambilLocks[r]){delete ambilLocks[r];}
+        else{rec.statusAmbil=ambilLocks[r];}
+      }
+    });
+    Object.keys(cairLocks).forEach(r=>{
+      const rec=dashState.allSales.find(x=>x.row==r);
+      if(rec){
+        if(rec.statusBayar===cairLocks[r]){delete cairLocks[r];}
+        else{rec.statusBayar=cairLocks[r];}
+      }
+    });
+  }
   if(Object.keys(masterData).length>0)populateDropdowns();
   persistLocal();
 }
@@ -897,19 +914,22 @@ function toggleAmbilJual(row,isAmbil){
   const newAmbil=isAmbil?'BELUM AMBIL':'SUDAH AMBIL';
   const rec=(dashState.allSales||[]).find(x=>x.row===row);
   if(rec)rec.statusAmbil=newAmbil;
+  if(row>0)ambilLocks[row]=newAmbil;
   persistLocal();
   renderJualTable();
   renderRekapUM();
   toast(newAmbil==='SUDAH AMBIL'?'✅ Ditandai SUDAH DIAMBIL':'Ditandai BELUM diambil');
   if(row<0)return;
   api('updateAmbilPenjualan',{payload:{row:row,newAmbil:newAmbil}}).then(res=>{
-    if(res&&res.success){applyServerData(res);}
+    if(res&&res.success){applyServerData(res);renderJualTable();renderRekapUM();}
     else{addPending({action:'updateAmbilPenjualan',payload:{row:row,newAmbil:newAmbil}});}
   });
 }
 
 async function deleteJual(row){
   if(!confirm('Hapus transaksi ini?')) return;
+  delete ambilLocks[row];
+  delete cairLocks[row];
   if(row<0){
     dashState.allSales=dashState.allSales.filter(x=>x.row!==row);
     savePending(getPending().filter(x=>x.tempRow!==row));
@@ -1219,13 +1239,14 @@ function toggleCairUM(row,isCair){
   const newStatus=isCair?'SUDAH BAYAR UM':'SUDAH CAIR UM';
   const rec=(dashState.allSales||[]).find(x=>x.row===row);
   if(rec)rec.statusBayar=newStatus;
+  if(row>0)cairLocks[row]=newStatus;
   persistLocal();
   renderRekapUM();
   renderDashboard();
   toast(isCair?'Dikembalikan ke Belum Cair':'Sudah Cair!');
   if(row<0)return;
   api('updateStatusPenjualan',{payload:{row:row,newStatus:newStatus}}).then(res=>{
-    if(res&&res.success){applyServerData(res);}
+    if(res&&res.success){applyServerData(res);renderRekapUM();renderDashboard();}
     else{addPending({action:'updateStatusPenjualan',payload:{row:row,newStatus:newStatus}});}
   });
 }
