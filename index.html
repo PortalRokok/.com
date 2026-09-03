@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Gana Store Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -11,7 +11,9 @@
 <style>
 :root{--bg:#070b14;--card:rgba(17,25,40,0.85);--bdr:rgba(255,255,255,0.08);--acc:#38bdf8;--acc2:#a855f7}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Plus Jakarta Sans','Kanit',sans-serif;-webkit-tap-highlight-color:transparent;background-color:var(--bg);background-image:url('https://lh3.googleusercontent.com/d/1zoGFZJ_fpKsMOf29YqGXxjl3K1RMo4zW');background-size:cover;background-position:center;background-attachment:fixed;min-height:100vh;color:#e2e8f0;font-size:15px}
+body{font-family:'Plus Jakarta Sans','Kanit',sans-serif;-webkit-tap-highlight-color:transparent;background-color:var(--bg);min-height:100vh;color:#e2e8f0;font-size:15px;overscroll-behavior-y:contain}
+/* Background layer terpisah agar scroll mulus di HP (bukan attachment:fixed) */
+.bg-fixed{position:fixed;inset:0;z-index:-1;background-image:url('https://lh3.googleusercontent.com/d/1zoGFZJ_fpKsMOf29YqGXxjl3K1RMo4zW');background-size:cover;background-position:center;transform:translateZ(0)}
 h1,h2,h3,h4,h5,.font-heading{font-family:'Kanit',sans-serif;}
 .hidden{display:none!important}
 input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit',sans-serif;font-size:16px}
@@ -19,7 +21,7 @@ input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(56,189,248,0.4);border-radius:20px}
 .lamp-bg{position:fixed;top:0;left:0;width:100%;height:100%;overflow:hidden;z-index:0;pointer-events:none}
-.lamp-bg div{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.25;animation:floatLamp 8s ease-in-out infinite}
+.lamp-bg div{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.22;animation:floatLamp 10s ease-in-out infinite;will-change:transform}
 .lamp-bg .l1{width:400px;height:400px;background:#38bdf8;top:-100px;left:-100px}
 .lamp-bg .l2{width:500px;height:500px;background:#a855f7;bottom:-150px;right:-100px}
 .lamp-bg .l3{width:300px;height:300px;background:#22d3ee;top:40%;left:40%}
@@ -120,10 +122,22 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 .toggle-cair.on::after{left:23px;background:#4ade80}
 .d-label{font-size:13px;font-weight:600;color:#cbd5e1;letter-spacing:.04em;margin-bottom:4px;line-height:1.3}
 .d-value{font-size:28px;font-weight:800;line-height:1.1}
+/* ====== MODE RINGAN UNTUK HP (anti lag scroll) ====== */
+@media (max-width:768px){
+  .lamp-bg div{filter:blur(60px);opacity:0.18}
+  .gc,.st,aside,header,.fl{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .gc{background:rgba(13,20,35,0.94)}
+  aside{background:rgba(5,8,18,0.98)}
+  header{background:rgba(5,8,18,0.96)}
+  .pc-cyan,.pc-green,.pc-blue,.pc-purple,.pc-pink,.pc-red,.pc-gold{animation-duration:6s}
+  .ifloat{animation:none}
+  .glow-ring{animation-duration:8s}
+}
 </style>
 </head>
 <body>
 
+<div class="bg-fixed"></div>
 <div class="lamp-bg"><div class="l1"></div><div class="l2"></div><div class="l3"></div></div>
 
 <div id="toast" class="hidden fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl shadow-2xl z-[100] font-bold text-sm ta"></div>
@@ -184,7 +198,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
     <div class="p-4 border-t border-white/5">
       <button onclick="doLogout()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 transition-colors group">
         <div class="w-9 h-9 bg-cyan-500/20 rounded-full flex items-center justify-center font-bold text-cyan-400 text-sm group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">A</div>
-        <div class="text-left flex-1"><p class="font-bold text-sm text-white">GANA</p><p class="text-[11px] text-slate-400 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
+        <div class="text-left flex-1"><p class="font-bold text-sm text-white">Admin</p><p class="text-[11px] text-slate-400 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
         <i class="fas fa-sign-out-alt text-slate-500 group-hover:text-red-400 transition-colors"></i>
       </button>
     </div>
@@ -192,14 +206,14 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
   <div id="overlay" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden"></div>
 
   <div class="lg:ml-[280px] min-h-screen flex flex-col">
-    <header class="bg-[rgba(5,8,18,0.80)] backdrop-blur-xl p-4 sticky top-0 z-20 border-b border-white/5 flex justify-between items-center gap-4">
+    <header class="bg-[rgba(5,8,18,0.80)] backdrop-blur-xl p-4 sticky top-0 z-20 border-b border-white/5 flex justify-between items-center gap-2">
       <div class="flex items-center gap-3">
         <button id="open-sidebar-btn" class="lg:hidden text-slate-300 text-xl hover:text-white"><i class="fas fa-bars"></i></button>
         <h2 id="page-title" class="text-lg font-extrabold tracking-tight text-white">Dashboard</h2>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <button onclick="refreshServerData()" title="Muat data terbaru" class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/25 transition-colors"><i id="refresh-ico" class="fas fa-rotate"></i></button>
         <div id="sync-indicator" class="hidden text-[11px] text-cyan-400 font-bold"><i class="fas fa-rotate anim-spin mr-1"></i>Sinkron</div>
-        <label class="text-[11px] text-slate-300 font-bold hidden md:block uppercase tracking-wider">Filter Bulan</label>
         <input type="month" id="month-filter" class="fl">
       </div>
     </header>
@@ -403,6 +417,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
             <h4 class="st" style="border:0;padding:0"><i class="fas fa-utensils"></i> Rekapan Pembayaran Uang Makan</h4>
             <button onclick="copyRekapUM()" class="bs text-xs"><i class="fas fa-copy mr-1"></i> COPY SEMUA REKAPAN</button>
           </div>
+          <p class="text-[11px] text-slate-300 font-medium px-2 pb-2"><i class="fas fa-hand-pointer mr-1 text-cyan-300"></i> Tips: cubit (pinch) layar HP untuk perkecil/perbesar tabel biar kelihatan semua.</p>
           <div id="rekap-um-text" class="hidden"></div>
           <div class="sa"><table class="text-center"><thead><tr><th class="text-left">Tanggal</th><th>Nama</th><th>Situs</th><th>Rokok</th><th>Jumlah</th><th>Harga</th><th>Status Cair</th><th>Ambil</th><th>Copy Baris</th><th>Aksi</th></tr></thead><tbody id="tb-um"></tbody></table></div>
         </div>
@@ -465,6 +480,7 @@ let salesChart=null;
 let today=new Date();
 let selMonth=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
 let sortedKeys=[];
+let isRefreshing=false;
 try{const sm=localStorage.getItem('gs_month');if(sm)selMonth=sm;}catch(e){}
 
 function dedupMaster(){
@@ -570,7 +586,7 @@ async function api(action,payload={},retry=1){
     const t=await r.text();
     try{return JSON.parse(t);}catch(e){return{error:'Server error'};}
   }catch(e){
-    if(isGet&&retry>0)return api(action,payload,retry-1);
+    if(isGet&&retry>0){await new Promise(res=>setTimeout(res,800));return api(action,payload,retry-1);}
     return{error:'Koneksi gagal'};
   }
 }
@@ -592,8 +608,36 @@ function fmtDate(d,time=true){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))
 function fmtDateShort(d){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);return String(dt.getDate()).padStart(2,'0')+' '+BULAN[dt.getMonth()]+' '+dt.getFullYear();}
 function cleanSitus(s){if(!s)return'-';s=String(s).trim();return (s===''||s==='-'||s==='undefined'||s==='null')?'-':s;}
 function situsHtml(s){const c=cleanSitus(s);return c==='-'?'<span class="td-situs empty">-</span>':'<span class="td-situs">'+c+'</span>';}
-function applyMonthFilter(){selMonth=document.getElementById('month-filter').value;try{localStorage.setItem('gs_month',selMonth);}catch(e){}if(dashState){renderDashboard();renderJualTable();renderStok();renderCrosscheck();renderRekapUM();renderKas();}}
+function applyMonthFilter(){selMonth=document.getElementById('month-filter').value;try{localStorage.setItem('gs_month',selMonth);}catch(e){}if(dashState){renderAll();}}
 function show(id){const el=document.getElementById(id);el.classList.remove('hidden');void el.offsetWidth;el.classList.add('fi');}
+function renderAll(){renderDashboard();renderJualTable();renderStok();renderCrosscheck();renderRekapUM();renderKas();}
+
+/* ====== REFRESH DATA SERVER (sinkron antar device) ====== */
+async function refreshServerData(silent){
+  if(isRefreshing)return;
+  isRefreshing=true;
+  const ind=document.getElementById('sync-indicator');
+  const ico=document.getElementById('refresh-ico');
+  if(!silent&&ico)ico.classList.add('anim-spin');
+  if(ind)ind.classList.remove('hidden');
+  const res=await api('getDashboard',{},2);
+  if(ind)ind.classList.add('hidden');
+  if(!silent&&ico)ico.classList.remove('anim-spin');
+  isRefreshing=false;
+  if(res&&!res.error&&res.masterMap){
+    applyServerData(res);
+    renderAll();
+    if(!silent)toast('Data terbaru dimuat!');
+    return true;
+  }else{
+    if(!silent)toast('Gagal ambil data server, cek koneksi','error');
+    return false;
+  }
+}
+/* Auto-sinkron tiap 45 detik (diam-diam, biar centang dari device lain ikut ter-update) */
+setInterval(function(){
+  if(document.visibilityState==='visible'&&dashState)refreshServerData(true);
+},45000);
 
 function applyServerData(res){
   if(!res)return;
@@ -665,30 +709,19 @@ function switchPage(page,sub){
 async function initApp(){
   document.getElementById('stok-tgl').value=new Date().toISOString().slice(0,10);
   document.getElementById('jual-tgl').value=new Date().toISOString().slice(0,10);
-  const ind=document.getElementById('sync-indicator');
   const adaLokal=loadLocal();
   if(adaLokal){
     dedupMaster();
     persistLocal();
     if(Object.keys(masterData).length>0){
       populateDropdowns();
-      renderDashboard();
+      renderAll();
     }
   }
   if(getPending().length>0){
-    if(ind)ind.classList.remove('hidden');
     await syncPending();
-    renderDashboard();
   }
-  if(ind)ind.classList.remove('hidden');
-  const res=await api('getDashboard');
-  if(ind)ind.classList.add('hidden');
-  if(!res.error&&res.masterMap){
-    applyServerData(res);
-    renderDashboard();
-  }else if(!adaLokal){
-    toast('Gagal memuat data server, cek koneksi lalu refresh','error');
-  }
+  await refreshServerData(true);
 }
 
 function populateDropdowns(){
@@ -870,9 +903,8 @@ function toggleAmbilJual(row,isAmbil){
   toast(newAmbil==='SUDAH AMBIL'?'✅ Ditandai SUDAH DIAMBIL':'Ditandai BELUM diambil');
   if(row<0)return;
   api('updateAmbilPenjualan',{payload:{row:row,newAmbil:newAmbil}}).then(res=>{
-    if(!res||!res.success){
-      addPending({action:'updateAmbilPenjualan',payload:{row:row,newAmbil:newAmbil}});
-    }
+    if(res&&res.success){applyServerData(res);}
+    else{addPending({action:'updateAmbilPenjualan',payload:{row:row,newAmbil:newAmbil}});}
   });
 }
 
@@ -1193,9 +1225,8 @@ function toggleCairUM(row,isCair){
   toast(isCair?'Dikembalikan ke Belum Cair':'Sudah Cair!');
   if(row<0)return;
   api('updateStatusPenjualan',{payload:{row:row,newStatus:newStatus}}).then(res=>{
-    if(!res||!res.success){
-      addPending({action:'updateStatusPenjualan',payload:{row:row,newStatus:newStatus}});
-    }
+    if(res&&res.success){applyServerData(res);}
+    else{addPending({action:'updateStatusPenjualan',payload:{row:row,newStatus:newStatus}});}
   });
 }
 
