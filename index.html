@@ -198,7 +198,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
     <div class="p-4 border-t border-white/5">
       <button onclick="doLogout()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 transition-colors group">
         <div class="w-9 h-9 bg-cyan-500/20 rounded-full flex items-center justify-center font-bold text-cyan-400 text-sm group-hover:bg-red-500/20 group-hover:text-red-400 transition-colors">A</div>
-        <div class="text-left flex-1"><p class="font-bold text-sm text-white">👑GANES PRAKAS👑</p><p class="text-[11px] text-slate-400 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
+        <div class="text-left flex-1"><p class="font-bold text-sm text-white">Admin</p><p class="text-[11px] text-slate-400 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
         <i class="fas fa-sign-out-alt text-slate-500 group-hover:text-red-400 transition-colors"></i>
       </button>
     </div>
@@ -481,18 +481,59 @@ let today=new Date();
 let selMonth=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
 let sortedKeys=[];
 let isRefreshing=false;
-/* ====== KUNCI STATUS: tidak boleh ditimpa data lama server ====== */
-let ambilLocks={};
-let statusLocks={};
-/* ====== BUKU CATATAN BARU: dipaksa tampil sampai server mengakuinya ====== */
+let isEnforcing=false;
+/* ====== JANJI STATUS PERMANEN: tersimpan di browser, tak hilang walau HP mati ====== */
+let statusFixes={};
+try{statusFixes=JSON.parse(localStorage.getItem('gs_statusfixes')||'{}');}catch(e){statusFixes={};}
+/* ====== BUKU CATATAN BARU ====== */
 let saveBuffer={sales:[],ambil:[],cc:[]};
 try{const sb=localStorage.getItem('gs_savebuffer');if(sb)saveBuffer=JSON.parse(sb);}catch(e){saveBuffer={sales:[],ambil:[],cc:[]};}
 try{const sm=localStorage.getItem('gs_month');if(sm)selMonth=sm;}catch(e){}
 
+function persistFixes(){try{localStorage.setItem('gs_statusfixes',JSON.stringify(statusFixes));}catch(e){}}
+function setFix(row,field,value){
+  row=String(row);
+  if(!statusFixes[row])statusFixes[row]={};
+  statusFixes[row][field]=value;
+  persistFixes();
+}
+function clearFix(row,field){
+  row=String(row);
+  if(statusFixes[row]){
+    delete statusFixes[row][field];
+    if(!Object.keys(statusFixes[row]).length)delete statusFixes[row];
+  }
+  persistFixes();
+}
+/* Kirim ulang semua janji yang belum tercatat di server, sampai server konfirmasi */
+async function enforceFixes(){
+  if(isEnforcing)return;
+  const rows=Object.keys(statusFixes);
+  if(!rows.length)return;
+  isEnforcing=true;
+  for(const row of rows){
+    const f=statusFixes[row];
+    if(f.ambil!==undefined){
+      try{
+        const res=await api('updateAmbilPenjualan',{payload:{row:Number(row),newAmbil:f.ambil}});
+        if(res&&res.success)clearFix(row,'ambil');
+      }catch(e){}
+    }
+    if(f.status!==undefined){
+      try{
+        const res=await api('updateStatusPenjualan',{payload:{row:Number(row),newStatus:f.status}});
+        if(res&&res.success)clearFix(row,'status');
+      }catch(e){}
+    }
+  }
+  isEnforcing=false;
+}
+
 function persistBuffer(){try{localStorage.setItem('gs_savebuffer',JSON.stringify(saveBuffer));}catch(e){}}
-function sigSale(r){return [r.tipe,String(r.nama||'').trim(),r.rokok,r.jumlah,r.harga,r.tipeBayar].join('|');}
-function sigAmbil(r){return [r.rokok,r.jumlah,r.tipe].join('|');}
-function sigCC(r){return [String(r.jam||''),r.status,r.tipe,r.jmlSelisih||0,String(r.catatan||'')].join('|');}
+function dayKey(d){const dt=(d instanceof Date)?d:new Date(d);return isNaN(dt)?'':dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate();}
+function sigSale(r){return [r.tipe,String(r.nama||'').trim(),r.rokok,r.jumlah,r.harga,r.tipeBayar,dayKey(r.tanggal)].join('|');}
+function sigAmbil(r){return [r.rokok,r.jumlah,r.tipe,dayKey(r.tanggal)].join('|');}
+function sigCC(r){return [String(r.jam||''),r.status,r.tipe,r.jmlSelisih||0,String(r.catatan||''),dayKey(r.tanggal)].join('|');}
 
 function dedupMaster(){
   const out={};
@@ -644,12 +685,15 @@ async function refreshServerData(silent){
     return false;
   }
 }
-/* Auto-sinkron 5 detik */
+/* Auto-sinkron 5 detik + auto-kirim-ulang janji status yang belum tercatat */
 setInterval(function(){
-  if(document.visibilityState==='visible'&&dashState&&!isRefreshing)refreshServerData(true);
+  if(document.visibilityState==='visible'&&dashState&&!isRefreshing){
+    refreshServerData(true).then(()=>{
+      if(Object.keys(statusFixes).length>0)enforceFixes();
+    });
+  }
 },5000);
 
-/* ====== APPLY SERVER DATA DENGAN PROTEKSI PENUH ====== */
 function applyServerData(res){
   if(!res)return;
   const d=res.dashboard||res;
@@ -660,16 +704,14 @@ function applyServerData(res){
   }
   dedupMaster();
 
-  /* 1. Masukin ulang catatan yang masih dikunci (belum diakui server) */
   if(dashState){
+    /* 1. Masukin ulang catatan baru yang belum diakui server */
     const sisaSales=[];
     saveBuffer.sales.forEach(sb=>{
       const ada=dashState.allSales.some(x=>sigSale(x)===sb.sig&&String(x.row)>0);
-      if(ada){/* server sudah punya, lepas kunci */}
+      if(ada){}
       else{
-        if(!dashState.allSales.some(x=>x.row===sb.rec.row)){
-          dashState.allSales.push(sb.rec);
-        }
+        if(!dashState.allSales.some(x=>x.row===sb.rec.row))dashState.allSales.push(sb.rec);
         sisaSales.push(sb);
       }
     });
@@ -678,11 +720,9 @@ function applyServerData(res){
     const sisaAmbil=[];
     saveBuffer.ambil.forEach(sb=>{
       const ada=dashState.allPengambilan.some(x=>sigAmbil(x)===sb.sig&&String(x.row)>0);
-      if(ada){/* lepas kunci */}
+      if(ada){}
       else{
-        if(!dashState.allPengambilan.some(x=>x.row===sb.rec.row)){
-          dashState.allPengambilan.push(sb.rec);
-        }
+        if(!dashState.allPengambilan.some(x=>x.row===sb.rec.row))dashState.allPengambilan.push(sb.rec);
         sisaAmbil.push(sb);
       }
     });
@@ -691,35 +731,32 @@ function applyServerData(res){
     const sisaCC=[];
     saveBuffer.cc.forEach(sb=>{
       const ada=dashState.allCrosscheck.some(x=>sigCC(x)===sb.sig&&String(x.row)>0);
-      if(ada){/* lepas kunci */}
+      if(ada){}
       else{
-        if(!dashState.allCrosscheck.some(x=>x.row===sb.rec.row)){
-          dashState.allCrosscheck.push(sb.rec);
-        }
+        if(!dashState.allCrosscheck.some(x=>x.row===sb.rec.row))dashState.allCrosscheck.push(sb.rec);
         sisaCC.push(sb);
       }
     });
     saveBuffer.cc=sisaCC;
     persistBuffer();
 
-    /* 2. Terapkan status terkunci (Ambil & Status Bayar/Cair) */
-    Object.keys(ambilLocks).forEach(r=>{
+    /* 2. Paksa tampilkan janji status (Ambil & Status) sampai server konfirmasi */
+    Object.keys(statusFixes).forEach(r=>{
       const rec=dashState.allSales.find(x=>x.row==r);
-      if(rec){
-        if(rec.statusAmbil===ambilLocks[r]){delete ambilLocks[r];}
-        else{rec.statusAmbil=ambilLocks[r];}
+      if(!rec)return;
+      const f=statusFixes[r];
+      if(f.ambil!==undefined){
+        if(rec.statusAmbil===f.ambil)clearFix(r,'ambil');
+        else rec.statusAmbil=f.ambil;
       }
-    });
-    Object.keys(statusLocks).forEach(r=>{
-      const rec=dashState.allSales.find(x=>x.row==r);
-      if(rec){
-        if(rec.statusBayar===statusLocks[r]){delete statusLocks[r];}
-        else{rec.statusBayar=statusLocks[r];}
+      if(f.status!==undefined){
+        if(rec.statusBayar===f.status)clearFix(r,'status');
+        else rec.statusBayar=f.status;
       }
     });
   }
 
-  /* 3. Masukin ulang operasi pending yang belum masuk server */
+  /* 3. Masukin ulang operasi pending */
   getPending().forEach(op=>{
     if(op.action==='saveMaster'||op.action==='updateMaster'){
       const p=op.payload;
@@ -794,6 +831,11 @@ async function initApp(){
     await syncPending();
   }
   await refreshServerData(true);
+  /* PENTING: kirim ulang centang/status yang kemarin gagal terkirim */
+  if(Object.keys(statusFixes).length>0){
+    await enforceFixes();
+    await refreshServerData(true);
+  }
 }
 
 function populateDropdowns(){
@@ -815,7 +857,6 @@ function renderDashboard(){
   jualBulan.forEach(j=>{
     const harga=j.harga||0;
     const mp=(masterData[j.rokok]&&masterData[j.rokok].modal)||(masterData[normalizeName(j.rokok)]&&masterData[normalizeName(j.rokok)].modal)||0;
-    /* Yang BELUM BAYAR belum dihitung sebagai uang masuk */
     const sudahBayar=j.statusBayar&&j.statusBayar.includes('DONE');
     const isUM=j.tipeBayar==='Uang Makan';
     if(j.tipe==='Eceran'){untungEceran+=harga-(mp/10*j.jumlah);}
@@ -926,7 +967,6 @@ async function saveJual(){
   const recBaru={row:tempRow,tanggal:new Date(tglVal||Date.now()),tipe:curJualTipe,nama:nama,situs:situsVal,rokok:rok,jumlah:jml,tipeBayar:tb,harga:harga,statusBayar:st,statusAmbil:'BELUM AMBIL'};
   if(!dashState)dashState={masterMap:masterData,allSales:[],allPengambilan:[],allCrosscheck:[]};
   dashState.allSales.push(recBaru);
-  /* KUNCI: catatan baru dipaksa tampil sampai server mengakuinya */
   saveBuffer.sales.push({sig:sigSale(recBaru),rec:recBaru,ts:Date.now()});
   persistBuffer();
   persistLocal();
@@ -975,19 +1015,11 @@ function renderJualTable(){
   if(tb.innerHTML==='') tb.innerHTML='<tr><td colspan="9" class="text-center text-slate-400 py-4">Belum ada transaksi</td></tr>';
 }
 
-/* Klik badge BELUM BAYAR <-> DONE BAYAR */
 function toggleBayarJual(row,isDone){
-  let newStatus;
-  if(isDone){
-    const rec=(dashState.allSales||[]).find(x=>x.row===row);
-    newStatus='BELUM BAYAR';
-  }else{
-    const rec=(dashState.allSales||[]).find(x=>x.row===row);
-    newStatus=(rec&&rec.tipeBayar==='ABA')?'DONE BAYAR ABA':'DONE BAYAR CASH';
-  }
   const rec=(dashState.allSales||[]).find(x=>x.row===row);
+  const newStatus=isDone?'BELUM BAYAR':((rec&&rec.tipeBayar==='ABA')?'DONE BAYAR ABA':'DONE BAYAR CASH');
   if(rec)rec.statusBayar=newStatus;
-  if(row>0)statusLocks[row]=newStatus;
+  if(row>0)setFix(row,'status',newStatus);
   persistLocal();
   renderJualTable();
   renderRekapUM();
@@ -1005,7 +1037,7 @@ function toggleAmbilJual(row,isAmbil){
   const newAmbil=isAmbil?'BELUM AMBIL':'SUDAH AMBIL';
   const rec=(dashState.allSales||[]).find(x=>x.row===row);
   if(rec)rec.statusAmbil=newAmbil;
-  if(row>0)ambilLocks[row]=newAmbil;
+  if(row>0)setFix(row,'ambil',newAmbil);
   persistLocal();
   renderJualTable();
   renderRekapUM();
@@ -1019,8 +1051,8 @@ function toggleAmbilJual(row,isAmbil){
 
 async function deleteJual(row){
   if(!confirm('Hapus transaksi ini?')) return;
-  delete ambilLocks[row];
-  delete statusLocks[row];
+  clearFix(row,'ambil');
+  clearFix(row,'status');
   if(row<0){
     dashState.allSales=dashState.allSales.filter(x=>x.row!==row);
     saveBuffer.sales=saveBuffer.sales.filter(x=>x.rec.row!==row);
@@ -1345,7 +1377,7 @@ function toggleCairUM(row,isCair){
   const newStatus=isCair?'SUDAH BAYAR UM':'SUDAH CAIR UM';
   const rec=(dashState.allSales||[]).find(x=>x.row===row);
   if(rec)rec.statusBayar=newStatus;
-  if(row>0)statusLocks[row]=newStatus;
+  if(row>0)setFix(row,'status',newStatus);
   persistLocal();
   renderRekapUM();
   renderDashboard();
