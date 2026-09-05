@@ -482,19 +482,14 @@ let selMonth=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
 let sortedKeys=[];
 let isRefreshing=false;
 let isEnforcing=false;
-/* ====== JANJI STATUS PERMANEN: tersimpan di browser, tak hilang walau HP mati ====== */
+/* ====== JANJI STATUS PERMANEN ====== */
 let statusFixes={};
 try{statusFixes=JSON.parse(localStorage.getItem('gs_statusfixes')||'{}');}catch(e){statusFixes={};}
-/* ====== BUKU CATATAN BARU ====== */
-let saveBuffer={sales:[],ambil:[],cc:[]};
-try{const sb=localStorage.getItem('gs_savebuffer');if(sb)saveBuffer=JSON.parse(sb);}catch(e){saveBuffer={sales:[],ambil:[],cc:[]};}
-try{const sm=localStorage.getItem('gs_month');if(sm)selMonth=sm;}catch(e){}
-
 function persistFixes(){try{localStorage.setItem('gs_statusfixes',JSON.stringify(statusFixes));}catch(e){}}
 function setFix(row,field,value){
   row=String(row);
   if(!statusFixes[row])statusFixes[row]={};
-  statusFixes[row][field]=value;
+  statusFixes[row][field]={v:value,ts:Date.now()};
   persistFixes();
 }
 function clearFix(row,field){
@@ -505,7 +500,6 @@ function clearFix(row,field){
   }
   persistFixes();
 }
-/* Kirim ulang semua janji yang belum tercatat di server, sampai server konfirmasi */
 async function enforceFixes(){
   if(isEnforcing)return;
   const rows=Object.keys(statusFixes);
@@ -513,22 +507,39 @@ async function enforceFixes(){
   isEnforcing=true;
   for(const row of rows){
     const f=statusFixes[row];
-    if(f.ambil!==undefined){
+    if(f.ambil){
       try{
-        const res=await api('updateAmbilPenjualan',{payload:{row:Number(row),newAmbil:f.ambil}});
+        const res=await api('updateAmbilPenjualan',{payload:{row:Number(row),newAmbil:f.ambil.v}});
         if(res&&res.success)clearFix(row,'ambil');
       }catch(e){}
     }
-    if(f.status!==undefined){
+    if(f.status){
       try{
-        const res=await api('updateStatusPenjualan',{payload:{row:Number(row),newStatus:f.status}});
+        const res=await api('updateStatusPenjualan',{payload:{row:Number(row),newStatus:f.status.v}});
         if(res&&res.success)clearFix(row,'status');
       }catch(e){}
     }
   }
   isEnforcing=false;
 }
+/* Kirim ulang janji SEBELUM halaman ditutup */
+window.addEventListener('beforeunload',function(){
+  if(Object.keys(statusFixes).length>0){
+    Object.keys(statusFixes).forEach(function(row){
+      const f=statusFixes[row];
+      if(f.ambil){
+        try{navigator.sendBeacon(API+'?action=updateAmbilPenjualan',JSON.stringify({payload:{row:Number(row),newAmbil:f.ambil.v}}));}catch(e){}
+      }
+      if(f.status){
+        try{navigator.sendBeacon(API+'?action=updateStatusPenjualan',JSON.stringify({payload:{row:Number(row),newStatus:f.status.v}}));}catch(e){}
+      }
+    });
+  }
+});
 
+/* ====== BUKU CATATAN BARU ====== */
+let saveBuffer={sales:[],ambil:[],cc:[]};
+try{const sb=localStorage.getItem('gs_savebuffer');if(sb)saveBuffer=JSON.parse(sb);}catch(e){saveBuffer={sales:[],ambil:[],cc:[]};}
 function persistBuffer(){try{localStorage.setItem('gs_savebuffer',JSON.stringify(saveBuffer));}catch(e){}}
 function dayKey(d){const dt=(d instanceof Date)?d:new Date(d);return isNaN(dt)?'':dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate();}
 function sigSale(r){return [r.tipe,String(r.nama||'').trim(),r.rokok,r.jumlah,r.harga,r.tipeBayar,dayKey(r.tanggal)].join('|');}
@@ -685,7 +696,7 @@ async function refreshServerData(silent){
     return false;
   }
 }
-/* Auto-sinkron 5 detik + auto-kirim-ulang janji status yang belum tercatat */
+/* Auto-sinkron 5 detik + kirim-ulang janji */
 setInterval(function(){
   if(document.visibilityState==='visible'&&dashState&&!isRefreshing){
     refreshServerData(true).then(()=>{
@@ -705,7 +716,6 @@ function applyServerData(res){
   dedupMaster();
 
   if(dashState){
-    /* 1. Masukin ulang catatan baru yang belum diakui server */
     const sisaSales=[];
     saveBuffer.sales.forEach(sb=>{
       const ada=dashState.allSales.some(x=>sigSale(x)===sb.sig&&String(x.row)>0);
@@ -740,23 +750,22 @@ function applyServerData(res){
     saveBuffer.cc=sisaCC;
     persistBuffer();
 
-    /* 2. Paksa tampilkan janji status (Ambil & Status) sampai server konfirmasi */
+    /* Janji status: paksa tampil sampai server konfirmasi */
     Object.keys(statusFixes).forEach(r=>{
       const rec=dashState.allSales.find(x=>x.row==r);
       if(!rec)return;
       const f=statusFixes[r];
-      if(f.ambil!==undefined){
-        if(rec.statusAmbil===f.ambil)clearFix(r,'ambil');
-        else rec.statusAmbil=f.ambil;
+      if(f.ambil){
+        if(rec.statusAmbil===f.ambil.v)clearFix(r,'ambil');
+        else rec.statusAmbil=f.ambil.v;
       }
-      if(f.status!==undefined){
-        if(rec.statusBayar===f.status)clearFix(r,'status');
-        else rec.statusBayar=f.status;
+      if(f.status){
+        if(rec.statusBayar===f.status.v)clearFix(r,'status');
+        else rec.statusBayar=f.status.v;
       }
     });
   }
 
-  /* 3. Masukin ulang operasi pending */
   getPending().forEach(op=>{
     if(op.action==='saveMaster'||op.action==='updateMaster'){
       const p=op.payload;
@@ -827,15 +836,14 @@ async function initApp(){
       renderAll();
     }
   }
+  /* PRIORITAS #1: kirim-ulang centang/status yang belum tercatat */
+  if(Object.keys(statusFixes).length>0){
+    await enforceFixes();
+  }
   if(getPending().length>0){
     await syncPending();
   }
   await refreshServerData(true);
-  /* PENTING: kirim ulang centang/status yang kemarin gagal terkirim */
-  if(Object.keys(statusFixes).length>0){
-    await enforceFixes();
-    await refreshServerData(true);
-  }
 }
 
 function populateDropdowns(){
@@ -1045,7 +1053,7 @@ function toggleAmbilJual(row,isAmbil){
   if(row<0)return;
   api('updateAmbilPenjualan',{payload:{row:row,newAmbil:newAmbil}}).then(res=>{
     if(res&&res.success){applyServerData(res);renderJualTable();renderRekapUM();}
-    else{addPending({action:'updateAmbilPenjualan',payload:{row:row,newAmbil:newAmbil}});}
+    else{/* Gagal kirim: janji tetap tersimpan, auto kirim-ulang */}
   });
 }
 
@@ -1385,7 +1393,7 @@ function toggleCairUM(row,isCair){
   if(row<0)return;
   api('updateStatusPenjualan',{payload:{row:row,newStatus:newStatus}}).then(res=>{
     if(res&&res.success){applyServerData(res);renderRekapUM();renderDashboard();}
-    else{addPending({action:'updateStatusPenjualan',payload:{row:row,newStatus:newStatus}});}
+    else{/* Gagal kirim: janji tetap tersimpan, auto kirim-ulang */}
   });
 }
 
