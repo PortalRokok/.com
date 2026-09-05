@@ -11,8 +11,8 @@
 <style>
 :root{--bg:#070b14;--card:rgba(17,25,40,0.85);--bdr:rgba(255,255,255,0.08);--acc:#38bdf8}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Plus Jakarta Sans','Kanit',sans-serif;-webkit-tap-highlight-color:transparent;background-color:var(--bg);min-height:100vh;color:#e2e8f0;font-size:15px;overscroll-behavior-y:contain}
-.bg-fixed{position:fixed;inset:0;z-index:-1;background-image:url('https://lh3.googleusercontent.com/d/1zoGFZJ_fpKsMOf29YqGXxjl3K1RMo4zW');background-size:cover;background-position:center;transform:translateZ(0)}
+body{font-family:'Plus Jakarta Sans','Kanit',sans-serif;-webkit-tap-highlight-color:transparent;background-color:var(--bg);min-height:100vh;color:#e2e8f0;font-size:15px}
+.bg-fixed{position:fixed;inset:0;z-index:-1;background-image:url('https://lh3.googleusercontent.com/d/1zoGFZJ_fpKsMOf29YqGXxjl3K1RMo4zW');background-size:cover;background-position:center}
 h1,h2,h3,h4,h5{font-family:'Kanit',sans-serif}
 .hidden{display:none!important}
 input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit',sans-serif;font-size:16px}
@@ -27,6 +27,7 @@ input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit
 .glow-ring{position:absolute;inset:0;border-radius:20px;padding:2px;pointer-events:none;background-size:300% 100%;animation:flowBorder 5s linear infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude}
 @keyframes flowBorder{0%{background-position:0% 50%}100%{background-position:300% 50%}}
 .g-cyan{background-image:linear-gradient(90deg,#38bdf8,#22d3ee,#0ea5e9,#38bdf8)}.g-green{background-image:linear-gradient(90deg,#4ade80,#34d399,#22c55e,#4ade80)}.g-blue{background-image:linear-gradient(90deg,#60a5fa,#38bdf8,#3b82f6,#60a5fa)}.g-purple{background-image:linear-gradient(90deg,#c084fc,#a855f7,#8b5cf6,#c084fc)}.g-pink{background-image:linear-gradient(90deg,#f472b6,#ec4899,#f43f5e,#f472b6)}.g-red{background-image:linear-gradient(90deg,#f87171,#ef4444,#dc2626,#f87171)}.g-gold{background-image:linear-gradient(90deg,#fbbf24,#f59e0b,#eab308,#fbbf24)}
+.pc-cyan{animation:glowCyan 4s ease-in-out infinite}.pc-green{animation:glowGreen 4s ease-in-out infinite}.pc-blue{animation:glowBlue 4s ease-in-out infinite}.pc-purple{animation:glowPurple 4s ease-in-out infinite}.pc-pink{animation:glowPink 4s ease-in-out infinite}.pc-red{animation:glowRed 4s ease-in-out infinite}.pc-gold{animation:glowGold 4s ease-in-out infinite}
 @keyframes glowCyan{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(56,189,248,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(56,189,248,0.4)}}
 @keyframes glowGreen{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(74,222,128,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(74,222,128,0.4)}}
 @keyframes glowBlue{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(96,165,250,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(96,165,250,0.4)}}
@@ -34,7 +35,6 @@ input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit
 @keyframes glowPink{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(244,114,182,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(244,114,182,0.4)}}
 @keyframes glowRed{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(248,113,113,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(248,113,113,0.4)}}
 @keyframes glowGold{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 15px rgba(251,191,36,0.15)}50%{box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 38px rgba(251,191,36,0.4)}}
-.pc-cyan{animation:glowCyan 4s ease-in-out infinite}.pc-green{animation:glowGreen 4s ease-in-out infinite}.pc-blue{animation:glowBlue 4s ease-in-out infinite}.pc-purple{animation:glowPurple 4s ease-in-out infinite}.pc-pink{animation:glowPink 4s ease-in-out infinite}.pc-red{animation:glowRed 4s ease-in-out infinite}.pc-gold{animation:glowGold 4s ease-in-out infinite}
 .ifloat{animation:ifloat 3s ease-in-out infinite}
 @keyframes ifloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 .shine{position:relative;overflow:hidden;display:inline-block}
@@ -383,26 +383,16 @@ const Bt=(n)=>'฿'+(n||0).toLocaleString('th-TH');
 const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 function normalizeName(s){return String(s||'').trim().replace(/\s+/g,' ');}
 
-/* Jalur resmi Google: google.script.run — tidak bisa diblokir apa pun */
+/* Jalur internal Google: tidak bisa diblokir browser mana pun */
 const HAS_GSR=(typeof google!=='undefined'&&google.script&&google.script.run);
-let APP_URL='';
 
 function callServer(action,payload){
   payload=payload||{};
   return new Promise(function(resolve){
     if(HAS_GSR){
-      try{
-        google.script.run.withSuccessHandler(function(r){resolve(r||{});}).withFailureHandler(function(e){resolve({error:String(e)});}).apiRouter(action,JSON.stringify(payload));
-        return;
-      }catch(e){}
+      try{google.script.run.withSuccessHandler(function(r){resolve(r||{});}).withFailureHandler(function(e){resolve({error:String(e)});}).apiRouter(action,JSON.stringify(payload));return;}catch(e){}
     }
-    if(!APP_URL){resolve({error:'Tidak tersambung'});return;}
-    var url=APP_URL+'?action='+action;
-    if(Object.keys(payload).length)url+='&payload='+encodeURIComponent(JSON.stringify(payload));
-    url+='&_t='+Date.now()+'_'+Math.random();
-    fetch(url,{method:'GET',cache:'no-store'}).then(function(r){return r.text();}).then(function(t){
-      try{resolve(JSON.parse(t));}catch(e){resolve({error:'Server error'});}
-    }).catch(function(){resolve({error:'Koneksi gagal'});});
+    resolve({error:'Tidak tersambung ke server'});
   });
 }
 function api(action,payload){return callServer(action,payload);}
@@ -436,15 +426,6 @@ async function enforceFixes(){
   }
   isEnforcing=false;
 }
-window.addEventListener('beforeunload',function(){
-  if(Object.keys(statusFixes).length>0&&HAS_GSR){
-    Object.keys(statusFixes).forEach(function(row){
-      const f=statusFixes[row];
-      if(f.ambil){try{google.script.run.apiRouter('updateAmbilPenjualan',JSON.stringify({payload:{row:Number(row),newAmbil:f.ambil.v}}));}catch(e){}}
-      if(f.status){try{google.script.run.apiRouter('updateStatusPenjualan',JSON.stringify({payload:{row:Number(row),newStatus:f.status.v}}));}catch(e){}}
-    });
-  }
-});
 
 let saveBuffer={sales:[],ambil:[],cc:[]};
 try{const sb=localStorage.getItem('gs_savebuffer');if(sb)saveBuffer=JSON.parse(sb);}catch(e){saveBuffer={sales:[],ambil:[],cc:[]};}
