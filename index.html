@@ -158,7 +158,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
     <div class="p-4 border-t border-white/5">
       <button onclick="doLogout()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 transition-colors group">
         <div class="w-9 h-9 bg-cyan-500/20 rounded-full flex items-center justify-center font-bold text-cyan-400 text-sm">A</div>
-        <div class="text-left flex-1"><p class="font-bold text-sm text-white">✨𝓖𝓪𝓷𝓮𝓼 𝓟𝓻𝓪𝓴𝓪𝓼✨ </p><p class="text-[11px] text-slate-400 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
+        <div class="text-left flex-1"><p class="font-bold text-sm text-white">Admin</p><p class="text-[11px] text-slate-400 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
         <i class="fas fa-sign-out-alt text-slate-500 group-hover:text-red-400 transition-colors"></i>
       </button>
     </div>
@@ -378,16 +378,27 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 </div>
 
 <script>
-/* ============ TEMPEL URL WEB APP KAMU DI ANTARA TANDA KUTIP INI ============ */
-const API='https://script.google.com/macros/s/AKfycbyb9UnCrsVXshx5u_Qs2aqSOpDmLlBYpspjEX1rRHjwYlI4iPG5qyGx4v0BzfIL5TOc/exec';
-/* ========================================================================== */
+/* ====== PEMBERSIH CACHE OTOMATIS: jalankan SEKALI saat pertama kali dibuka setelah update ====== */
+(function(){
+  var v=localStorage.getItem('gs_version');
+  if(v!=='v2'){
+    localStorage.removeItem('gs_data');
+    localStorage.removeItem('gs_statusfixes');
+    localStorage.removeItem('gs_savebuffer');
+    localStorage.setItem('gs_version','v2');
+  }
+})();
+
+/* ====== TEMPEL URL WEB APP KAMU DI ANTARA TANDA KUTIP INI ====== */
+const API='https://script.google.com/macros/s/AKfycbw3yxm8zo6ylV2qmh5oaChen4XJeyXdYW2B5brpFgKKLZQh7K78yGO8iKeGBE_UYZgx/exec';
+/* ============================================================= */
 
 const BARCODE_URL='https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN';
 const Bt=(n)=>'฿'+(n||0).toLocaleString('th-TH');
 const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 function normalizeName(s){return String(s||'').trim().replace(/\s+/g,' ');}
 
-/* Kirim via GET + gambar 1x1: mustahil diblokir, langsung tulis ke sheet */
+/* Kirim via GET + gambar: mustahil diblokir, langsung tulis ke sheet */
 function silentGet(action,payload){
   var url=API+'?action='+action+'&payload='+encodeURIComponent(JSON.stringify(payload||{}))+'&_t='+Date.now()+'_'+Math.random();
   var img=new Image();
