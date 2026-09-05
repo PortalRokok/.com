@@ -464,7 +464,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 </div>
 
 <script>
-const API='https://script.google.com/macros/s/AKfycbxp8a4nwxrwAkA6fX8hI182ebsV6yEzFAV7DvdmLjQNYFwnMlAGMWeAlQDCmIw8LxEo/exec';
+const API='https://script.google.com/macros/s/AKfycbybxNIoRebMvOprAiJMKetSdx24UiZeVU7EfP7deLlEueyd8ZZTLEiKHDANPTjYAoFw/exec';
 const BARCODE_URL='https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN';
 const Bt=(n)=>'฿'+(n||0).toLocaleString('th-TH');
 const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -500,6 +500,7 @@ function clearFix(row,field){
   }
   persistFixes();
 }
+/* Kirim-ulang janji sampai server mencatat (pakai no-cors: gak bisa diblokir) */
 async function enforceFixes(){
   if(isEnforcing)return;
   const rows=Object.keys(statusFixes);
@@ -522,7 +523,6 @@ async function enforceFixes(){
   }
   isEnforcing=false;
 }
-/* Kirim ulang janji SEBELUM halaman ditutup */
 window.addEventListener('beforeunload',function(){
   if(Object.keys(statusFixes).length>0){
     Object.keys(statusFixes).forEach(function(row){
@@ -641,11 +641,19 @@ function togglePass(){
   if(inp.type==='password'){inp.type='text';ic.className='fas fa-eye-slash';}else{inp.type='password';ic.className='fas fa-eye';}
 }
 
+/* ====== API: POST pakai form-urlencoded (ANTI-CORS, pasti sampai server) ====== */
 async function api(action,payload={},retry=1){
   const isGet=action==='getDashboard'||action==='getMaster';
+  const url=API+'?action='+action+'&_t='+Date.now()+'_'+Math.random();
   try{
-    const nc='&_t='+Date.now()+'_'+Math.random();
-    const r=await fetch(API+'?action='+action+nc,{method:isGet?'GET':'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:isGet?null:JSON.stringify(payload),cache:'no-store'});
+    if(!isGet){
+      const body=new URLSearchParams();
+      body.append('payload',JSON.stringify(payload));
+      const r=await fetch(url,{method:'POST',body:body});
+      const t=await r.text();
+      try{return JSON.parse(t);}catch(e){return{error:'Server error'};}
+    }
+    const r=await fetch(url,{method:'GET',cache:'no-store'});
     const t=await r.text();
     try{return JSON.parse(t);}catch(e){return{error:'Server error'};}
   }catch(e){
@@ -1053,7 +1061,7 @@ function toggleAmbilJual(row,isAmbil){
   if(row<0)return;
   api('updateAmbilPenjualan',{payload:{row:row,newAmbil:newAmbil}}).then(res=>{
     if(res&&res.success){applyServerData(res);renderJualTable();renderRekapUM();}
-    else{/* Gagal kirim: janji tetap tersimpan, auto kirim-ulang */}
+    else{/* Gagal: janji tersimpan, auto kirim-ulang tiap 5 detik */}
   });
 }
 
@@ -1393,7 +1401,7 @@ function toggleCairUM(row,isCair){
   if(row<0)return;
   api('updateStatusPenjualan',{payload:{row:row,newStatus:newStatus}}).then(res=>{
     if(res&&res.success){applyServerData(res);renderRekapUM();renderDashboard();}
-    else{/* Gagal kirim: janji tetap tersimpan, auto kirim-ulang */}
+    else{/* Gagal: janji tersimpan, auto kirim-ulang */}
   });
 }
 
