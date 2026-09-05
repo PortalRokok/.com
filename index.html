@@ -19,9 +19,7 @@ input,select,button,textarea{outline:none;font-family:'Plus Jakarta Sans','Kanit
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:rgba(56,189,248,0.4);border-radius:20px}
 .lamp-bg{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
 .lamp-bg div{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.22;animation:floatLamp 10s ease-in-out infinite}
-.lamp-bg .l1{width:400px;height:400px;background:#38bdf8;top:-100px;left:-100px}
-.lamp-bg .l2{width:500px;height:500px;background:#a855f7;bottom:-150px;right:-100px}
-.lamp-bg .l3{width:300px;height:300px;background:#22d3ee;top:40%;left:40%}
+.lamp-bg .l1{width:400px;height:400px;background:#38bdf8;top:-100px;left:-100px}.lamp-bg .l2{width:500px;height:500px;background:#a855f7;bottom:-150px;right:-100px}.lamp-bg .l3{width:300px;height:300px;background:#22d3ee;top:40%;left:40%}
 @keyframes floatLamp{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-30px)}}
 .vivid{transition:transform .3s ease;overflow:hidden}.vivid:hover{transform:translateY(-5px)}
 .glow-ring{position:absolute;inset:0;border-radius:20px;padding:2px;pointer-events:none;background-size:300% 100%;animation:flowBorder 5s linear infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude}
@@ -117,7 +115,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
     <div class="glow-ring g-cyan"></div>
     <div class="flex flex-col items-center mb-8">
       <img src="https://lh3.googleusercontent.com/d/1Xi_QeItdI3ZV3WzCp67yiuxoKo8heIKf" class="w-full max-w-[180px] h-auto object-fill mb-5 rounded-xl" alt="Logo">
-      <h1 class="text-3xl font-extrabold tracking-tight text-blink">Gana Store</h1>
+      <h1 class="text-4xl font-extrabold tracking-tight text-blink" style="font-family:'Kanit',sans-serif">Gana Store</h1>
       <p class="text-sm text-slate-300 mt-2 font-semibold">Masuk untuk mengelola data toko</p>
     </div>
     <form id="login-form" onsubmit="return false;">
@@ -257,7 +255,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
             <button onclick="saveBukaSlop()" id="btn-buka-slop" class="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white font-bold py-3 rounded-xl">BUKA SLOP KE ECERAN</button>
           </div>
           <div class="gc vivid pc-blue flex flex-col overflow-hidden"><div class="glow-ring g-blue"></div>
-            <h4 class="st"><i class="fas fa-warehouse"></i> Stok Saat Ini</h4>
+            <h4 class="st"><i class="fas fa-warehouse"></i> Stok Saat Ini (termasuk sisa bulan lalu)</h4>
             <div class="sa flex-1"><table class="text-center"><thead><tr><th class="text-left">Rokok</th><th>Sisa Slop</th><th>Sisa Eceran</th></tr></thead><tbody id="tb-stok-mini"></tbody></table></div>
           </div>
         </div>
@@ -378,34 +376,21 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 </div>
 
 <script>
-/* ====== PEMBERSIH CACHE OTOMATIS: jalankan SEKALI saat pertama kali dibuka setelah update ====== */
-(function(){
-  var v=localStorage.getItem('gs_version');
-  if(v!=='v2'){
-    localStorage.removeItem('gs_data');
-    localStorage.removeItem('gs_statusfixes');
-    localStorage.removeItem('gs_savebuffer');
-    localStorage.setItem('gs_version','v2');
-  }
-})();
-
-/* ====== TEMPEL URL WEB APP KAMU DI ANTARA TANDA KUTIP INI ====== */
-const API='https://script.google.com/macros/s/AKfycbw3yxm8zo6ylV2qmh5oaChen4XJeyXdYW2B5brpFgKKLZQh7K78yGO8iKeGBE_UYZgx/exec';
-/* ============================================================= */
-
 const BARCODE_URL='https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN';
 const Bt=(n)=>'฿'+(n||0).toLocaleString('th-TH');
 const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 function normalizeName(s){return String(s||'').trim().replace(/\s+/g,' ');}
 
-/* Kirim via GET + gambar: mustahil diblokir, langsung tulis ke sheet */
+/* ====== TEMPEL URL WEB APP KAMU DI ANTARA TANDA KUTIP ====== */
+const API='https://script.google.com/macros/s/AKfycbx-Cxu_Cjy7I1dR0PAfWJVtTN10omXxedE1lnYTpvEN2c0rHH25xQhvBM1CCdSKeLQk/exec';
+/* ========================================================= */
+
 function silentGet(action,payload){
   var url=API+'?action='+action+'&payload='+encodeURIComponent(JSON.stringify(payload||{}))+'&_t='+Date.now()+'_'+Math.random();
   var img=new Image();
   img.src=url;
   return true;
 }
-
 function api(action,payload){
   payload=payload||{};
   return new Promise(function(resolve){
@@ -525,6 +510,12 @@ function parseNum(s){return parseFloat(String(s).replace(/[.,]/g,''))||0;}
 function copyText(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>toast('Text berhasil disalin!'));}
 async function copyBarcodeImage(){try{const r=await fetch(BARCODE_URL),b=await r.blob();await navigator.clipboard.write([new ClipboardItem({[b.type]:b})]);toast('Barcode disalin!');}catch(e){toast('Gagal copy gambar','error');}}
 function getMonth(d){if(!d)return'';let dt=d instanceof Date?d:new Date(d);if(isNaN(dt))return'';return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0');}
+function prevMonth(m){
+  var p=m.split('-');
+  var y=parseInt(p[0]),mo=parseInt(p[1])-1;
+  if(mo===0){mo=12;y--;}
+  return y+'-'+String(mo).padStart(2,'0');
+}
 function fmtDate(d,time=true){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);const date=String(dt.getDate()).padStart(2,'0')+' '+BULAN[dt.getMonth()]+' '+dt.getFullYear();return time?date+' '+dt.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):date;}
 function fmtDateShort(d){if(!d)return'-';const dt=new Date(d);if(isNaN(dt))return String(d);return String(dt.getDate()).padStart(2,'0')+' '+BULAN[dt.getMonth()]+' '+dt.getFullYear();}
 function cleanSitus(s){if(!s)return'-';s=String(s).trim();return(s===''||s==='-'||s==='undefined'||s==='null')?'-':s;}
@@ -606,7 +597,7 @@ function switchPage(page,sub){
     else{curJualTipe='Eceran';curJualFilter='Eceran';document.getElementById('nav-jual-eceran').classList.add('ac');title.innerText='Jual Rokok Eceran';}
     setupJualForm();if(dashState)renderJualTable();
   }
-  else if(page==='stok'){show('page-stok');document.getElementById('nav-stok').classList.add('ac');title.innerText='Stok & Pengambilan';if(dashState)renderStok();}
+  else if(page==='stok'){show('page-stok');document.getElementById('nav-stok').classList.add('ac');title.innerText='Stok & Pengambilan';populateDropdowns();if(dashState)renderStok();}
   else if(page==='crosscheck'){
     show('page-crosscheck');
     if(sub==='Perslop'){curCCTipe='Perslop';document.getElementById('nav-cc-perslop').classList.add('ac');title.innerText='Crosscheck Perslop';}
@@ -639,11 +630,34 @@ function populateDropdowns(){
   const sj=document.getElementById('jual-rokok'),ss=document.getElementById('stok-rokok'),sb=document.getElementById('buka-rokok');
   sj.innerHTML='<option value="">Pilih Rokok</option>';ss.innerHTML='';sb.innerHTML='';
   Object.keys(masterData).sort().forEach(r=>{
-    if(curJualTipe==='Eceran'&&(masterData[r].eceran||0)===0)return;
+    const hanyaEceran=(curJualTipe==='Eceran'&&(masterData[r].eceran||0)===0);
     sj.appendChild(new Option(r,r));
+    if(hanyaEceran)return;
     ss.appendChild(new Option(r,r));
     sb.appendChild(new Option(r,r));
   });
+}
+
+function hitungStokRokok(){
+  if(!dashState)return null;
+  const m=selMonth,pm=prevMonth(m);
+  const hasil={};
+  Object.keys(masterData).forEach(r=>{hasil[r]={sisaSlop:0,sisaEceran:0};});
+  const allM=(dashState.allSales||[]);
+  const allA=(dashState.allPengambilan||[]);
+  [pm,m].forEach(bulan=>{
+    const jualB=allM.filter(x=>getMonth(x.tanggal)===bulan);
+    const ambilB=allA.filter(x=>getMonth(x.tanggal)===bulan);
+    Object.keys(masterData).forEach(r=>{
+      const masuk=ambilB.filter(x=>x.rokok===r&&x.tipe==='Masuk').reduce((s,x)=>s+x.jumlah,0);
+      const buka=ambilB.filter(x=>x.rokok===r&&x.tipe==='Buka Slop').reduce((s,x)=>s+x.jumlah,0);
+      const jualS=jualB.filter(x=>x.rokok===r&&x.tipe==='Perslop').reduce((s,x)=>s+x.jumlah,0);
+      const jualE=jualB.filter(x=>x.rokok===r&&x.tipe==='Eceran').reduce((s,x)=>s+x.jumlah,0);
+      hasil[r].sisaSlop+=masuk-jualS-buka;
+      hasil[r].sisaEceran+=(buka*10)-jualE;
+    });
+  });
+  return hasil;
 }
 
 function renderDashboard(){
@@ -884,6 +898,7 @@ async function saveBukaSlop(){
 function renderStok(){
   if(!dashState)return;
   const d=dashState,m=selMonth;
+  const stok=hitungStokRokok()||{};
   const ambilBulan=(d.allPengambilan||[]).filter(x=>getMonth(x.tanggal)===m);
   const tbAmbil=document.getElementById('tb-pengambilan');
   tbAmbil.innerHTML='';
@@ -893,16 +908,11 @@ function renderStok(){
   if(tbAmbil.innerHTML==='')tbAmbil.innerHTML='<tr><td colspan="6" class="text-center text-slate-400 py-4">Belum ada riwayat</td></tr>';
   const tbMini=document.getElementById('tb-stok-mini');
   tbMini.innerHTML='';
-  const jualBulan=(d.allSales||[]).filter(x=>getMonth(x.tanggal)===m);
   Object.keys(masterData).sort().forEach(r=>{
-    const masukSlop=ambilBulan.filter(x=>x.rokok===r&&x.tipe==='Masuk').reduce((s,x)=>s+x.jumlah,0);
-    const bukaSlop=ambilBulan.filter(x=>x.rokok===r&&x.tipe==='Buka Slop').reduce((s,x)=>s+x.jumlah,0);
-    const jualSlop=jualBulan.filter(x=>x.rokok===r&&x.tipe==='Perslop').reduce((s,x)=>s+x.jumlah,0);
-    const jualEceran=jualBulan.filter(x=>x.rokok===r&&x.tipe==='Eceran').reduce((s,x)=>s+x.jumlah,0);
-    const sisaSlop=masukSlop-jualSlop-bukaSlop;
-    const sisaEceran=(bukaSlop*10)-jualEceran;
-    tbMini.innerHTML+=`<tr><td class="text-left td-rokok">${r}</td><td class="td-jml">${sisaSlop>0?sisaSlop+' Slop':'-'}</td><td class="td-jml">${sisaEceran>0?sisaEceran+' Bks':'-'}</td></tr>`;
+    const st=stok[r]||{sisaSlop:0,sisaEceran:0};
+    tbMini.innerHTML+=`<tr><td class="text-left td-rokok">${r}</td><td class="td-jml">${st.sisaSlop>0?st.sisaSlop+' Slop':'-'}</td><td class="td-jml">${st.sisaEceran>0?st.sisaEceran+' Bks':'-'}</td></tr>`;
   });
+  const jualBulan=(d.allSales||[]).filter(x=>getMonth(x.tanggal)===m);
   const tbSlop=document.getElementById('tb-stok-perslop');
   const tbEceran=document.getElementById('tb-stok-eceran');
   tbSlop.innerHTML='';tbEceran.innerHTML='';
@@ -957,13 +967,15 @@ function renderCrosscheck(){
   const d=dashState,m=selMonth;
   const tbStok=document.getElementById('tb-cc-stok');
   tbStok.innerHTML='';
+  const stok=hitungStokRokok()||{};
   const ambilBulan=(d.allPengambilan||[]).filter(x=>getMonth(x.tanggal)===m&&x.tipe==="Masuk");
   const jualBulan=(d.allSales||[]).filter(x=>getMonth(x.tanggal)===m&&x.tipe===curCCTipe);
   Object.keys(masterData).sort().forEach(r=>{
     const ambil=ambilBulan.filter(x=>x.rokok===r).reduce((s,x)=>s+x.jumlah,0);
     const jual=jualBulan.filter(x=>x.rokok===r).reduce((s,x)=>s+x.jumlah,0);
-    const sisa=ambil-jual;
-    if(ambil>0||jual>0){
+    const st=stok[r]||{sisaSlop:0,sisaEceran:0};
+    const sisa=curCCTipe==='Eceran'?st.sisaEceran:st.sisaSlop;
+    if(ambil>0||jual>0||sisa>0){
       const satuan=curCCTipe==='Eceran'?' Bks':' Slop';
       tbStok.innerHTML+=`<tr><td class="text-left td-rokok">${r}</td><td class="td-jml">${ambil}${satuan}</td><td class="td-jml">${jual}${satuan}</td><td class="td-jml">${sisa}${satuan}</td></tr>`;
     }
