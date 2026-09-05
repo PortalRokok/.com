@@ -378,24 +378,34 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 </div>
 
 <script>
+/* ============ TEMPEL URL WEB APP KAMU DI ANTARA TANDA KUTIP INI ============ */
+const API='https://script.google.com/macros/s/AKfycbyb9UnCrsVXshx5u_Qs2aqSOpDmLlBYpspjEX1rRHjwYlI4iPG5qyGx4v0BzfIL5TOc/exec';
+/* ========================================================================== */
+
 const BARCODE_URL='https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN';
 const Bt=(n)=>'฿'+(n||0).toLocaleString('th-TH');
 const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 function normalizeName(s){return String(s||'').trim().replace(/\s+/g,' ');}
 
-/* Jalur internal Google: tidak bisa diblokir browser mana pun */
-const HAS_GSR=(typeof google!=='undefined'&&google.script&&google.script.run);
+/* Kirim via GET + gambar 1x1: mustahil diblokir, langsung tulis ke sheet */
+function silentGet(action,payload){
+  var url=API+'?action='+action+'&payload='+encodeURIComponent(JSON.stringify(payload||{}))+'&_t='+Date.now()+'_'+Math.random();
+  var img=new Image();
+  img.src=url;
+  return true;
+}
 
-function callServer(action,payload){
+function api(action,payload){
   payload=payload||{};
   return new Promise(function(resolve){
-    if(HAS_GSR){
-      try{google.script.run.withSuccessHandler(function(r){resolve(r||{});}).withFailureHandler(function(e){resolve({error:String(e)});}).apiRouter(action,JSON.stringify(payload));return;}catch(e){}
-    }
-    resolve({error:'Tidak tersambung ke server'});
+    var url=API+'?action='+action;
+    if(Object.keys(payload).length)url+='&payload='+encodeURIComponent(JSON.stringify(payload));
+    url+='&_t='+Date.now()+'_'+Math.random();
+    fetch(url,{method:'GET',cache:'no-store'}).then(function(r){return r.text();}).then(function(t){
+      try{resolve(JSON.parse(t));}catch(e){resolve({error:'Server error'});}
+    }).catch(function(){resolve({error:'Koneksi gagal'});});
   });
 }
-function api(action,payload){return callServer(action,payload);}
 
 let masterData={};
 let dashState=null;
@@ -407,25 +417,11 @@ let salesChart=null;
 let today=new Date();
 let selMonth=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
 let sortedKeys=[];
-let isRefreshing=false;
-let isEnforcing=false;
 let statusFixes={};
 try{statusFixes=JSON.parse(localStorage.getItem('gs_statusfixes')||'{}');}catch(e){statusFixes={};}
 function persistFixes(){try{localStorage.setItem('gs_statusfixes',JSON.stringify(statusFixes));}catch(e){}}
 function setFix(row,field,value){row=String(row);if(!statusFixes[row])statusFixes[row]={};statusFixes[row][field]={v:value,ts:Date.now()};persistFixes();}
 function clearFix(row,field){row=String(row);if(statusFixes[row]){delete statusFixes[row][field];if(!Object.keys(statusFixes[row]).length)delete statusFixes[row];}persistFixes();}
-async function enforceFixes(){
-  if(isEnforcing)return;
-  const rows=Object.keys(statusFixes);
-  if(!rows.length)return;
-  isEnforcing=true;
-  for(const row of rows){
-    const f=statusFixes[row];
-    if(f.ambil){const res=await api('updateAmbilPenjualan',{payload:{row:Number(row),newAmbil:f.ambil.v}});if(res&&res.success)clearFix(row,'ambil');}
-    if(f.status){const res=await api('updateStatusPenjualan',{payload:{row:Number(row),newStatus:f.status.v}});if(res&&res.success)clearFix(row,'status');}
-  }
-  isEnforcing=false;
-}
 
 let saveBuffer={sales:[],ambil:[],cc:[]};
 try{const sb=localStorage.getItem('gs_savebuffer');if(sb)saveBuffer=JSON.parse(sb);}catch(e){saveBuffer={sales:[],ambil:[],cc:[]};}
@@ -527,16 +523,10 @@ function show(id){const el=document.getElementById(id);el.classList.remove('hidd
 function renderAll(){renderDashboard();renderJualTable();renderStok();renderCrosscheck();renderRekapUM();renderKas();}
 
 async function refreshServerData(silent){
-  if(isRefreshing)return;
-  isRefreshing=true;
   const ind=document.getElementById('sync-indicator');
-  const ico=document.getElementById('refresh-ico');
-  if(!silent&&ico)ico.classList.add('anim-spin');
   if(ind)ind.classList.remove('hidden');
   const res=await api('getDashboard',{});
   if(ind)ind.classList.add('hidden');
-  if(!silent&&ico)ico.classList.remove('anim-spin');
-  isRefreshing=false;
   if(res&&!res.error&&res.masterMap){
     applyServerData(res);
     renderAll();
@@ -548,11 +538,7 @@ async function refreshServerData(silent){
   }
 }
 setInterval(function(){
-  if(document.visibilityState==='visible'&&dashState&&!isRefreshing){
-    refreshServerData(true).then(function(){
-      if(Object.keys(statusFixes).length>0)enforceFixes();
-    });
-  }
+  if(document.visibilityState==='visible'&&dashState){refreshServerData(true);}
 },5000);
 
 function applyServerData(res){
@@ -630,7 +616,11 @@ async function initApp(){
     dedupMaster();persistLocal();
     if(Object.keys(masterData).length>0){populateDropdowns();renderAll();}
   }
-  if(Object.keys(statusFixes).length>0)await enforceFixes();
+  Object.keys(statusFixes).forEach(function(row){
+    const f=statusFixes[row];
+    if(f.ambil)silentGet('updateAmbilPenjualan',{payload:{row:Number(row),newAmbil:f.ambil.v}});
+    if(f.status)silentGet('updateStatusPenjualan',{payload:{row:Number(row),newStatus:f.status.v}});
+  });
   await refreshServerData(true);
 }
 
@@ -767,6 +757,7 @@ async function saveJual(){
   if(curJualFilter==='UM'){switchPage('rekap');}else{renderJualTable();renderDashboard();}
   const res=await api('savePenjualan',payload);
   if(res&&res.success){applyServerData(res);renderDashboard();renderJualTable();renderRekapUM();}
+  else{silentGet('savePenjualan',payload);}
 }
 
 function renderJualTable(){
@@ -799,7 +790,7 @@ function toggleBayarJual(row,isDone){
   const rec=(dashState.allSales||[]).find(x=>x.row===row);
   const newStatus=isDone?'BELUM BAYAR':((rec&&rec.tipeBayar==='ABA')?'DONE BAYAR ABA':'DONE BAYAR CASH');
   if(rec)rec.statusBayar=newStatus;
-  if(row>0)setFix(row,'status',newStatus);
+  if(row>0){setFix(row,'status',newStatus);silentGet('updateStatusPenjualan',{payload:{row:row,newStatus:newStatus}});}
   persistLocal();
   renderJualTable();renderRekapUM();renderDashboard();renderKas();
   toast(newStatus.includes('DONE')?'✅ SUDAH BAYAR - masuk total pendapatan':'Ditandai BELUM BAYAR');
@@ -813,7 +804,7 @@ function toggleAmbilJual(row,isAmbil){
   const newAmbil=isAmbil?'BELUM AMBIL':'SUDAH AMBIL';
   const rec=(dashState.allSales||[]).find(x=>x.row===row);
   if(rec)rec.statusAmbil=newAmbil;
-  if(row>0)setFix(row,'ambil',newAmbil);
+  if(row>0){setFix(row,'ambil',newAmbil);silentGet('updateAmbilPenjualan',{payload:{row:row,newAmbil:newAmbil}});}
   persistLocal();
   renderJualTable();renderRekapUM();
   toast(newAmbil==='SUDAH AMBIL'?'✅ SUDAH DIAMBIL':'Ditandai BELUM diambil');
@@ -1126,7 +1117,7 @@ function toggleCairUM(row,isCair){
   const newStatus=isCair?'SUDAH BAYAR UM':'SUDAH CAIR UM';
   const rec=(dashState.allSales||[]).find(x=>x.row===row);
   if(rec)rec.statusBayar=newStatus;
-  if(row>0)setFix(row,'status',newStatus);
+  if(row>0){setFix(row,'status',newStatus);silentGet('updateStatusPenjualan',{payload:{row:row,newStatus:newStatus}});}
   persistLocal();
   renderRekapUM();renderDashboard();
   toast(isCair?'Dikembalikan ke Belum Cair':'Sudah Cair!');
