@@ -114,7 +114,6 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 .anim-spin{animation:spin .6s linear infinite}
 .d-label{font-size:14px;font-weight:600;color:#cbd5e1;margin-bottom:4px;line-height:1.3}
 .d-value{font-size:30px;font-weight:800;line-height:1.1}
-/* ====== MOBILE: enteng + tabel auto-fit full lebar, animasi berat dimatikan ====== */
 @media (max-width:768px){
   .lamp-bg div{filter:blur(60px);opacity:0.15;animation:none}
   .gc,.st,aside,header,.fl{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
@@ -456,7 +455,7 @@ const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus',
 const POLL_MS=5000;
 function normalizeName(s){return String(s||'').trim().replace(/\s+/g,' ');}
 
-/* ====== URL WEB APP KAMU ====== */
+/* ====== URL WEB APP KAMU (pastikan sama dengan deployment sekarang) ====== */
 const API='https://script.google.com/macros/s/AKfycbz_XcfqSYuLXx8TlR-1wtns1dCcJAbQU-TclJCun3dXxZMrLt9ugNUL3KKtzCG14KRw/exec';
 
 function api(action,payload){
@@ -488,6 +487,7 @@ let lastAuto=0;
 let fetching=false;
 let lastFP='';
 
+/* status cair/ambil: penandaan dikirim pakai ID PERMANEN + dicatat lokal by isi transaksi */
 let statusFixes={};
 try{statusFixes=JSON.parse(localStorage.getItem('gs_statusfixes2')||'{}');}catch(e){statusFixes={};}
 function persistFixes(){try{localStorage.setItem('gs_statusfixes2',JSON.stringify(statusFixes));}catch(e){}}
@@ -524,7 +524,7 @@ function loadLocal(){
     if(!raw)return false;
     const d=JSON.parse(raw);
     if(d.masterData)masterData=d.masterData;
-    if(d.dashState&&d.dashState.allSales){dashState=d.dashState;return true;}
+    if(d.dashState&&d.dashState.allSales){dashState=d.dashState;ensureDash();return true;}
   }catch(e){}
   return false;
 }
@@ -542,6 +542,13 @@ function fmtID(n){n=Math.round(Number(n)||0);return n?n.toLocaleString('id-ID'):
 function isPending(row){return Number(row)<0;}
 function isUMJual(){return curJualTipe==='Perslop'&&curJualFilter==='UM';}
 function ensureDash(){if(!dashState)dashState={allSales:[],allPengambilan:[],allCrosscheck:[],allSetoran:[]};if(!dashState.allSales)dashState.allSales=[];if(!dashState.allPengambilan)dashState.allPengambilan=[];if(!dashState.allCrosscheck)dashState.allCrosscheck=[];if(!dashState.allSetoran)dashState.allSetoran=[];}
+
+/* ====== ID PERMANEN: kunci untuk toggle/hapus ====== */
+function keyOf(r){return r.id?("'"+String(r.id).replace(/[^A-Za-z0-9]/g,'')+"'"):r.row;}
+function findRec(list,key){
+  if(typeof key==='string')return (list||[]).find(function(x){return String(x.id)===key;});
+  return (list||[]).find(function(x){return x.row==key;});
+}
 
 function copyToClipboard(t){
   if(navigator.clipboard&&navigator.clipboard.writeText){
@@ -638,7 +645,6 @@ function cleanSitus(s){if(!s)return'-';s=String(s).trim();return(s===''||s==='-'
 function situsHtml(s){const c=cleanSitus(s);return c==='-'?'<span class="td-situs empty">-</span>':'<span class="td-situs">'+esc(c)+'</span>';}
 function applyMonthFilter(){selMonth=document.getElementById('month-filter').value;try{localStorage.setItem('gs_month',selMonth);}catch(e){}if(dashState)renderAll();}
 
-/* render halaman AKTIF saja = anti-lag. renderAll dipakai saat pindah halaman/ganti bulan */
 function renderAll(){renderDashboard();renderJualTable();renderStok();renderCrosscheck();renderRokokTable();renderRekapUM();renderKas();fitTablesSoon();}
 function renderCurrent(){
   if(curPage==='dashboard')renderDashboard();
@@ -651,7 +657,7 @@ function renderCurrent(){
   fitTablesSoon();
 }
 
-/* ---------- MOBILE: tabel otomatis menyesuaikan lebar layar (full kelihatan, tanpa geser) ---------- */
+/* ---------- MOBILE: tabel auto-fit lebar layar ---------- */
 let fitTimer=null;
 function fitTablesSoon(){if(fitTimer)return;fitTimer=requestAnimationFrame(function(){fitTimer=null;fitTables();});}
 function fitTables(){
@@ -674,14 +680,14 @@ function fitTables(){
 let rszT=null;
 window.addEventListener('resize',function(){clearTimeout(rszT);rszT=setTimeout(fitTables,200);});
 
-/* ---------- sinkronisasi server (5 detik, anti-lag, tidak kedip-kedip) ---------- */
+/* ---------- sinkronisasi server ---------- */
 function dataFingerprint(){
   if(!dashState)return '0';
   let p=[Object.keys(masterData).length];
-  (dashState.allSales||[]).forEach(s=>p.push(s.row,s.statusBayar,s.statusAmbil));
-  (dashState.allPengambilan||[]).forEach(a=>p.push(a.row));
-  (dashState.allCrosscheck||[]).forEach(c=>p.push(c.row));
-  (dashState.allSetoran||[]).forEach(x=>p.push(x.row,x.jumlah));
+  (dashState.allSales||[]).forEach(s=>p.push(s.row,s.id,s.statusBayar,s.statusAmbil));
+  (dashState.allPengambilan||[]).forEach(a=>p.push(a.row,a.id));
+  (dashState.allCrosscheck||[]).forEach(c=>p.push(c.row,c.id));
+  (dashState.allSetoran||[]).forEach(x=>p.push(x.row,x.id,x.jumlah));
   return p.join(',');
 }
 async function refreshServerData(silent){
@@ -720,7 +726,10 @@ function applyServerData(res){
   if(d.allSales||d.allPengambilan||d.allCrosscheck||d.allSetoran){
     dashState=d;
     ensureDash();
-    dashState.allSales.forEach(s=>{s.situs=cleanSitus(s.situs);if(!s.statusAmbil)s.statusAmbil='BELUM AMBIL';});
+    dashState.allSales.forEach(s=>{s.situs=cleanSitus(s.situs);if(!s.statusAmbil)s.statusAmbil='BELUM AMBIL';if(!s.id)s.id='';});
+    dashState.allPengambilan.forEach(a=>{if(!a.id)a.id='';});
+    dashState.allCrosscheck.forEach(c=>{if(!c.id)c.id='';});
+    dashState.allSetoran.forEach(x=>{if(!x.id)x.id='';});
   }
   dedupMaster();
   ensureDash();
@@ -749,7 +758,7 @@ function applyServerData(res){
   });
   saveBuffer.stor=sisaStor;
   persistBuffer();
-  /* status cair/ambil ditempel ulang berdasarkan ISI transaksi + kirim ulang kalau server belum nerima */
+  /* penandaan yang belum sampai server: tempel lagi + KIRIM ULANG pakai ID (bukan nomor baris!) */
   const now=Date.now();
   dashState.allSales.forEach(function(s){
     if(Number(s.row)<=0)return;
@@ -760,14 +769,14 @@ function applyServerData(res){
       if(s.statusBayar===f.status.v){clearFix(sg,'status');}
       else{
         s.statusBayar=f.status.v;
-        if(!f.status.try||now-f.status.try>20000){f.status.try=now;persistFixes();api('updateStatusPenjualan',{row:s.row,newStatus:f.status.v}).then(function(){}).catch(function(){});}
+        if(!f.status.try||now-f.status.try>20000){f.status.try=now;persistFixes();api('updateStatusPenjualan',{id:s.id||'',row:s.row,newStatus:f.status.v}).then(function(){}).catch(function(){});}
       }
     }
     if(f.ambil){
       if(s.statusAmbil===f.ambil.v){clearFix(sg,'ambil');}
       else{
         s.statusAmbil=f.ambil.v;
-        if(!f.ambil.try||now-f.ambil.try>20000){f.ambil.try=now;persistFixes();api('updateAmbilPenjualan',{row:s.row,newAmbil:f.ambil.v}).then(function(){}).catch(function(){});}
+        if(!f.ambil.try||now-f.ambil.try>20000){f.ambil.try=now;persistFixes();api('updateAmbilPenjualan',{id:s.id||'',row:s.row,newAmbil:f.ambil.v}).then(function(){}).catch(function(){});}
       }
     }
   });
@@ -863,7 +872,7 @@ function applyJualMode(){
   hitungOtomatis();
 }
 
-/* ---------- dropdown: pilihan tidak pernah lompat ---------- */
+/* ---------- dropdown ---------- */
 function fillSelectKeep(sel,keys,placeholder){
   if(!sel)return;
   if(document.activeElement===sel&&sel.value)return;
@@ -896,13 +905,11 @@ function hitungOtomatis(){
   setTxt('jual-harga',Bt(h));
 }
 
-/* ============================================================
-   SIMPAN = INSTAN. Data langsung muncul, kirim ke server di
-   belakang. Kalau koneksi putus → masuk antrian offline ⏳.
-   ============================================================ */
+/* ---------- SIMPAN INSTAN ---------- */
 function instantSave(action,rec,bufKey,listKey,sig,okMsg,offMsg){
   ensureDash();
   rec.row=-Date.now();
+  rec.id='';
   dashState[listKey].push(rec);
   const ent={sig:sig,rec:rec,sending:Date.now()};
   saveBuffer[bufKey].push(ent);
@@ -939,11 +946,12 @@ function saveJual(){
     'Disimpan lokal — dikirim otomatis saat online');
 }
 
-/* ---------- hapus = INSTAN ---------- */
-function instantDelete(action,payload,listKey,row,msg){
+/* ---------- HAPUS INSTAN (pakai ID) ---------- */
+function instantDelete(action,payload,listKey,key,msg){
   ensureDash();
-  const idx=dashState[listKey].findIndex(x=>x.row==row);
-  if(idx<0)return;
+  const rec=findRec(dashState[listKey],key);
+  if(!rec)return;
+  const idx=dashState[listKey].indexOf(rec);
   dashState[listKey].splice(idx,1);
   renderCurrent();
   persistLocal();
@@ -953,10 +961,10 @@ function instantDelete(action,payload,listKey,row,msg){
     else refreshServerData(true);
   }).catch(function(){refreshServerData(true);});
 }
-function deleteSale(row){if(!isPending(row))instantDelete('deletePenjualan',{row:row},'allSales',row,'Terhapus ✓');}
-function deletePengambilan(row){if(!isPending(row))instantDelete('deletePengambilan',{row:row},'allPengambilan',row,'Terhapus ✓');}
-function deleteCrosscheckRow(row){if(!isPending(row))instantDelete('deleteCrosscheck',{row:row},'allCrosscheck',row,'Terhapus ✓');}
-function deleteSetoranRow(row){if(!isPending(row))instantDelete('deleteSetoran',{row:row},'allSetoran',row,'Terhapus ✓');}
+function deleteSale(key){const s=findRec(dashState.allSales,key);if(s&&!isPending(s.row))instantDelete('deletePenjualan',{id:s.id||'',row:s.row},'allSales',key,'Terhapus ✓');}
+function deletePengambilan(key){const a=findRec(dashState.allPengambilan,key);if(a&&!isPending(a.row))instantDelete('deletePengambilan',{id:a.id||'',row:a.row},'allPengambilan',key,'Terhapus ✓');}
+function deleteCrosscheckRow(key){const c=findRec(dashState.allCrosscheck,key);if(c&&!isPending(c.row))instantDelete('deleteCrosscheck',{id:c.id||'',row:c.row},'allCrosscheck',key,'Terhapus ✓');}
+function deleteSetoranRow(key){const x=findRec(dashState.allSetoran,key);if(x&&!isPending(x.row))instantDelete('deleteSetoran',{id:x.id||'',row:x.row},'allSetoran',key,'Terhapus ✓');}
 
 /* ---------- tabel penjualan ---------- */
 function renderJualTable(){
@@ -975,6 +983,7 @@ function renderJualTable(){
     const stOk=/DONE|CAIR/i.test(s.statusBayar||'');
     const amOk=/SUDAH\s*AMBIL/i.test(s.statusAmbil||'');
     const stTxt=isUM?(stOk?'SUDAH CAIR':'BELUM CAIR'):(s.statusBayar||'BELUM BAYAR');
+    const kk=keyOf(s);
     let h='<tr>';
     h+='<td class="td-date">'+esc(fmtDateShort(s.tanggal))+'</td>';
     h+='<td class="td-name">'+esc(s.nama||'-')+'</td>';
@@ -984,17 +993,18 @@ function renderJualTable(){
     h+='<td class="td-harga">'+Bt(s.harga)+'</td>';
     if(isPending(s.row)){h+='<td><span class="badge badge-pending">⏳ MENUNGGU KIRIM</span></td><td><span class="badge ba1">-</span></td><td></td>';}
     else{
-      h+='<td><span class="badge clickable '+(stOk?'bg1':'br1')+'" onclick="toggleStatusBayar('+s.row+')" title="Klik untuk ubah">'+esc(stTxt)+'</span></td>';
-      h+='<td><span class="badge clickable '+(amOk?'bg1':'ba1')+'" onclick="toggleAmbil('+s.row+')" title="Klik untuk ubah">'+(amOk?'SUDAH AMBIL':'BELUM AMBIL')+'</span></td>';
-      h+='<td><button class="bd" onclick="deleteSale('+s.row+')" title="Hapus"><i class="fas fa-trash"></i></button></td>';
+      h+='<td><span class="badge clickable '+(stOk?'bg1':'br1')+'" onclick="toggleStatusBayar('+kk+')" title="Klik untuk ubah">'+esc(stTxt)+'</span></td>';
+      h+='<td><span class="badge clickable '+(amOk?'bg1':'ba1')+'" onclick="toggleAmbil('+kk+')" title="Klik untuk ubah">'+(amOk?'SUDAH AMBIL':'BELUM AMBIL')+'</span></td>';
+      h+='<td><button class="bd" onclick="deleteSale('+kk+')" title="Hapus"><i class="fas fa-trash"></i></button></td>';
     }
     return h+'</tr>';
   }).join('');
 }
 
-async function toggleStatusBayar(row){
-  if(isPending(row))return;
-  const s=(dashState.allSales||[]).find(x=>x.row==row);if(!s)return;
+/* toggle status: kirim pakai ID PERMANEN + row fallback */
+async function toggleStatusBayar(key){
+  const s=findRec(dashState.allSales,key);
+  if(!s||isPending(s.row))return;
   const isUM=s.tipeBayar==='Uang Makan';
   const opts=isUM?['BELUM BAYAR','SUDAH CAIR']:['DONE BAYAR CASH','DONE BAYAR ABA','BELUM BAYAR'];
   const idx=opts.indexOf(s.statusBayar);
@@ -1002,18 +1012,18 @@ async function toggleStatusBayar(row){
   const sg=sigSale(s);
   s.statusBayar=next;setFix(sg,'status',next);renderCurrent();
   try{
-    const r=await api('updateStatusPenjualan',{row:row,newStatus:next});
+    const r=await api('updateStatusPenjualan',{id:s.id||'',row:s.row,newStatus:next});
     if(r&&r.success){clearFix(sg,'status');applyServerData(r);renderCurrent();}
   }catch(e){}
 }
-async function toggleAmbil(row){
-  if(isPending(row))return;
-  const s=(dashState.allSales||[]).find(x=>x.row==row);if(!s)return;
+async function toggleAmbil(key){
+  const s=findRec(dashState.allSales,key);
+  if(!s||isPending(s.row))return;
   const next=/SUDAH\s*AMBIL/i.test(s.statusAmbil||'')?'BELUM AMBIL':'SUDAH AMBIL';
   const sg=sigSale(s);
   s.statusAmbil=next;setFix(sg,'ambil',next);renderCurrent();
   try{
-    const r=await api('updateAmbilPenjualan',{row:row,newAmbil:next});
+    const r=await api('updateAmbilPenjualan',{id:s.id||'',row:s.row,newAmbil:next});
     if(r&&r.success){clearFix(sg,'ambil');applyServerData(r);renderCurrent();}
   }catch(e){}
 }
@@ -1084,7 +1094,8 @@ function renderStok(){
   document.getElementById('tb-pengambilan').innerHTML=amb.map(function(a){
     const isBuka=/buka/i.test(String(a.tipe||''));
     const j=Number(a.jumlah)||0;
-    let del='<button class="bd" onclick="deletePengambilan('+a.row+')" title="Hapus"><i class="fas fa-trash"></i></button>';
+    const kk=keyOf(a);
+    let del='<button class="bd" onclick="deletePengambilan('+kk+')" title="Hapus"><i class="fas fa-trash"></i></button>';
     if(isPending(a.row))del='';
     return '<tr><td class="td-date">'+esc(fmtDateShort(a.tanggal))+'</td>'+
       '<td class="td-rokok">'+esc(a.rokok)+'</td>'+
@@ -1143,7 +1154,8 @@ function renderCrosscheck(){
   const ccs=(dashState.allCrosscheck||[]).filter(function(c){return String(c.tipe||'Eceran')===curCCTipe&&getMonth(c.tanggal)===selMonth;}).slice().reverse();
   document.getElementById('tb-cc').innerHTML=ccs.map(function(c){
     const ok=String(c.status)==='KLOP';
-    let del='<button class="bd" onclick="deleteCrosscheckRow('+c.row+')"><i class="fas fa-trash"></i></button>';
+    const kk=keyOf(c);
+    let del='<button class="bd" onclick="deleteCrosscheckRow('+kk+')"><i class="fas fa-trash"></i></button>';
     if(isPending(c.row))del='<span class="badge badge-pending">⏳</span>';
     return '<tr><td class="td-date">'+esc(fmtDateShort(c.tanggal))+'</td>'+
       '<td>'+esc(c.jam||'-')+'</td>'+
@@ -1161,7 +1173,7 @@ function saveCrosscheck(){
   instantSave('saveCrosscheck',rec,'cc','allCrosscheck',sigCC(rec),'Crosscheck tersimpan ✓','Disimpan lokal — dikirim otomatis saat online');
 }
 
-/* ---------- master rokok (simpan & hapus = INSTAN) ---------- */
+/* ---------- master rokok ---------- */
 function renderRokokTable(){
   const tb=document.getElementById('tb-rokok');if(!tb)return;
   const keys=Object.keys(masterData).sort();
@@ -1196,7 +1208,6 @@ function saveMaster(){
   if(!nama){toast('Nama rokok wajib diisi!','error');return;}
   const rec={nama:nama,modal:parseNum(val('m-modal')),cashRiel:parseNum(val('m-cash')),um:parseNum(val('m-um')),eceran:parseNum(val('m-eceran'))};
   const wasEdit=editMode;
-  /* INSTAN: langsung tampil */
   if(wasEdit&&wasEdit!==nama)delete masterData[wasEdit];
   masterData[nama]=rec;
   populateDropdowns();
@@ -1204,7 +1215,6 @@ function saveMaster(){
   renderCurrent();
   persistLocal();
   toast(wasEdit?'Harga diperbarui ✓':'Rokok ditambahkan ✓');
-  /* kirim di belakang */
   const send=function(){
     let p=Promise.resolve();
     if(wasEdit&&wasEdit!==nama)p=api('deleteMaster',{nama:wasEdit});
@@ -1229,7 +1239,7 @@ function deleteMasterRow(k){
   }).catch(function(){refreshServerData(true);});
 }
 
-/* Format share LIST ROKOK — persis sesuai contoh */
+/* Format share list rokok — sesuai contoh */
 function updateShareText(){
   const el=document.getElementById('text-share');if(!el)return;
   const keys=Object.keys(masterData).sort();
@@ -1256,6 +1266,7 @@ function renderRekapUM(){
   document.getElementById('tb-um').innerHTML=list.map(function(s){
     const cair=/CAIR|DONE/i.test(s.statusBayar||'');
     const amOk=/SUDAH\s*AMBIL/i.test(s.statusAmbil||'');
+    const kk=keyOf(s);
     let h='<tr>';
     h+='<td class="td-date">'+esc(fmtDateShort(s.tanggal))+'</td>';
     h+='<td class="td-name">'+esc(s.nama||'-')+'</td>';
@@ -1265,16 +1276,16 @@ function renderRekapUM(){
     h+='<td class="td-harga">'+Bt(s.harga)+'</td>';
     if(isPending(s.row)){h+='<td><span class="badge badge-pending">⏳</span></td><td><span class="badge ba1">-</span></td><td></td><td></td>';}
     else{
-      h+='<td><span class="badge clickable '+(cair?'bg1':'br1')+'" onclick="toggleStatusBayar('+s.row+')" title="Klik untuk ubah">'+(cair?'SUDAH CAIR':'BELUM CAIR')+'</span></td>';
-      h+='<td><span class="badge clickable '+(amOk?'bg1':'ba1')+'" onclick="toggleAmbil('+s.row+')" title="Klik untuk ubah">'+(amOk?'SUDAH AMBIL':'BELUM AMBIL')+'</span></td>';
-      h+='<td><button class="be" onclick="copyRowUM('+s.row+')" title="Copy baris ini"><i class="fas fa-copy"></i></button></td>';
-      h+='<td><button class="bd" onclick="deleteSale('+s.row+')"><i class="fas fa-trash"></i></button></td>';
+      h+='<td><span class="badge clickable '+(cair?'bg1':'br1')+'" onclick="toggleStatusBayar('+kk+')" title="Klik untuk ubah">'+(cair?'SUDAH CAIR':'BELUM CAIR')+'</span></td>';
+      h+='<td><span class="badge clickable '+(amOk?'bg1':'ba1')+'" onclick="toggleAmbil('+kk+')" title="Klik untuk ubah">'+(amOk?'SUDAH AMBIL':'BELUM AMBIL')+'</span></td>';
+      h+='<td><button class="be" onclick="copyRowUM('+kk+')" title="Copy baris ini"><i class="fas fa-copy"></i></button></td>';
+      h+='<td><button class="bd" onclick="deleteSale('+kk+')"><i class="fas fa-trash"></i></button></td>';
     }
     return h+'</tr>';
   }).join('')||emptyRow(10);
 }
-function copyRowUM(row){
-  const s=(dashState.allSales||[]).find(x=>x.row==row);if(!s)return;
+function copyRowUM(key){
+  const s=findRec(dashState.allSales,key);if(!s)return;
   const cair=/CAIR|DONE/i.test(s.statusBayar||'');
   copyToClipboard(fmtDateShort(s.tanggal)+' | '+s.nama+' | '+cleanSitus(s.situs)+' | '+s.rokok+' | '+(Number(s.jumlah)||0)+' Slop | '+Bt(s.harga)+' | '+(cair?'SUDAH CAIR':'BELUM CAIR')+' | '+(s.statusAmbil||''));
 }
@@ -1323,7 +1334,7 @@ function renderDashboard(){
   if(curPage==='dashboard')updateChart();
 }
 
-/* ---------- KAS ROKOK + SETORAN (setor = INSTAN) ---------- */
+/* ---------- kas rokok + setoran ---------- */
 function renderKas(){
   if(!dashState){
     ['kas-pendapatan','kas-untung','kas-setor','kas-sisa','kas-penjualan','kas-modal','kas-untung2','kas-total','kas-aba','kas-um','kas-um-cair','kas-masuk'].forEach(id=>setTxt(id,'฿0'));
@@ -1355,7 +1366,8 @@ function renderSetoran(){
   if(!dashState){tb.innerHTML=emptyRow(4);return;}
   const list=(dashState.allSetoran||[]).filter(function(x){return getMonth(x.tanggal)===selMonth;}).slice().reverse();
   tb.innerHTML=list.map(function(x){
-    let del='<button class="bd" onclick="deleteSetoranRow('+x.row+')" title="Hapus"><i class="fas fa-trash"></i></button>';
+    const kk=keyOf(x);
+    let del='<button class="bd" onclick="deleteSetoranRow('+kk+')" title="Hapus"><i class="fas fa-trash"></i></button>';
     if(isPending(x.row))del='<span class="badge badge-pending">⏳</span>';
     return '<tr><td class="td-date">'+esc(fmtDateShort(x.tanggal))+'</td>'+
       '<td class="td-harga">'+Bt(x.jumlah)+'</td>'+
@@ -1371,7 +1383,7 @@ function saveSetoran(){
   instantSave('saveSetoran',rec,'stor','allSetoran',sigSetor(rec),'Setoran dicatat ✓','Disimpan lokal — dikirim otomatis saat online');
 }
 
-/* ---------- GRAFIK BATANG 6 BULAN (cyan-biru, ungu+👑 = paling ramai) ---------- */
+/* ---------- grafik batang 6 bulan ---------- */
 const valueLabelPlugin={
   id:'valLabels',
   afterDatasetsDraw:function(chart){
