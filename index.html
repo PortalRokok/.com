@@ -82,6 +82,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 .td-rokok{font-weight:700;font-size:16px;color:#fdba74;text-shadow:0 0 12px rgba(251,146,60,0.6)}
 .td-jml{font-weight:800;font-size:16px;color:#86efac;text-shadow:0 0 12px rgba(74,222,128,0.6)}
 .td-harga{font-weight:800;font-size:16px;color:#fde047;text-shadow:0 0 14px rgba(250,204,21,0.75),0 1px 3px rgba(0,0,0,0.8)}
+.td-no{font-weight:800;font-size:16px;color:#7dd3fc;text-shadow:0 0 12px rgba(56,189,248,0.7)}
 .badge{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;display:inline-block;text-align:center}
 .badge.clickable{cursor:pointer;transition:all .15s}.badge.clickable:hover{transform:scale(1.08)}
 .bg1{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
@@ -123,6 +124,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
   .pc-cyan,.pc-green,.pc-blue,.pc-purple,.pc-pink,.pc-red,.pc-gold{animation:none}
   th{animation:none}
   .shine::after{animation:none}
+  .pill-warn{animation:none}
   .d-value{font-size:26px}
   .kas-val{font-size:20px}
   .brand{animation:brandGlow 3s ease-in-out infinite}
@@ -232,9 +234,9 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
             <p class="d-value shine gt-pink" id="d-um">฿0</p></div>
         </div>
         <div class="gc vivid pc-pink p-6"><div class="glow-ring g-pink"></div>
-          <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-chart-column text-pink-400 ifloat"></i> Grafik Penjualan 6 Bulan Terakhir</h3>
+          <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-chart-line text-pink-400 ifloat"></i> Grafik Penjualan 6 Bulan Terakhir</h3>
           <div style="height:320px;position:relative"><canvas id="salesChart"></canvas></div>
-          <p class="chart-hint"><i class="fas fa-crown" style="color:#c084fc"></i> Batang UNGU + 👑 = bulan penjualan paling ramai</p></div>
+          <p class="chart-hint"><i class="fas fa-arrow-trend-up text-cyan-300"></i> Garis naik-turun seperti grafik saham &nbsp;•&nbsp; <i class="fas fa-crown" style="color:#c084fc"></i> Titik ungu + 👑 = bulan tertinggi</p></div>
       </div>
 
       <div id="page-jual" class="hidden fi space-y-6">
@@ -306,7 +308,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
           </div>
         </div>
         <div class="gc vivid pc-cyan flex flex-col overflow-hidden"><div class="glow-ring g-cyan"></div>
-          <h4 class="st"><i class="fas fa-box"></i> Stok Perslop Bulan Ini</h4><div class="sa"><table class="text-center"><thead><tr><th class="text-left">Rokok</th><th>Masuk</th><th>Dibuka</th><th>Terjual</th><th>Sisa</th></tr></thead><tbody id="tb-stok-perslop"></tbody></table></div></div>
+          <h4 class="st"><i class="fas fa-box"></i> Stok Perslop Bulan Ini <span class="text-[11px] font-semibold text-slate-400 ml-2">(stok hanya berkurang jika SUDAH AMBIL)</span></h4><div class="sa"><table class="text-center"><thead><tr><th class="text-left">Rokok</th><th>Masuk</th><th>Dibuka</th><th>Terjual</th><th>Sisa</th></tr></thead><tbody id="tb-stok-perslop"></tbody></table></div></div>
         <div class="gc vivid pc-purple flex flex-col overflow-hidden"><div class="glow-ring g-purple"></div>
           <h4 class="st" style="color:#c084fc"><i class="fas fa-shopping-basket"></i> Stok Eceran Bulan Ini</h4><div class="sa"><table class="text-center"><thead><tr><th class="text-left">Rokok</th><th>Dibuka</th><th>Terjual</th><th>Sisa</th></tr></thead><tbody id="tb-stok-eceran"></tbody></table></div></div>
         <div class="gc vivid pc-blue flex flex-col overflow-hidden"><div class="glow-ring g-blue"></div>
@@ -375,13 +377,21 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
             <div class="flex items-center gap-3 mb-2"><div class="si bg-red-500/10 text-red-400 ifloat"><i class="fas fa-hourglass-half"></i></div><p class="d-label text-red-200">Belum Cair</p></div>
             <p class="d-value shine gt-red" id="um-belum">฿0</p></div>
         </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="gc vivid pc-pink p-5"><div class="glow-ring g-pink"></div>
+            <div class="flex items-center gap-3 mb-2"><div class="si bg-pink-500/10 text-pink-400 ifloat"><i class="fas fa-box"></i></div><p class="d-label text-pink-200">Total Slop Uang Makan Terjual (Bulan Ini)</p></div>
+            <p class="d-value shine gt-pink" style="font-size:26px" id="um-slop-total">0 Slop</p></div>
+          <div class="gc vivid pc-blue p-5"><div class="glow-ring g-blue"></div>
+            <div class="flex items-center gap-3 mb-2"><div class="si bg-blue-500/10 text-blue-400 ifloat"><i class="fas fa-building-columns"></i></div><p class="d-label text-blue-200">Total Slop Cash Terjual (Bulan Ini)</p></div>
+            <p class="d-value shine gt-blue" style="font-size:26px" id="cash-slop-total">0 Slop</p></div>
+        </div>
         <div class="gc vivid pc-pink p-4"><div class="glow-ring g-pink"></div>
           <div class="flex flex-wrap justify-between items-center mb-3 gap-2">
             <h4 class="st" style="border:0;padding:0"><i class="fas fa-utensils"></i> Rekapan Pembayaran Uang Makan</h4>
             <button onclick="copyRekapUM()" class="bs text-xs"><i class="fas fa-copy mr-1"></i> COPY SEMUA REKAPAN</button>
           </div>
           <div id="rekap-um-text" class="hidden"></div>
-          <div class="sa"><table class="text-center"><thead><tr><th class="text-left">Tanggal</th><th>Nama</th><th>Situs</th><th>Rokok</th><th>Jumlah</th><th>Harga</th><th>Status Cair</th><th>Ambil</th><th>Copy Baris</th><th>Aksi</th></tr></thead><tbody id="tb-um"></tbody></table></div>
+          <div class="sa"><table class="text-center"><thead><tr><th>No</th><th class="text-left">Tanggal</th><th>Nama</th><th>Situs</th><th>Rokok</th><th>Jumlah</th><th>Harga</th><th>Status Cair</th><th>Ambil</th><th>Copy Baris</th><th>Aksi</th></tr></thead><tbody id="tb-um"></tbody></table></div>
         </div>
       </div>
 
@@ -449,6 +459,16 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 </div>
 
 <script>
+/* ====== KUNCI F12 / DEVTOOLS / KLIK KANAN ====== */
+(function(){
+  document.addEventListener('keydown',function(e){
+    if(e.key==='F12'){e.preventDefault();e.stopPropagation();return false;}
+    if(e.ctrlKey&&e.shiftKey&&['I','J','C','i','j','c'].indexOf(e.key)>-1){e.preventDefault();e.stopPropagation();return false;}
+    if(e.ctrlKey&&['U','u','S','s'].indexOf(e.key)>-1){e.preventDefault();e.stopPropagation();return false;}
+  },true);
+  document.addEventListener('contextmenu',function(e){e.preventDefault();return false;});
+})();
+
 const BARCODE_URL='https://lh3.googleusercontent.com/d/1kbXXWlnEuRl3xuGQHhumTGKjZcRkYlMN';
 const Bt=(n)=>'฿'+(Math.round(Number(n)||0)).toLocaleString('th-TH');
 const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -487,7 +507,6 @@ let lastAuto=0;
 let fetching=false;
 let lastFP='';
 
-/* status cair/ambil: penandaan dikirim pakai ID PERMANEN + dicatat lokal by isi transaksi */
 let statusFixes={};
 try{statusFixes=JSON.parse(localStorage.getItem('gs_statusfixes2')||'{}');}catch(e){statusFixes={};}
 function persistFixes(){try{localStorage.setItem('gs_statusfixes2',JSON.stringify(statusFixes));}catch(e){}}
@@ -541,9 +560,9 @@ function showEl(id,s){const el=document.getElementById(id);if(el)el.classList.to
 function fmtID(n){n=Math.round(Number(n)||0);return n?n.toLocaleString('id-ID'):'';}
 function isPending(row){return Number(row)<0;}
 function isUMJual(){return curJualTipe==='Perslop'&&curJualFilter==='UM';}
+function isSudahAmbil(s){return /SUDAH\s*AMBIL/i.test(String((s&&s.statusAmbil)||''));}
 function ensureDash(){if(!dashState)dashState={allSales:[],allPengambilan:[],allCrosscheck:[],allSetoran:[]};if(!dashState.allSales)dashState.allSales=[];if(!dashState.allPengambilan)dashState.allPengambilan=[];if(!dashState.allCrosscheck)dashState.allCrosscheck=[];if(!dashState.allSetoran)dashState.allSetoran=[];}
 
-/* ====== ID PERMANEN: kunci untuk toggle/hapus ====== */
 function keyOf(r){return r.id?("'"+String(r.id).replace(/[^A-Za-z0-9]/g,'')+"'"):r.row;}
 function findRec(list,key){
   if(typeof key==='string')return (list||[]).find(function(x){return String(x.id)===key;});
@@ -758,7 +777,6 @@ function applyServerData(res){
   });
   saveBuffer.stor=sisaStor;
   persistBuffer();
-  /* penandaan yang belum sampai server: tempel lagi + KIRIM ULANG pakai ID (bukan nomor baris!) */
   const now=Date.now();
   dashState.allSales.forEach(function(s){
     if(Number(s.row)<=0)return;
@@ -946,7 +964,7 @@ function saveJual(){
     'Disimpan lokal — dikirim otomatis saat online');
 }
 
-/* ---------- HAPUS INSTAN (pakai ID) ---------- */
+/* ---------- HAPUS INSTAN ---------- */
 function instantDelete(action,payload,listKey,key,msg){
   ensureDash();
   const rec=findRec(dashState[listKey],key);
@@ -981,7 +999,7 @@ function renderJualTable(){
     const unit=s.tipe==='Eceran'?'Bungkus':'Slop';
     const isUM=s.tipeBayar==='Uang Makan';
     const stOk=/DONE|CAIR/i.test(s.statusBayar||'');
-    const amOk=/SUDAH\s*AMBIL/i.test(s.statusAmbil||'');
+    const amOk=isSudahAmbil(s);
     const stTxt=isUM?(stOk?'SUDAH CAIR':'BELUM CAIR'):(s.statusBayar||'BELUM BAYAR');
     const kk=keyOf(s);
     let h='<tr>';
@@ -994,14 +1012,13 @@ function renderJualTable(){
     if(isPending(s.row)){h+='<td><span class="badge badge-pending">⏳ MENUNGGU KIRIM</span></td><td><span class="badge ba1">-</span></td><td></td>';}
     else{
       h+='<td><span class="badge clickable '+(stOk?'bg1':'br1')+'" onclick="toggleStatusBayar('+kk+')" title="Klik untuk ubah">'+esc(stTxt)+'</span></td>';
-      h+='<td><span class="badge clickable '+(amOk?'bg1':'ba1')+'" onclick="toggleAmbil('+kk+')" title="Klik untuk ubah">'+(amOk?'SUDAH AMBIL':'BELUM AMBIL')+'</span></td>';
+      h+='<td><span class="badge clickable '+(amOk?'bg1':'ba1')+'" onclick="toggleAmbil('+kk+')" title="Klik untuk ubah — stok berkurang saat SUDAH AMBIL">'+(amOk?'SUDAH AMBIL':'BELUM AMBIL')+'</span></td>';
       h+='<td><button class="bd" onclick="deleteSale('+kk+')" title="Hapus"><i class="fas fa-trash"></i></button></td>';
     }
     return h+'</tr>';
   }).join('');
 }
 
-/* toggle status: kirim pakai ID PERMANEN + row fallback */
 async function toggleStatusBayar(key){
   const s=findRec(dashState.allSales,key);
   if(!s||isPending(s.row))return;
@@ -1019,7 +1036,7 @@ async function toggleStatusBayar(key){
 async function toggleAmbil(key){
   const s=findRec(dashState.allSales,key);
   if(!s||isPending(s.row))return;
-  const next=/SUDAH\s*AMBIL/i.test(s.statusAmbil||'')?'BELUM AMBIL':'SUDAH AMBIL';
+  const next=isSudahAmbil(s)?'BELUM AMBIL':'SUDAH AMBIL';
   const sg=sigSale(s);
   s.statusAmbil=next;setFix(sg,'ambil',next);renderCurrent();
   try{
@@ -1028,10 +1045,10 @@ async function toggleAmbil(key){
   }catch(e){}
 }
 
-/* ---------- stok ---------- */
+/* ---------- STOK: hanya SUDAH AMBIL yang mengurangi stok ---------- */
 function aggStok(){
   const map={};
-  function g(k){const n=normalizeName(k);if(!n)return null;if(!map[n])map[n]={masuk:0,dibuka:0,jslop:0,jbks:0,mMasuk:0,mDibuka:0,mJslop:0,mJbks:0};return map[n];}
+  function g(k){const n=normalizeName(k);if(!n)return null;if(!map[n])map[n]={masuk:0,dibuka:0,jslop:0,jslopA:0,jbks:0,jbksA:0,mMasuk:0,mDibuka:0,mJslop:0,mJslopA:0,mJbks:0,mJbksA:0};return map[n];}
   (dashState.allPengambilan||[]).forEach(function(a){
     const o=g(a.rokok);if(!o)return;
     const j=Number(a.jumlah)||0;
@@ -1044,11 +1061,22 @@ function aggStok(){
     const o=g(s.rokok);if(!o)return;
     const j=Number(s.jumlah)||0;
     const inM=getMonth(s.tanggal)===selMonth;
-    if(s.tipe==='Eceran'){o.jbks+=j;if(inM)o.mJbks+=j;}
-    else{o.jslop+=j;if(inM)o.mJslop+=j;}
+    const ambil=isSudahAmbil(s);
+    if(s.tipe==='Eceran'){
+      o.jbks+=j;if(inM)o.mJbks+=j;
+      if(ambil){o.jbksA+=j;if(inM)o.mJbksA+=j;}
+    }else{
+      o.jslop+=j;if(inM)o.mJslop+=j;
+      if(ambil){o.jslopA+=j;if(inM)o.mJslopA+=j;}
+    }
   });
   Object.keys(masterData).forEach(k=>{g(k);});
   return map;
+}
+function soldCell(total,pending,unit){
+  let h='<span class="pill pill-out"><i class="fas fa-arrow-up"></i> '+total+' '+unit+'</span>';
+  if(pending>0)h+='<br><span class="pill pill-warn"><i class="fas fa-clock"></i> '+pending+' belum ambil</span>';
+  return h;
 }
 
 function renderStok(){
@@ -1056,7 +1084,13 @@ function renderStok(){
   const stok=aggStok();
   const keys=Object.keys(stok).sort();
   let totSlop=0,totBks=0,low=0;
-  keys.forEach(function(k){const o=stok[k];o.sisaSlop=o.masuk-o.dibuka-o.jslop;o.sisaBks=o.dibuka*10-o.jbks;totSlop+=o.sisaSlop;totBks+=o.sisaBks;if(o.sisaSlop>0&&o.sisaSlop<=5)low++;});
+  keys.forEach(function(k){
+    const o=stok[k];
+    o.sisaSlop=o.masuk-o.dibuka-o.jslopA;
+    o.sisaBks=o.dibuka*10-o.jbksA;
+    totSlop+=o.sisaSlop;totBks+=o.sisaBks;
+    if(o.sisaSlop>0&&o.sisaSlop<=5)low++;
+  });
   setTxt('stok-sum-items',keys.length+' Jenis');
   setTxt('stok-sum-slop',totSlop+' Slop');
   setTxt('stok-sum-eceran',totBks+' Bungkus');
@@ -1071,22 +1105,24 @@ function renderStok(){
 
   document.getElementById('tb-stok-perslop').innerHTML=keys.map(function(k){
     const o=stok[k];
-    const sisa=o.mMasuk-o.mDibuka-o.mJslop;
+    const sisa=o.mMasuk-o.mDibuka-o.mJslopA;
     const pct=o.mMasuk>0?Math.max(0,Math.min(100,Math.round(sisa/o.mMasuk*100))):0;
+    const pending=o.mJslop-o.mJslopA;
     return '<tr><td class="td-rokok text-left">'+esc(k)+'</td>'+
       '<td><span class="pill pill-in"><i class="fas fa-arrow-down"></i> '+o.mMasuk+' Slop</span></td>'+
       '<td><span class="pill pill-open"><i class="fas fa-box-open"></i> '+o.mDibuka+' Slop</span></td>'+
-      '<td><span class="pill pill-out"><i class="fas fa-arrow-up"></i> '+o.mJslop+' Slop</span></td>'+
+      '<td>'+soldCell(o.mJslop,pending,'Slop')+'</td>'+
       '<td><span class="pill '+(sisa<=5?'pill-warn':'pill-slop')+'">Sisa '+sisa+' Slop</span><br><span class="bar"><i style="width:'+pct+'%"></i></span></td></tr>';
   }).join('')||emptyRow(5);
 
   document.getElementById('tb-stok-eceran').innerHTML=keys.map(function(k){
     const o=stok[k];
-    const sisa=o.mDibuka*10-o.mJbks;
+    const sisa=o.mDibuka*10-o.mJbksA;
     const pct=o.mDibuka>0?Math.max(0,Math.min(100,Math.round(sisa/(o.mDibuka*10)*100))):0;
+    const pending=o.mJbks-o.mJbksA;
     return '<tr><td class="td-rokok text-left">'+esc(k)+'</td>'+
       '<td><span class="pill pill-open"><i class="fas fa-box-open"></i> '+o.mDibuka+' Slop</span></td>'+
-      '<td><span class="pill pill-out"><i class="fas fa-arrow-up"></i> '+o.mJbks+' Bungkus</span></td>'+
+      '<td>'+soldCell(o.mJbks,pending,'Bungkus')+'</td>'+
       '<td><span class="pill pill-bks">Sisa '+sisa+' Bungkus</span><br><span class="bar"><i style="width:'+pct+'%"></i></span></td></tr>';
   }).join('')||emptyRow(4);
 
@@ -1136,17 +1172,18 @@ function renderCrosscheck(){
   document.getElementById('tb-cc-stok').innerHTML=keys.map(function(k){
     const o=stok[k];
     if(isEcer){
-      const dib=o.dibuka*10,ter=o.jbks,sisa=dib-ter;
+      const dib=o.dibuka*10,ter=o.jbks,sisa=dib-o.jbksA,pending=o.jbks-o.jbksA;
       return '<tr><td class="td-rokok text-left">'+esc(k)+'</td><td><span class="empty-cell">-</span></td>'+
         '<td><span class="pill pill-open">'+dib+' Bungkus</span></td>'+
-        '<td><span class="pill pill-out">'+ter+' Bungkus</span></td>'+
+        '<td>'+soldCell(ter,pending,'Bungkus')+'</td>'+
         '<td><span class="pill '+(sisa<=5?'pill-warn':'pill-bks')+'">Sisa '+sisa+' Bungkus</span></td></tr>';
     }
-    const sisa=o.masuk-o.dibuka-o.jslop;
+    const sisa=o.masuk-o.dibuka-o.jslopA;
+    const pending=o.jslop-o.jslopA;
     return '<tr><td class="td-rokok text-left">'+esc(k)+'</td>'+
       '<td><span class="pill pill-in">'+o.masuk+' Slop</span></td>'+
       '<td><span class="pill pill-open">'+o.dibuka+' Slop</span></td>'+
-      '<td><span class="pill pill-out">'+o.jslop+' Slop</span></td>'+
+      '<td>'+soldCell(o.jslop,pending,'Slop')+'</td>'+
       '<td><span class="pill '+(sisa<=5?'pill-warn':'pill-slop')+'">Sisa '+sisa+' Slop</span></td></tr>';
   }).join('')||emptyRow(5);
 
@@ -1239,7 +1276,6 @@ function deleteMasterRow(k){
   }).catch(function(){refreshServerData(true);});
 }
 
-/* Format share list rokok — sesuai contoh */
 function updateShareText(){
   const el=document.getElementById('text-share');if(!el)return;
   const keys=Object.keys(masterData).sort();
@@ -1255,19 +1291,30 @@ function updateShareText(){
   el.innerText=t;
 }
 
-/* ---------- rekap UM ---------- */
+/* ---------- REKAP UM: bernomor rapi + kartu slop ---------- */
 function renderRekapUM(){
-  if(!dashState){setTxt('um-total','฿0');setTxt('um-cair','฿0');setTxt('um-belum','฿0');setTxt('tb-um','');return;}
+  if(!dashState){setTxt('um-total','฿0');setTxt('um-cair','฿0');setTxt('um-belum','฿0');setTxt('um-slop-total','0 Slop');setTxt('cash-slop-total','0 Slop');setTxt('tb-um','');return;}
   const umAll=(dashState.allSales||[]).filter(function(s){return s.tipeBayar==='Uang Makan';});
   let tot=0,cair=0;
   umAll.forEach(function(s){tot+=Number(s.harga)||0;if(/CAIR|DONE/i.test(s.statusBayar||''))cair+=Number(s.harga)||0;});
   setTxt('um-total',Bt(tot));setTxt('um-cair',Bt(cair));setTxt('um-belum',Bt(tot-cair));
+  const bulanIni=(dashState.allSales||[]).filter(function(s){return getMonth(s.tanggal)===selMonth;});
+  let slopUM=0,slopCash=0;
+  bulanIni.forEach(function(s){
+    if(s.tipe==='Eceran')return;
+    if(s.tipeBayar==='Uang Makan')slopUM+=Number(s.jumlah)||0;
+    else slopCash+=Number(s.jumlah)||0;
+  });
+  setTxt('um-slop-total',slopUM+' Slop');
+  setTxt('cash-slop-total',slopCash+' Slop');
   const list=umAll.filter(function(s){return getMonth(s.tanggal)===selMonth;}).slice().reverse();
-  document.getElementById('tb-um').innerHTML=list.map(function(s){
+  if(!list.length){document.getElementById('tb-um').innerHTML=emptyRow(11);return;}
+  document.getElementById('tb-um').innerHTML=list.map(function(s,idx){
     const cair=/CAIR|DONE/i.test(s.statusBayar||'');
-    const amOk=/SUDAH\s*AMBIL/i.test(s.statusAmbil||'');
+    const amOk=isSudahAmbil(s);
     const kk=keyOf(s);
     let h='<tr>';
+    h+='<td class="td-no">'+(idx+1)+'</td>';
     h+='<td class="td-date">'+esc(fmtDateShort(s.tanggal))+'</td>';
     h+='<td class="td-name">'+esc(s.nama||'-')+'</td>';
     h+='<td>'+situsHtml(s.situs)+'</td>';
@@ -1282,7 +1329,7 @@ function renderRekapUM(){
       h+='<td><button class="bd" onclick="deleteSale('+kk+')"><i class="fas fa-trash"></i></button></td>';
     }
     return h+'</tr>';
-  }).join('')||emptyRow(10);
+  }).join('');
 }
 function copyRowUM(key){
   const s=findRec(dashState.allSales,key);if(!s)return;
@@ -1299,7 +1346,9 @@ function copyRekapUM(){
     t+=(i+1)+'. '+fmtDateShort(s.tanggal)+' | '+s.nama+' | '+cleanSitus(s.situs)+' | '+s.rokok+' | '+(Number(s.jumlah)||0)+' Slop | '+Bt(s.harga)+' | '+(cair?'SUDAH CAIR':'BELUM CAIR')+'\n';
   });
   const tot=list.reduce(function(a,s){return a+(Number(s.harga)||0);},0);
-  t+='\nTOTAL: '+Bt(tot);
+  const totSlop=list.reduce(function(a,s){return a+(Number(s.jumlah)||0);},0);
+  t+='\nTOTAL SLOP: '+totSlop+' Slop';
+  t+='\nTOTAL UANG: '+Bt(tot);
   copyToClipboard(t);
 }
 
@@ -1383,21 +1432,23 @@ function saveSetoran(){
   instantSave('saveSetoran',rec,'stor','allSetoran',sigSetor(rec),'Setoran dicatat ✓','Disimpan lokal — dikirim otomatis saat online');
 }
 
-/* ---------- grafik batang 6 bulan ---------- */
+/* ---------- GRAFIK SAHAM (LINE) 6 BULAN ---------- */
 const valueLabelPlugin={
   id:'valLabels',
   afterDatasetsDraw:function(chart){
     try{
       const ctx=chart.ctx,meta=chart.getDatasetMeta(0),data=chart.data.datasets[0].data;
       ctx.save();
-      ctx.font='700 11px Kanit, sans-serif';
+      ctx.font='700 12px Kanit, sans-serif';
       ctx.fillStyle='#bae6fd';
       ctx.textAlign='center';
-      meta.data.forEach(function(bar,i){
+      ctx.shadowColor='rgba(0,0,0,0.8)';
+      ctx.shadowBlur=4;
+      meta.data.forEach(function(pt,i){
         const v=Number(data[i])||0;if(!v)return;
         let t;
         if(v>=1000){t=(v/1000).toFixed(v>=10000?0:1).replace('.0','')+'k';}else{t=String(v);}
-        ctx.fillText('฿'+t,bar.x,bar.y-8);
+        ctx.fillText('฿'+t,pt.x,pt.y-14);
       });
       ctx.restore();
     }catch(e){}
@@ -1415,24 +1466,31 @@ function updateChart(){
   if(salesChart){salesChart.data.labels=lbl;salesChart.data.datasets[0].data=totals;salesChart.update();return;}
   const ctx=cv.getContext('2d');
   salesChart=new Chart(ctx,{
-    type:'bar',
-    data:{labels:lbl,datasets:[{label:'Penjualan',data:totals,borderRadius:10,borderSkipped:false,barPercentage:0.55,categoryPercentage:0.72,
+    type:'line',
+    data:{labels:lbl,datasets:[{
+      label:'Penjualan',data:totals,
+      borderWidth:3,borderColor:'#38bdf8',tension:0.35,fill:true,
       backgroundColor:function(c){
         try{
           const chart=c.chart,area=chart.chartArea;
-          if(!area)return 'rgba(56,189,248,0.8)';
-          const g=chart.ctx.createLinearGradient(0,area.bottom,0,area.top);
-          if(maxV>0&&Number(c.raw)===maxV){g.addColorStop(0,'rgba(168,85,247,0.85)');g.addColorStop(0.6,'rgba(192,132,252,0.95)');g.addColorStop(1,'#f472b6');}
-          else{g.addColorStop(0,'rgba(2,132,199,0.7)');g.addColorStop(0.6,'rgba(56,189,248,0.9)');g.addColorStop(1,'#a5e8ff');}
+          if(!area)return 'rgba(56,189,248,0.15)';
+          const g=chart.ctx.createLinearGradient(0,area.top,0,area.bottom);
+          g.addColorStop(0,'rgba(56,189,248,0.35)');
+          g.addColorStop(1,'rgba(56,189,248,0)');
           return g;
-        }catch(e){return 'rgba(56,189,248,0.8)';}
-      }}]},
-    options:{responsive:true,maintainAspectRatio:false,animation:{duration:400},
+        }catch(e){return 'rgba(56,189,248,0.15)';}
+      },
+      pointRadius:5,pointHoverRadius:9,pointBorderWidth:2,pointBorderColor:'#e0f2fe',
+      pointBackgroundColor:function(c){return (maxV>0&&Number(c.raw)===maxV)?'#c084fc':'#38bdf8';},
+      pointHoverBackgroundColor:'#f472b6',pointHoverBorderColor:'#fff'
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:600},
+      interaction:{mode:'index',intersect:false},
       plugins:{legend:{display:false},
-        tooltip:{backgroundColor:'rgba(5,8,18,0.95)',titleFont:{family:'Kanit'},bodyFont:{family:'Kanit'},borderColor:'rgba(56,189,248,0.4)',borderWidth:1,padding:10,displayColors:false,
+        tooltip:{backgroundColor:'rgba(5,8,18,0.95)',titleFont:{family:'Kanit',size:14},bodyFont:{family:'Kanit',size:14},borderColor:'rgba(56,189,248,0.4)',borderWidth:1,padding:12,displayColors:false,
           callbacks:{label:function(c){return ' Penjualan: '+Bt(c.raw);}}}},
-      scales:{x:{ticks:{color:'#7c8db5',font:{family:'Kanit',weight:'700',size:13}},grid:{display:false}},
-        y:{beginAtZero:true,ticks:{color:'#7c8db5',font:{family:'Kanit'},callback:function(v){return '฿'+(v>=1000?(v/1000)+'k':v);}},grid:{color:'rgba(255,255,255,0.08)'}}}},
+      scales:{x:{ticks:{color:'#a5c2e8',font:{family:'Kanit',weight:'700',size:14}},grid:{display:false}},
+        y:{beginAtZero:true,ticks:{color:'#a5c2e8',font:{family:'Kanit',size:13},callback:function(v){return '฿'+(v>=1000?(v/1000)+'k':v);}},grid:{color:'rgba(255,255,255,0.08)'}}}},
     plugins:[valueLabelPlugin]
   });
 }
