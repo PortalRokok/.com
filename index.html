@@ -108,9 +108,11 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
 .kas-row:last-child{border-bottom:0}
 .kas-label{font-size:15px;font-weight:600;color:#cbd5e1;display:flex;align-items:center;gap:8px}
 .kas-val{font-family:'Kanit',sans-serif;font-weight:800;font-size:22px;line-height:1}
+.kas-sub{font-size:12px;font-weight:600;color:#94a3b8;margin-top:3px}
 .prog{height:10px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:10px}
 .prog i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#f59e0b,#fbbf24,#fde047);transition:width .5s ease}
 .chart-hint{font-size:11px;color:#94a3b8;text-align:center;margin-top:8px;font-weight:600}
+.ringkas{padding:10px 20px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;font-size:13px;font-weight:700;color:#cbd5e1}
 @keyframes spin{to{transform:rotate(360deg)}}
 .anim-spin{animation:spin .6s linear infinite}
 .d-label{font-size:14px;font-weight:600;color:#cbd5e1;margin-bottom:4px;line-height:1.3}
@@ -183,7 +185,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
     <div class="p-4 border-t border-white/5">
       <button onclick="doLogout()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 transition-colors group">
         <div class="w-9 h-9 bg-cyan-500/20 rounded-full flex items-center justify-center font-bold text-cyan-400 text-sm">A</div>
-        <div class="text-left flex-1"><p class="font-bold text-sm text-white">𝓖𝓪𝓷𝓮𝓼 𝓟𝓻𝓪𝓴𝓪𝓼</p><p class="text-[11px] text-slate-400 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
+        <div class="text-left flex-1"><p class="font-bold text-sm text-white">𝓖𝓪𝓷𝓮𝓼 𝓟𝓻𝓪𝓴𝓪𝓲</p><p class="text-[11px] text-slate-400 group-hover:text-red-400 transition-colors">Klik untuk logout</p></div>
         <i class="fas fa-sign-out-alt text-slate-500 group-hover:text-red-400 transition-colors"></i>
       </button>
     </div>
@@ -260,6 +262,7 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
           </div>
           <div class="gc vivid pc-purple flex flex-col overflow-hidden" id="jual-riwayat-card"><div class="glow-ring g-purple"></div>
             <h4 id="title-rekap-jual" class="st"><i class="fas fa-receipt"></i> Riwayat Penjualan</h4>
+            <div id="jual-ringkas" class="ringkas"></div>
             <div class="sa flex-1"><table class="text-center"><thead><tr><th class="text-left">Tanggal</th><th>Nama</th><th>Situs</th><th>Rokok</th><th>Jumlah</th><th>Harga</th><th>Status</th><th>Ambil</th><th>Aksi</th></tr></thead><tbody id="tb-jual"></tbody></table></div>
           </div>
         </div>
@@ -377,14 +380,6 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
             <div class="flex items-center gap-3 mb-2"><div class="si bg-red-500/10 text-red-400 ifloat"><i class="fas fa-hourglass-half"></i></div><p class="d-label text-red-200">Belum Cair</p></div>
             <p class="d-value shine gt-red" id="um-belum">฿0</p></div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="gc vivid pc-pink p-5"><div class="glow-ring g-pink"></div>
-            <div class="flex items-center gap-3 mb-2"><div class="si bg-pink-500/10 text-pink-400 ifloat"><i class="fas fa-box"></i></div><p class="d-label text-pink-200">Total Slop Uang Makan Terjual (Bulan Ini)</p></div>
-            <p class="d-value shine gt-pink" style="font-size:26px" id="um-slop-total">0 Slop</p></div>
-          <div class="gc vivid pc-blue p-5"><div class="glow-ring g-blue"></div>
-            <div class="flex items-center gap-3 mb-2"><div class="si bg-blue-500/10 text-blue-400 ifloat"><i class="fas fa-building-columns"></i></div><p class="d-label text-blue-200">Total Slop Cash Terjual (Bulan Ini)</p></div>
-            <p class="d-value shine gt-blue" style="font-size:26px" id="cash-slop-total">0 Slop</p></div>
-        </div>
         <div class="gc vivid pc-pink p-4"><div class="glow-ring g-pink"></div>
           <div class="flex flex-wrap justify-between items-center mb-3 gap-2">
             <h4 class="st" style="border:0;padding:0"><i class="fas fa-utensils"></i> Rekapan Pembayaran Uang Makan</h4>
@@ -428,7 +423,10 @@ tbody tr:hover td{background:rgba(56,189,248,0.18)!important;box-shadow:inset 3p
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="gc vivid pc-gold p-6"><div class="glow-ring g-gold"></div>
             <h3 class="font-bold text-white mb-4 flex items-center gap-2 text-sm"><i class="fas fa-file-invoice-dollar text-yellow-400 ifloat"></i> Laporan Rokok (Bulan Ini)</h3>
-            <div class="kas-row"><span class="kas-label"><i class="fas fa-cart-shopping text-cyan-300"></i>Total Penjualan</span><span class="kas-val gt-gold" id="kas-penjualan">฿0</span></div>
+            <div class="kas-row"><span class="kas-label"><i class="fas fa-utensils text-pink-300"></i>Total Terjual Uang Makan</span><div class="text-right"><span class="kas-val gt-pink" id="kas-jual-um">0 Slop</span></div></div>
+            <div class="kas-row"><span class="kas-label"><i class="fas fa-building-columns text-blue-300"></i>Total Terjual Cash</span><div class="text-right"><span class="kas-val gt-blue" id="kas-jual-cash">0 Slop</span></div></div>
+            <div class="kas-row"><span class="kas-label"><i class="fas fa-fire text-yellow-300"></i>Total All Rokok Terjual</span><div class="text-right"><span class="kas-val gt-gold" id="kas-jual-all">0 Slop</span><p class="kas-sub" id="kas-jual-all-sub"></p></div></div>
+            <div class="kas-row"><span class="kas-label"><i class="fas fa-cart-shopping text-cyan-300"></i>Total Penjualan (Uang)</span><span class="kas-val gt-gold" id="kas-penjualan">฿0</span></div>
             <div class="kas-row"><span class="kas-label"><i class="fas fa-boxes-stacked text-red-300"></i>Total Modal Rokok</span><span class="kas-val gt-red" id="kas-modal">฿0</span></div>
             <div class="kas-row"><span class="kas-label"><i class="fas fa-arrow-trend-up text-green-300"></i>Untung Bersih</span><span class="kas-val gt-green" id="kas-untung2">฿0</span></div>
           </div>
@@ -477,6 +475,14 @@ function normalizeName(s){return String(s||'').trim().replace(/\s+/g,' ');}
 
 /* ====== URL WEB APP KAMU (pastikan sama dengan deployment sekarang) ====== */
 const API='https://script.google.com/macros/s/AKfycbz_XcfqSYuLXx8TlR-1wtns1dCcJAbQU-TclJCun3dXxZMrLt9ugNUL3KKtzCG14KRw/exec';
+
+/* ====== SATU RUMUS RESMI — dipakai di SEMUA tempat ======
+   Tidak peduli huruf besar/kecil/spasi di data sheet lama,
+   semua tempat menghitung dengan cara yang SAMA PERSIS. */
+function tipeOf(s){return String((s&&s.tipe)||'').trim().toUpperCase().replace(/\s+/g,' ');}
+function bayarOf(s){return String((s&&s.tipeBayar)||'').trim().toUpperCase().replace(/\s+/g,' ');}
+function isEceranSale(s){return tipeOf(s)==='ECERAN';}
+function isUMSale(s){const b=bayarOf(s);return b==='UANG MAKAN'||b==='UM'||b==='UANGMAKAN';}
 
 function api(action,payload){
   payload=payload||{};
@@ -553,6 +559,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){retur
 function val(id){const el=document.getElementById(id);return el?el.value:'';}
 function setVal(id,v){const el=document.getElementById(id);if(el)el.value=v;}
 function setTxt(id,t){const el=document.getElementById(id);if(el)el.innerText=t;}
+function setHTML(id,t){const el=document.getElementById(id);if(el)el.innerHTML=t;}
 function isoToday(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function hhmm(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 function emptyRow(n){return '<tr><td colspan="'+n+'" style="text-align:center;padding:28px 12px;color:#64748b;font-weight:600">— Belum ada data —</td></tr>';}
@@ -984,20 +991,33 @@ function deletePengambilan(key){const a=findRec(dashState.allPengambilan,key);if
 function deleteCrosscheckRow(key){const c=findRec(dashState.allCrosscheck,key);if(c&&!isPending(c.row))instantDelete('deleteCrosscheck',{id:c.id||'',row:c.row},'allCrosscheck',key,'Terhapus ✓');}
 function deleteSetoranRow(key){const x=findRec(dashState.allSetoran,key);if(x&&!isPending(x.row))instantDelete('deleteSetoran',{id:x.id||'',row:x.row},'allSetoran',key,'Terhapus ✓');}
 
-/* ---------- tabel penjualan ---------- */
+/* ---------- tabel penjualan + BARANG BUKTI TOTAL ---------- */
 function renderJualTable(){
   const tb=document.getElementById('tb-jual');if(!tb)return;
-  if(!dashState||!dashState.allSales){tb.innerHTML=emptyRow(9);return;}
+  if(!dashState||!dashState.allSales){tb.innerHTML=emptyRow(9);setHTML('jual-ringkas','');return;}
   const list=dashState.allSales.filter(function(s){
     if(getMonth(s.tanggal)!==selMonth)return false;
-    if(curJualTipe==='Eceran')return s.tipe==='Eceran';
-    if(s.tipe==='Eceran')return false;
-    return curJualFilter==='UM'?(s.tipeBayar==='Uang Makan'):(s.tipeBayar!=='Uang Makan');
+    if(curJualTipe==='Eceran')return isEceranSale(s);
+    if(isEceranSale(s))return false;
+    return curJualFilter==='UM'?isUMSale(s):!isUMSale(s);
   });
+  /* BARANG BUKTI: total dihitung LANGSUNG dari baris yang tampil */
+  const unit=curJualTipe==='Eceran'?'Bungkus':'Slop';
+  let tJml=0,tUang=0;
+  list.forEach(function(s){tJml+=Number(s.jumlah)||0;tUang+=Number(s.harga)||0;});
+  const rk=document.getElementById('jual-ringkas');
+  if(rk){
+    if(list.length){
+      rk.innerHTML='<span><i class="fas fa-calculator text-purple-300 mr-1"></i>Total Bulan Ini:</span>'+
+        '<span class="gt-cyan" style="font-size:15px">'+tJml+' '+unit+'</span>'+
+        '<span class="gt-gold" style="font-size:15px">'+Bt(tUang)+'</span>'+
+        '<span class="text-slate-400">'+list.length+' transaksi</span>';
+    }else rk.innerHTML='';
+  }
   if(!list.length){tb.innerHTML=emptyRow(9);return;}
   tb.innerHTML=list.slice().reverse().map(function(s){
-    const unit=s.tipe==='Eceran'?'Bungkus':'Slop';
-    const isUM=s.tipeBayar==='Uang Makan';
+    const unit2=isEceranSale(s)?'Bungkus':'Slop';
+    const isUM=isUMSale(s);
     const stOk=/DONE|CAIR/i.test(s.statusBayar||'');
     const amOk=isSudahAmbil(s);
     const stTxt=isUM?(stOk?'SUDAH CAIR':'BELUM CAIR'):(s.statusBayar||'BELUM BAYAR');
@@ -1007,7 +1027,7 @@ function renderJualTable(){
     h+='<td class="td-name">'+esc(s.nama||'-')+'</td>';
     h+='<td>'+situsHtml(s.situs)+'</td>';
     h+='<td class="td-rokok">'+esc(s.rokok)+'</td>';
-    h+='<td><span class="td-jml">'+(Number(s.jumlah)||0)+' '+unit+'</span></td>';
+    h+='<td><span class="td-jml">'+(Number(s.jumlah)||0)+' '+unit2+'</span></td>';
     h+='<td class="td-harga">'+Bt(s.harga)+'</td>';
     if(isPending(s.row)){h+='<td><span class="badge badge-pending">⏳ MENUNGGU KIRIM</span></td><td><span class="badge ba1">-</span></td><td></td>';}
     else{
@@ -1022,7 +1042,7 @@ function renderJualTable(){
 async function toggleStatusBayar(key){
   const s=findRec(dashState.allSales,key);
   if(!s||isPending(s.row))return;
-  const isUM=s.tipeBayar==='Uang Makan';
+  const isUM=isUMSale(s);
   const opts=isUM?['BELUM BAYAR','SUDAH CAIR']:['DONE BAYAR CASH','DONE BAYAR ABA','BELUM BAYAR'];
   const idx=opts.indexOf(s.statusBayar);
   const next=opts[(idx+1+opts.length)%opts.length]||opts[0];
@@ -1062,7 +1082,7 @@ function aggStok(){
     const j=Number(s.jumlah)||0;
     const inM=getMonth(s.tanggal)===selMonth;
     const ambil=isSudahAmbil(s);
-    if(s.tipe==='Eceran'){
+    if(isEceranSale(s)){
       o.jbks+=j;if(inM)o.mJbks+=j;
       if(ambil){o.jbksA+=j;if(inM)o.mJbksA+=j;}
     }else{
@@ -1291,22 +1311,13 @@ function updateShareText(){
   el.innerText=t;
 }
 
-/* ---------- REKAP UM: bernomor rapi + kartu slop ---------- */
+/* ---------- REKAP UM (bernomor, TANPA total terjual — itu di Kas Rokok) ---------- */
 function renderRekapUM(){
-  if(!dashState){setTxt('um-total','฿0');setTxt('um-cair','฿0');setTxt('um-belum','฿0');setTxt('um-slop-total','0 Slop');setTxt('cash-slop-total','0 Slop');setTxt('tb-um','');return;}
-  const umAll=(dashState.allSales||[]).filter(function(s){return s.tipeBayar==='Uang Makan';});
+  if(!dashState){setTxt('um-total','฿0');setTxt('um-cair','฿0');setTxt('um-belum','฿0');setTxt('tb-um','');return;}
+  const umAll=(dashState.allSales||[]).filter(function(s){return !isEceranSale(s)&&isUMSale(s);});
   let tot=0,cair=0;
   umAll.forEach(function(s){tot+=Number(s.harga)||0;if(/CAIR|DONE/i.test(s.statusBayar||''))cair+=Number(s.harga)||0;});
   setTxt('um-total',Bt(tot));setTxt('um-cair',Bt(cair));setTxt('um-belum',Bt(tot-cair));
-  const bulanIni=(dashState.allSales||[]).filter(function(s){return getMonth(s.tanggal)===selMonth;});
-  let slopUM=0,slopCash=0;
-  bulanIni.forEach(function(s){
-    if(s.tipe==='Eceran')return;
-    if(s.tipeBayar==='Uang Makan')slopUM+=Number(s.jumlah)||0;
-    else slopCash+=Number(s.jumlah)||0;
-  });
-  setTxt('um-slop-total',slopUM+' Slop');
-  setTxt('cash-slop-total',slopCash+' Slop');
   const list=umAll.filter(function(s){return getMonth(s.tanggal)===selMonth;}).slice().reverse();
   if(!list.length){document.getElementById('tb-um').innerHTML=emptyRow(11);return;}
   document.getElementById('tb-um').innerHTML=list.map(function(s,idx){
@@ -1338,7 +1349,7 @@ function copyRowUM(key){
 }
 function copyRekapUM(){
   if(!dashState){return;}
-  const list=(dashState.allSales||[]).filter(function(s){return s.tipeBayar==='Uang Makan'&&getMonth(s.tanggal)===selMonth;});
+  const list=(dashState.allSales||[]).filter(function(s){return !isEceranSale(s)&&isUMSale(s)&&getMonth(s.tanggal)===selMonth;});
   if(!list.length){toast('Belum ada data bulan ini','error');return;}
   let t='🍛 REKAP UANG MAKAN — '+BULAN[parseInt(selMonth.split('-')[1])-1]+' '+selMonth.split('-')[0]+'\n\n';
   list.forEach(function(s,i){
@@ -1352,23 +1363,26 @@ function copyRekapUM(){
   copyToClipboard(t);
 }
 
-/* ---------- perhitungan ---------- */
+/* ---------- SATU PERHITUNGAN RESMI (dipakai dashboard + kas rokok) ---------- */
 function calcMonth(){
   const sales=(dashState.allSales||[]).filter(function(s){return getMonth(s.tanggal)===selMonth;});
-  let pend=0,modTot=0,uSlop=0,uEcer=0,slop=0,aba=0,um=0,cairUM=0;
+  let pend=0,modTot=0,uSlop=0,uEcer=0,aba=0,um=0,cairUM=0;
+  let slopUM=0,slopCash=0,slopAll=0,bks=0,trx=0;
   sales.forEach(function(s){
-    const h=Number(s.harga)||0;pend+=h;
+    const h=Number(s.harga)||0;pend+=h;trx++;
     const m=masterData[normalizeName(s.rokok)]||{};
     const mod=Number(m.modal)||0;const j=Number(s.jumlah)||0;
-    if(s.tipe==='Eceran'){const mo=mod/10*j;modTot+=mo;uEcer+=h-mo;}
-    else{
-      const mo=mod*j;modTot+=mo;uSlop+=h-mo;slop+=j;
-      if(s.tipeBayar==='Uang Makan'){
+    if(isEceranSale(s)){
+      const mo=mod/10*j;modTot+=mo;uEcer+=h-mo;bks+=j;
+    }else{
+      const mo=mod*j;modTot+=mo;uSlop+=h-mo;slopAll+=j;
+      if(isUMSale(s)){
+        slopUM+=j;
         if(/CAIR|DONE/i.test(s.statusBayar||''))cairUM+=h;else um+=h;
-      }else aba+=h;
+      }else{slopCash+=j;aba+=h;}
     }
   });
-  return {pend:pend,modTot:modTot,uSlop:uSlop,uEcer:uEcer,slop:slop,aba:aba,um:um,cairUM:cairUM};
+  return {pend:pend,modTot:modTot,uSlop:uSlop,uEcer:uEcer,slop:slopAll,slopUM:slopUM,slopCash:slopCash,slopAll:slopAll,bks:bks,trx:trx,aba:aba,um:um,cairUM:cairUM};
 }
 function renderDashboard(){
   if(!dashState)return;
@@ -1383,10 +1397,11 @@ function renderDashboard(){
   if(curPage==='dashboard')updateChart();
 }
 
-/* ---------- kas rokok + setoran ---------- */
+/* ---------- KAS ROKOK: total terjual UM + Cash + All ---------- */
 function renderKas(){
   if(!dashState){
     ['kas-pendapatan','kas-untung','kas-setor','kas-sisa','kas-penjualan','kas-modal','kas-untung2','kas-total','kas-aba','kas-um','kas-um-cair','kas-masuk'].forEach(id=>setTxt(id,'฿0'));
+    setTxt('kas-jual-um','0 Slop');setTxt('kas-jual-cash','0 Slop');setTxt('kas-jual-all','0 Slop');setTxt('kas-jual-all-sub','');
     renderSetoran();return;
   }
   const c=calcMonth();
@@ -1401,6 +1416,11 @@ function renderKas(){
   setTxt('kas-sisa',Bt(sisa));
   setTxt('kas-prog-txt',pct+'% dari pendapatan');
   const bar=document.getElementById('kas-prog-bar');if(bar)bar.style.width=pct+'%';
+  /* TOTAL TERJUAL — pakai rumus yang sama dengan tabel & dashboard */
+  setTxt('kas-jual-um',c.slopUM+' Slop');
+  setTxt('kas-jual-cash',c.slopCash+' Slop');
+  setTxt('kas-jual-all',(c.slopUM+c.slopCash)+' Slop');
+  setTxt('kas-jual-all-sub',c.bks>0?('+ '+c.bks+' Bungkus Eceran • '+c.trx+' transaksi'):(c.trx+' transaksi'));
   setTxt('kas-penjualan',Bt(c.pend));
   setTxt('kas-modal',Bt(c.modTot));
   setTxt('kas-total',Bt(c.pend));
